@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { useStore } from '../../../store/store';
 import ContentCard from '../UI/ContentCard/ContentCard';
 import FieldCard from '../UI/FieldsCard/FieldCard';
 
@@ -7,10 +8,12 @@ interface Props {
 }
 
 const Lend: FC<Props> = (props) => {
+    const state: any = useStore()[0];
+
     return (
         <>
             <ContentCard>
-                <FieldCard fieldLabel="You Lend" selectLabel="Balance: -" />
+                <FieldCard fieldLabel="You Lend" selectLabel="Balance: -" list={state.currency} />
                 <div className="price_head py-4">
                     <div className="price_aa">
                         <div className="price-list">Balance <span className="price">-</span></div>

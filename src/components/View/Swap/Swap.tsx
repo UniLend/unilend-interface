@@ -4,21 +4,23 @@ import FieldCard from '../UI/FieldsCard/FieldCard';
 
 import './Swap.scss'
 import switchIcon from '../../../assets/switch.svg';
+import { useStore } from '../../../store/store';
 interface Props {
 
 }
 
 const Swap: FC<Props> = (props) => {
+    const state: any = useStore()[0];
     return (
         <>
             <ContentCard>
                 <div className="swap-root">
-                    <FieldCard fieldLabel="Your Collateral" selectLabel="Balance: -" />
+                    <FieldCard fieldLabel="Your Collateral" selectLabel="Balance: -" list={state.currency} />
                     <div className="switch-body py-3">
                         <button className="btn btn-icon align-center"><img src={switchIcon} alt="" /></button>
 
                     </div>
-                    <FieldCard fieldLabel="Received" selectLabel="" />
+                    <FieldCard fieldLabel="Received" selectLabel="" list={state.currency} />
                     <div className="d-grid py-3">
                         <button className="btn btn-lg btn-custom-primary" type="button">Connect Wallet</button>
                     </div>

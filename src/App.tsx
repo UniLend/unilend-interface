@@ -11,7 +11,6 @@ import Swap from './components/View/Swap/Swap';
 import LoadingPage from './components/View/UI/LoadingPage/LoadingPage';
 import Redeem from './components/View/Redeem/Redeem';
 import Repay from './components/View/Repay/Repay';
-import { Transition } from 'react-transition-group';
 
 function App() {
   const [loading, setLoading] = useState(true);
