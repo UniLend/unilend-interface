@@ -11,7 +11,7 @@ const Lend: FC<Props> = (props) => {
         <>
             <ContentCard>
                 <FieldCard fieldLabel="You Lend" selectLabel="Balance: -" />
-                <div className="price_head">
+                <div className="price_head py-4">
                     <div className="price_aa">
                         <div className="price-list">Balance <span className="price">-</span></div>
                         <div className="price-list">Deposit APY <span className="price">-</span></div>
