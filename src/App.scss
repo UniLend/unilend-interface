@@ -1,0 +1,84 @@
+.App {
+  // text-align: center;
+
+}
+.app-bg-light {
+  background: linear-gradient(180deg, #BED4FF 0%, #BED4FF 50%, #dce5f7de 102%);
+  height: 91vh;
+}
+.bg-vector {
+  background-image:url("../src/assets/light-bg.svg");
+  height: 100%;
+}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// bootstrap default changes
+.align-end {
+  text-align: end;
+}
+
+.btn-custom-primary {
+  display: block;
+  width: 100%;
+  background: #2F4F74;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: smaller;
+  &:hover {
+    color: white;
+  }
+}
+
+.btn-custom-secondary {
+  background-color: white;
+    color: black;
+    font-weight: 900;
+    font-size: smaller;
+}
+
+.bg-light {
+  background-color: #F3F5F9 !important;
+}
+
+.nav-link {
+  font-size: smaller;
+}
+
+.active {
+  color: #4F607B !important;
+  font-weight: 500;
+}

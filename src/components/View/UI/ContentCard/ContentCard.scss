@@ -1,0 +1,24 @@
+.content-card {
+    width: 35%;
+    height: auto;
+    margin: auto;
+    transform: translate(0px, 70px);
+    border: 1px solid #E7E7E7;
+    box-sizing: border-box;
+    /* Box shadow */
+    
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+}
+
+@media (max-width:768px) {
+    .content-card {
+        width: 50%;
+    }
+}
+
+@media (max-width:576px) {
+    .content-card {
+        width: 70%;
+    }
+}
