@@ -1,6 +1,7 @@
 .App {
-  // text-align: center;
-
+  // animation: ease-in-out alternate;
+  // animation-name: run;
+  // animation-duration: 2s;
 }
 .app-bg-light {
   background: linear-gradient(180deg, #BED4FF 0%, #BED4FF 50%, #dce5f7de 102%);
@@ -14,6 +15,9 @@
   height: 40vmin;
   pointer-events: none;
 }
+
+
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

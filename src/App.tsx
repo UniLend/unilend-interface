@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.scss';
 import Borrow from './components/View/Borrow/Borrow';
@@ -11,15 +11,21 @@ import Swap from './components/View/Swap/Swap';
 import LoadingPage from './components/View/UI/LoadingPage/LoadingPage';
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+  }, [])
+
   return (
     <div className="App">
-      <Layout>
+      {loading ? <LoadingPage /> : <Layout>
         <div className="app-bg-light">
           <div className="bg-vector">
             <div style={{ height: "100%", overflow: "auto" }}>
-
               <Switch>
-                <Route path="/loading" component={LoadingPage} />
                 <Route path="/swap" exact component={Swap} />
                 <Route path="/lend" exact component={Lend} />
                 <Route path="/borrow" exact component={Borrow} />
@@ -30,9 +36,8 @@ function App() {
               </Switch>
             </div>
           </div>
-
         </div>
-      </Layout>
+      </Layout>}
     </div>
   );
 }

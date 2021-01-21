@@ -1,3 +1,6 @@
+.swap-root {
+//   animation: run 0.3s;
+}
 .btn-icon {
     background:#F9FBFD;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.08);
@@ -30,3 +33,12 @@
     color: #2c6def;
     float: right;
 }
+
+@keyframes run {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
