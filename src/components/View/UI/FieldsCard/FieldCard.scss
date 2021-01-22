@@ -22,8 +22,10 @@
 
 .field-select {
     border:none;
+    width: 80px;
     border-radius: 6px;
     font-size: 15px;
+    float:right;
     &:focus {
         border:none;
         box-shadow: none;
