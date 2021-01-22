@@ -4,7 +4,7 @@ import icon from '../../../../assets/logo.svg'
 interface Props {
     fieldLabel: String,
     selectLabel: String,
-    list: []
+    list: any
 }
 
 const FieldCard: FC<Props> = (props) => {
@@ -23,7 +23,7 @@ const FieldCard: FC<Props> = (props) => {
 
                             </div>
                             <select className="form-control field-select ">
-                                {props.list.map((list: any) => <option data-content={icon} key={list.name} value="1">
+                                {props.list.map((list: any) => <option data-content={icon} key={list.name} value={list.id}>
                                     {list.name}
                                 </option>)}
                             </select>

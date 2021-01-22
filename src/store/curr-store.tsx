@@ -1,10 +1,19 @@
+import { httpClient } from '../services/htttpClient';
 import { initStore } from './store';
 
-export const configureCrrStore = () => {
+const configureCrrStore = () => {
     const actions = {
         TOGGLE: (curState: any, payload: any) => {
             //action
-            return { currency: curState.currency };
+            const updatedCurr: any = [];
+            httpClient.get('/users').then((res: any) => {
+                console.log(curState)
+                updatedCurr.push(res);
+                return { currency: updatedCurr };
+            }).catch(err => {
+                console.log(err);
+            })
+
         }
     }
     initStore(
@@ -17,3 +26,5 @@ export const configureCrrStore = () => {
         }
     );
 }
+
+export default configureCrrStore;

@@ -15,7 +15,7 @@ const NavBar: React.FC<Props> = (props) => {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-sm navbar-light bg-light">
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="#">
                         <img src={logo} alt="Logo" width="30" height="24" className="d-inline-block align-top" />
