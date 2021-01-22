@@ -1,18 +1,14 @@
-import { httpClient } from '../services/htttpClient';
+import { httpClient } from '../services/httpClient';
 import { initStore } from './store';
 
 const configureCrrStore = () => {
     const actions = {
-        TOGGLE: (curState: any, payload: any) => {
-            const updatedCurr: any = [];
-            httpClient.get('/users').then((res: any) => {
-                console.log(curState)
-                updatedCurr.push(res);
-                return { currency: updatedCurr };
-            }).catch(err => {
-                console.log(err);
-            })
-
+        LIST_CURRENCY: async (curState: any, payload: any) => {
+            if (curState.currency) {
+            }
+            const response = await httpClient.get('/users');
+            console.log('response', response)
+            return { currency: [...response] }
         }
     }
     initStore(
