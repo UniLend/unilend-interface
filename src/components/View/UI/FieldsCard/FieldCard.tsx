@@ -13,11 +13,11 @@ const FieldCard: FC<Props> = (props) => {
             <div className="card field-card">
                 <div className="card-body py-2">
                     <div className="row">
-                        <div className=" col-7">
+                        <div className=" col-6 col-sm-7">
                             <label className="form-label">{props.fieldLabel}</label>
                             <input type="email" className="form-control field-input" placeholder="0.0" />
                         </div>
-                        <div className=" col-5">
+                        <div className=" col-6 col-sm-5">
                             <div className="align-end">
                                 <label className="form-label">{props.selectLabel}</label>
 
