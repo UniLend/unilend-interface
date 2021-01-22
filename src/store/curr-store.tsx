@@ -4,7 +4,6 @@ import { initStore } from './store';
 const configureCrrStore = () => {
     const actions = {
         TOGGLE: (curState: any, payload: any) => {
-            //action
             const updatedCurr: any = [];
             httpClient.get('/users').then((res: any) => {
                 console.log(curState)

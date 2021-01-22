@@ -6,6 +6,7 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = (props) => {
+
     return (
         <>
             <NavBar />

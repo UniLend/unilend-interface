@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import './theme.scss';
 import './App.scss';
 import Borrow from './components/View/Borrow/Borrow';
 import Info from './components/View/Info/Info';
@@ -11,10 +12,11 @@ import Swap from './components/View/Swap/Swap';
 import LoadingPage from './components/View/UI/LoadingPage/LoadingPage';
 import Redeem from './components/View/Redeem/Redeem';
 import Repay from './components/View/Repay/Repay';
+import { useStore } from './store/store';
 
 function App() {
   const [loading, setLoading] = useState(true);
-
+  const state: any = useStore()[0];
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
@@ -23,7 +25,7 @@ function App() {
 
 
   return (
-    <div className="App">
+    <div className={`App ${state.theme}`}>
       {loading ?
         // <Transition in={loading} timeout={300}>
         //   {state => { <div style={{ opacity: state === 'exited' ? 0 : 1 }}><LoadingPage /> </div> }}
@@ -32,9 +34,9 @@ function App() {
         <LoadingPage />
         :
         <Layout>
-          <div className="app-bg-light">
-            <div className="bg-vector">
-              <div style={{ height: "100%", overflow: "auto" }}>
+          <div className={`app-bg`}>
+            <div className={`bg-vector ${state.theme}`}>
+              <div className="pt-6" style={{ height: "100%", overflow: "auto", paddingTop: "60px" }}>
                 <Switch>
                   <Route path="/swap" exact component={Swap} />
                   <Route path="/lend" exact component={Lend} />

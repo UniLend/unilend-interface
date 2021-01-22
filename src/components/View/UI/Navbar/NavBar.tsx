@@ -2,20 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
 
-import logo from '../../../../assets/logo.svg'
-import wallet from '../../../../assets/wallet.svg'
+import logo from '../../../../assets/logo.svg';
+import walletlight from '../../../../assets/wallet-light.svg';
+import walletdark from '../../../../assets/wallet-dark.svg';
+import { useStore } from '../../../../store/store';
 interface Props extends RouteComponentProps<any> {
+
 }
 
 const NavBar: React.FC<Props> = (props) => {
     const [currentPage, setCurrentPage] = useState('');
+    const state: any = useStore()[0];
+    const dispatch: any = useStore(true)[1];
+
     useEffect(() => {
         setCurrentPage(props.location.pathname)
     }, [props.location.pathname])
-
+    const handleUpdate = () => {
+        dispatch('THEME_CHANGE', {});
+        console.log(state)
+    }
     return (
         <>
-            <nav className="navbar navbar-expand-sm navbar-light bg-light">
+            <nav className={`navbar navbar-expand-sm navbar-${state.theme} bg-${state.theme}`}>
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="#">
                         <img src={logo} alt="Logo" width="30" height="24" className="d-inline-block align-top" />
@@ -25,7 +34,7 @@ const NavBar: React.FC<Props> = (props) => {
                     </button> */}
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        <ul className="navbar-nav me-auto mb-lg-0">
                             <li className="nav-item">
                                 <Link className={currentPage === '/swap' ? "nav-link active" : "nav-link"} aria-current="page" to="/swap">
                                     Swap</Link>
@@ -48,8 +57,9 @@ const NavBar: React.FC<Props> = (props) => {
                         </ul>
 
                     </div>
-                    <button className="d-flex btn btn-custom-secondary">
-                        <img src={wallet} width="26" alt="Wallet" className="d-inline-block px-1" />
+                    <button onClick={() => handleUpdate()} className={`d-flex mr-3 btn ${state.theme === 'dark' && 'btn-dark'} btn-custom-secondary`}>{state.theme === "light" ? 'Dark' : 'Light'}</button>
+                    <button className={`d-flex btn ${state.theme === 'dark' && 'btn-dark'} btn-custom-secondary`}>
+                        <img src={state.theme === "light" ? walletlight : walletdark} width="26" alt="Wallet" className="d-inline-block px-1" />
                             Connect wallet
                         </button>
                 </div>

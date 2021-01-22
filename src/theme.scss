@@ -1,0 +1,24 @@
+.light {
+    --theme-color-light: #000000b3;
+    --theme-page-background: linear-gradient(180deg, #BED4FF 0%, #BED4FF 50%, #dce5f7de 102%);
+    --theme-page-text: #111;
+    --theme-field-text-color: #9FADC0;
+    --theme-card-bg: white;
+    --theme-button: white;
+    --theme-input-color:#495057;
+    --theme-card-border:#E7E7E7;
+    --theme-field-card:#F2F4FA;
+    --theme-price-text:#8D9BAE;
+}
+
+.dark {
+    --theme-page-background: #111;
+    --theme-page-text: #FFF;
+    --theme-button: #273041;
+    --theme-field-text-color: white;
+    --theme-input-color:#fff;
+    --theme-card-bg: #2B3B59 ;
+    --theme-card-border:#23488C;
+    --theme-field-card:#2F4774;
+    --theme-price-text:white;
+}

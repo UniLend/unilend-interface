@@ -1,10 +1,10 @@
 .form-label {
-    color: #9FADC0;
+    color: var(--theme-field-text-color);
     font-size: small;
     line-height: 10px;
 }
 .field-card {
-    background: #F2F4FA;
+    background: var(--theme-field-card);
     border:none;
     border-radius: 8px;
 }
@@ -12,11 +12,13 @@
 .field-input {
     border:none;
     background: transparent;
+    color: var(--theme-input-color);
     padding: 0;
     &:focus {
         border:none;
         background: transparent;
         box-shadow: none;
+        color: var(--theme-input-color);
     }
 }
 

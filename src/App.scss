@@ -2,14 +2,22 @@
   // animation: ease-in-out alternate;
   // animation-name: run;
   // animation-duration: 2s;
+  // background: var(--theme-page-background);
+  color: var(--theme-page-text);
 }
-.app-bg-light {
-  background: linear-gradient(180deg, #BED4FF 0%, #BED4FF 50%, #dce5f7de 102%);
-  height: 91vh;
+.app-bg {
+  background: var(--theme-page-background);
+  height: 100vh;
 }
 .bg-vector {
-  background-image:url("../src/assets/light-bg.svg");
   height: 100%;
+  &.dark {
+    background-image:url("../src/assets/dark-bg.svg");
+    background-repeat: repeat no-repeat;
+  }
+  &.light {
+    background-image:url("../src/assets/light-bg.svg");
+  }
 }
 .App-logo {
   height: 40vmin;
@@ -68,8 +76,8 @@
 }
 
 .btn-custom-secondary {
-  background-color: white;
-    color: black;
+  background: var(--theme-button);
+    color: var(--theme-page-text);
     font-weight: 900;
     font-size: smaller;
 }
@@ -77,12 +85,16 @@
 .bg-light {
   background-color: #F3F5F9 !important;
 }
-
+.navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
 .nav-link {
   font-size: smaller;
 }
 
 .active {
-  color: #4F607B !important;
+//   color: #4F607B !important;
   font-weight: 500;
 }
