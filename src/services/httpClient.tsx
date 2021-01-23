@@ -1,67 +1,92 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
 
+export interface IHttpClientRequestParameters<T> {
+    url: string
+    requiresToken: boolean
+    payload?: T
+}
+export interface IHttpClient {
+    get<T>(parameters: IHttpClientRequestParameters<T>): Promise<T>
+    post<T>(parameters: IHttpClientRequestParameters<T>): Promise<T>
+}
 
-const getClientAxios = () => {
-    //const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    const options = {
-        baseURL: 'https://jsonplaceholder.typicode.com/',
-        headers: {
-            Accept: 'application/json',
-        }
-    };
-    /*    if (currentUser) {
-            options.headers.Authorization = 'Bearer ' + currentUser.token;
-            options.headers.role = '' + currentUser.role === '0' ? 'admin' : 'editor';
-        }
-    */
-    const clientAxios = axios.create(options);
-    return clientAxios;
-};
+export class HttpClient implements IHttpClient {
+    // ... implementation code will go here
+    get<T>(parameters: IHttpClientRequestParameters<T>): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            const { url, requiresToken } = parameters
 
-let client = getClientAxios()
+            const options: AxiosRequestConfig = {
+                headers: {}
+            }
 
-export const httpClient = {
+            // if API endpoint requires a token, we'll need to add a way to add this.
+            if (requiresToken) {
+                // const token = this.getToken()
+                // options.headers.RequestVerificationToken = token
+            }
 
-    get: (url: any, conf = {}) => {
-        return client.get(url, conf)
-            .then((response: any) => Promise.resolve(response.data))
-            .catch((error: any) => Promise.reject(error));
-    },
+            axios
+                .get(url, options)
+                .then((response: AxiosResponse) => {
+                    resolve(response.data as T)
+                })
+                .catch((response: AxiosError) => {
+                    reject(response)
+                })
 
-    delete: (url: any, conf = {}) => {
-        return client.delete(url, conf)
-            .then(response => Promise.resolve(response))
-            .catch(error => Promise.reject(error));
-    },
-
-    head: (url: any, conf = {}) => {
-        return client.head(url, conf)
-            .then((response: any) => Promise.resolve(response))
-            .catch((error: any) => Promise.reject(error));
-    },
-
-    options: (url: any, conf = {}) => {
-        return client.options(url, conf)
-            .then((response: any) => Promise.resolve(response))
-            .catch((error: any) => Promise.reject(error));
-    },
-
-    post: (url: any, data = {}, conf = {}) => {
-        return client.post(url, data, conf)
-            .then((response: any) => Promise.resolve(response.data))
-            .catch((error: any) => Promise.reject(error));
-    },
-
-    put: (url: any, data = {}, conf = {}) => {
-        return client.put(url, data, conf)
-            .then((response: any) => Promise.resolve(response))
-            .catch((error: any) => Promise.reject(error));
-    },
-
-    patch: (url: any, data = {}, conf = {}) => {
-        return client.patch(url, data, conf)
-            .then((response: any) => Promise.resolve(response))
-            .catch((error: any) => Promise.reject(error));
+        })
     }
 
+    post<T>(parameters: IHttpClientRequestParameters<T>): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            const { url, payload, requiresToken } = parameters
+
+            const options: AxiosRequestConfig = {
+                headers: {}
+            }
+
+            // if API endpoint requires a token, we'll need to add a way to add this.
+            if (requiresToken) {
+                // const token = this.getToken()
+                // options.headers.RequestVerificationToken = token
+            }
+
+
+            axios
+                .post(url, payload, options)
+                .then((response: AxiosResponse) => {
+                    resolve(response.data as T)
+                })
+                .catch((response: AxiosError) => {
+                    reject(response)
+                })
+        })
+    }
+
+    delete<T>(parameters: IHttpClientRequestParameters<T>): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            const { url, requiresToken } = parameters
+
+            const options: AxiosRequestConfig = {
+                headers: {}
+            }
+
+            // if API endpoint requires a token, we'll need to add a way to add this.
+            if (requiresToken) {
+                // const token = this.getToken()
+                // options.headers.RequestVerificationToken = token
+            }
+            axios
+                .delete(url, options)
+                .then((response: AxiosResponse) => {
+                    resolve(response.data as T)
+                })
+                .catch((response: AxiosError) => {
+                    reject(response)
+                })
+        })
+    }
 }
+
+export const httpClient = new HttpClient()

@@ -20,8 +20,6 @@ const NavBar: React.FC<Props> = (props) => {
     }, [props.location.pathname])
     const handleUpdate = () => {
         dispatch('THEME_CHANGE', {});
-        dispatch('LIST_CURRENCY', {});
-        console.log(state)
     }
     return (
         <>

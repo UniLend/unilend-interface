@@ -13,11 +13,19 @@ import LoadingPage from './components/View/UI/LoadingPage/LoadingPage';
 import Redeem from './components/View/Redeem/Redeem';
 import Repay from './components/View/Repay/Repay';
 import { useStore } from './store/store';
+import currService from './services/currService';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const state: any = useStore()[0];
+  const dispatch: any = useStore(false)[1];
+
   useEffect(() => {
+    let updatedState: any = []
+    currService.fetchItems().then(response => {
+      updatedState = response;
+      dispatch('LIST_CURRENCY', { updatedState });
+    })
     setTimeout(() => {
       setLoading(false)
     }, 2000)

@@ -1,3 +1,4 @@
+
 import { initStore } from './store';
 
 const configureSettingStore = () => {
@@ -16,7 +17,7 @@ const configureSettingStore = () => {
     initStore(
         actions,
         {
-            theme: localStorage.getItem('theme') || 'light'
+            theme: localStorage.getItem('theme') || 'light',
         }
     );
 }
