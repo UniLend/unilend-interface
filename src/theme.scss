@@ -9,6 +9,7 @@
     --theme-card-border:#E7E7E7;
     --theme-field-card:#F2F4FA;
     --theme-price-text:#8D9BAE;
+    --theme-line-break: rgba(0, 0, 0, 0.1);
 }
 
 .dark {
@@ -21,4 +22,6 @@
     --theme-card-border:#23488C;
     --theme-field-card:#2F4774;
     --theme-price-text:white;
+    --theme-line-break: white;
+
 }

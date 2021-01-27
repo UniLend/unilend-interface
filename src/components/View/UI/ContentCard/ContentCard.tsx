@@ -8,7 +8,7 @@ const ContentCard: FC<Props> = (props) => {
     return (
         <>
             <div className="card content-card">
-                <div className="card-body">
+                <div className="card-body" style={{ padding: "1.5rem 2rem" }}>
                     {props.children}
                 </div>
             </div>
