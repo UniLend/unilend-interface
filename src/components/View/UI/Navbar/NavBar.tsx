@@ -56,6 +56,18 @@ const NavBar: React.FC<Props> = (props) => {
               <li className="nav-item">
                 <Link
                   className={
+                    currentPage === "/borrow" ? "nav-link active" : "nav-link"
+                  }
+                  aria-current="page"
+                  to="/borrow"
+                >
+                  Borrow
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link
+                  className={
                     currentPage === "/lend" ? "nav-link active" : "nav-link"
                   }
                   aria-current="page"
@@ -64,15 +76,28 @@ const NavBar: React.FC<Props> = (props) => {
                   Lend
                 </Link>
               </li>
+
               <li className="nav-item">
                 <Link
                   className={
-                    currentPage === "/borrow" ? "nav-link active" : "nav-link"
+                    currentPage === "/redeem" ? "nav-link active" : "nav-link"
                   }
                   aria-current="page"
-                  to="/borrow"
+                  to="/redeem"
                 >
-                  Borrow
+                  Redeem
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link
+                  className={
+                    currentPage === "/repay" ? "nav-link active" : "nav-link"
+                  }
+                  aria-current="page"
+                  to="/repay"
+                >
+                  Repay
                 </Link>
               </li>
               <li className="nav-item">

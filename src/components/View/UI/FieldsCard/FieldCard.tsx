@@ -6,7 +6,6 @@ interface Props {
     selectLabel: String,
     list: any
 }
-
 const FieldCard: FC<Props> = (props) => {
     return (
         <>
@@ -23,7 +22,7 @@ const FieldCard: FC<Props> = (props) => {
 
                             </div>
                             <select className="form-control field-select ">
-                                {props.list.map((list: any) => <option data-content={icon} key={list.name} value={list.id}>
+                                {props.list.map((list: any) => <option  data-content='<img src="https://www.base64-image.de/build/img/base64-image-logo-3eb23a9eef.png"/>' key={list.name} value={list.id}>
                                     {list.name}
                                 </option>)}
                             </select>
