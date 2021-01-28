@@ -7,11 +7,13 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import configureCrrStore from './store/curr-store'
 import configureSettingStore from './store/setting-store';
+import configureWalletStore from './store/wallet-store';
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
 
 configureCrrStore();
 configureSettingStore();
+configureWalletStore();
 
 ReactDOM.render(
   <React.StrictMode>
