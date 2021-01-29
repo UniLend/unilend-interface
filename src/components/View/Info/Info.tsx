@@ -8,7 +8,7 @@ interface Props {
 const Info: FC<Props> = (props) => {
     return (
         <>
-            <ContentCard>
+            <ContentCard title="Info">
                 <h1>Hello Info</h1>
             </ContentCard>
         </>

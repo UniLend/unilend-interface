@@ -12,7 +12,18 @@
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.08);
   border-radius: 24px;
 }
-
+.content-title {
+  padding: 20px 30px 20px;
+  border-radius: 25px 25px 0 0;
+  background-color: var(--theme-card-title-bg);
+}
+.content-card-title {
+  display: inline-block;
+  background: var(--theme-card-title);
+  border-radius: 30px;
+  padding: 6px 15px;
+  margin-bottom: 0;
+}
 @media (max-width: 768px) {
   .content-card {
     width: 50%;

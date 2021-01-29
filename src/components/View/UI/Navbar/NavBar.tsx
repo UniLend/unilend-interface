@@ -4,6 +4,9 @@ import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import logo from "../../../../assets/logo.svg";
 import walletlight from "../../../../assets/wallet-light.svg";
 import walletdark from "../../../../assets/wallet-dark.svg";
+import sun from "../../../../assets/sun.svg";
+import moon from "../../../../assets/moon.svg";
+
 import { useStore } from "../../../../store/store";
 interface Props extends RouteComponentProps<any> {}
 
@@ -42,7 +45,7 @@ const NavBar: React.FC<Props> = (props) => {
           </Link>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-lg-0">
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link
                   className={
                     currentPage === "/swap" ? "nav-link active" : "nav-link"
@@ -52,7 +55,7 @@ const NavBar: React.FC<Props> = (props) => {
                 >
                   Swap
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link
                   className={
@@ -100,7 +103,7 @@ const NavBar: React.FC<Props> = (props) => {
                   Repay
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link
                   className={
                     currentPage === "/migrate" ? "nav-link active" : "nav-link"
@@ -110,8 +113,8 @@ const NavBar: React.FC<Props> = (props) => {
                 >
                   Migrate
                 </Link>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <Link
                   className={
                     currentPage === "/mining" ? "nav-link active" : "nav-link"
@@ -132,17 +135,9 @@ const NavBar: React.FC<Props> = (props) => {
                 >
                   Info
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
-          <button
-            onClick={() => handleUpdate()}
-            className={`d-flex mr-3 btn ${
-              state.theme === "dark" && "btn-dark"
-            } btn-custom-secondary`}
-          >
-            {state.theme === "light" ? "Dark" : "Light"}
-          </button>
           <button
             className={`d-flex btn ${
               state.theme === "dark" && "btn-dark"
@@ -156,6 +151,15 @@ const NavBar: React.FC<Props> = (props) => {
               className="d-inline-block px-1"
             />
             Connect wallet
+          </button>
+
+          <button
+            onClick={() => handleUpdate()}
+            className={`d-flex ml-3 btn ${
+              state.theme === "dark" && "btn-dark"
+            } btn-custom-secondary btn-theme-icon`}
+          >
+            {<img width="20" src={state.theme === "light" ? sun : moon } alt="theme"/>}
           </button>
         </div>
       </nav>

@@ -18,7 +18,7 @@ const Repay: FC<Props> = (props) => {
     }
     return (
         <>
-            <ContentCard>
+            <ContentCard title="Repay">
                 <div className="mb-3">
                     <div className="row mt-3" >
                         <div className="col-5">You Owe</div>

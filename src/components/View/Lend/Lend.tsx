@@ -12,7 +12,7 @@ const Lend: FC<Props> = (props) => {
 
     return (
         <>
-            <ContentCard>
+            <ContentCard title="Lend">
                 <FieldCard fieldLabel="You Lend" selectLabel="Balance: -" list={state.currency} />
                 <div className="price_head py-4">
                     <div className="price_aa">

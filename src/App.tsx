@@ -54,7 +54,7 @@ function App() {
                   <Route path="/redeem" exact component={Redeem} />
                   <Route path="/repay" exact component={Repay} />
                   <Route path="/info" exact component={Info} />
-                  <Redirect from="/" to="/swap" />
+                  <Redirect from="/" to="/borrow" />
                 </Switch>
               </div>
             </div>

@@ -13,7 +13,7 @@ const Redeem: FC<Props> = (props) => {
 
     return (
         <>
-            <ContentCard>
+            <ContentCard title="Redeem">
                 <div className="mb-3">
                     <div className="row mt-3" >
                         <div className="col-6">

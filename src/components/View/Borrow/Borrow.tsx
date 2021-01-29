@@ -22,7 +22,7 @@ const Borrow: FC<Props> = (props) => {
 
     return (
         <>
-            <ContentCard>
+            <ContentCard title="Borrow">
             <div className="swap-root">
                 <FieldCard fieldLabel="Your Collateral" selectLabel="Balance: -" list={state.currency} />
                 <div className="pt-3"></div>

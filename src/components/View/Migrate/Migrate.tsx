@@ -8,7 +8,7 @@ interface Props {
 const Migrate: FC<Props> = (props) => {
     return (
         <>
-            <ContentCard>
+            <ContentCard title="Migrate">
                 <h1>Hello Migrate</h1>
             </ContentCard>
         </>
