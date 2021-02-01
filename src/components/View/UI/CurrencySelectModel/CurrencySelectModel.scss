@@ -4,6 +4,42 @@
 
 .modal-content {
   border-radius: 1rem;
+
+  // background-color: var(--theme-modal-bg);
+}
+
+.dark {
+  .modal-content {
+    background-color: rgb(33, 36, 41);
+  }
+  .model-search-input {
+    border: 1px solid rgb(64, 68, 79);
+    color: white;
+    &:focus {
+      background-color: rgb(33, 36, 41);
+    }
+  }
+  .list-group-item {
+    background-color: rgb(33, 36, 41);
+    color: white;
+    &:hover {
+      background-color: rgb(44, 47, 54);
+    }
+  }
+  .curr-list {
+    .list-icon {
+      background-color: transparent;
+    }
+  }
+  .modal-header {
+    border-bottom: 1px solid #2d2f36;
+    .close {
+      color: white;
+    }
+  }
+  .modal-body {
+    border-bottom: 1px solid #2d2f36;
+  }
 }
 
 .modal-header {
@@ -11,9 +47,12 @@
 }
 
 .modal-body {
+  border-bottom: 1px solid #edeef28a;
   padding: 0;
 }
-
+.modal-footer {
+  border-top: none;
+}
 .model-title-custom {
   width: 100%;
 }

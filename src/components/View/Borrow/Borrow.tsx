@@ -30,7 +30,6 @@ const Borrow: FC<Props> = (props) => {
     setShowModel(true);
   };
   const handleCurrChange = (selectedField: any) => {
-    console.log("selected", selectedField);
     switch (currFieldName) {
       case "borrowCollateral":
         setCollateralBal(selectedField.name);

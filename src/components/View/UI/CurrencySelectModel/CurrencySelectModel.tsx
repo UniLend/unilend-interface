@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useRef } from "react";
 import { Button, ListGroup, Modal } from "react-bootstrap";
 import { useStore } from "../../../../store/store";
-import "../../../../theme.scss";
 import "./CurrencySelectModel.scss";
 import Logo from "../../../../assets/logo.svg";
 import Edit from "../../../../assets/edit.svg";
@@ -20,12 +19,15 @@ const CurrencySelectModel: FC<Props> = ({
 }) => {
   const state: any = useStore()[0];
   const search: any = useRef("");
-  useEffect(() => {
-    console.log(state);
-  }, []);
   return (
     <>
-      <Modal animation={false} size="sm" show={show} onHide={handleClose}>
+      <Modal
+        className={state.theme === "dark" ? "dark" : ""}
+        animation={false}
+        size="sm"
+        show={show}
+        onHide={handleClose}
+      >
         <Modal.Header closeButton>
           <Modal.Title className="model-title-custom">
             <label className="form-label modal-label-search">
