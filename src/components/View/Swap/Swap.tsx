@@ -13,6 +13,7 @@ const Swap: FC<Props> = (props) => {
   const dispatch: any = useStore(true)[1];
   const setMessage = useState("")[1];
   const [showModel, setShowModel] = useState(false);
+  const [currFieldName, setCurrFieldName] = useState("");
   useEffect(() => {}, []);
 
   const connectWallet = async () => {
@@ -25,16 +26,21 @@ const Swap: FC<Props> = (props) => {
     setShowModel(false);
   };
 
-  const handleModelOpen = () => {
+  const handleModelOpen = (fieldName: string) => {
+    setCurrFieldName(fieldName);
     setShowModel(true);
   };
-
+  const handleCurrChange = (selectedField: any) => {
+    console.log("selected", selectedField);
+  };
   return (
     <ContentCard title="Swap">
       <div className="swap-root">
         <FieldCard
           fieldLabel="Your Collateral"
           selectLabel="Balance: -"
+          selectValue={""}
+          handleModelOpen={() => handleModelOpen("collateralBalance")}
           list={state.currency}
         />
         <div className="switch-body py-3">
@@ -42,7 +48,13 @@ const Swap: FC<Props> = (props) => {
             <img src={switchIcon} alt="" />
           </button>
         </div>
-        <FieldCard fieldLabel="Received" selectLabel="" list={state.currency} />
+        <FieldCard
+          fieldLabel="Received"
+          selectLabel=""
+          selectValue={""}
+          handleModelOpen={() => handleModelOpen("received")}
+          list={state.currency}
+        />
         <div className="d-grid py-3">
           <button
             className="btn btn-lg btn-custom-primary"
@@ -76,7 +88,12 @@ const Swap: FC<Props> = (props) => {
       >
         Launch demo modal
       </button> */}
-      <CurrencySelectModel show={showModel} handleClose={handleModelClose} />
+      <CurrencySelectModel
+        show={showModel}
+        handleClose={handleModelClose}
+        handleCurrChange={(selectedField) => handleCurrChange(selectedField)}
+        currFieldName={currFieldName}
+      />
     </ContentCard>
   );
 };
