@@ -40,7 +40,7 @@ const Repay: FC<Props> = (props) => {
             </div>
             <div className="col-4" style={{ textAlign: "right" }}>
               <img className="ticker_img  mr-2" src={eth} alt="Eth" />
-              <strong className="ticker_name">ETH</strong>
+              <span className="ticker_name">ETH</span>
             </div>
           </div>
           <hr className="ticket_linebreak" />
@@ -51,7 +51,7 @@ const Repay: FC<Props> = (props) => {
             </div>
             <div className="col-4" style={{ textAlign: "right" }}>
               <img className="ticker_img  mr-2" src={uft} alt="UFT" />
-              <strong className="ticker_name">UFT</strong>
+              <span className="ticker_name">UFT</span>
             </div>
           </div>
         </div>

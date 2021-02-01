@@ -1,7 +1,10 @@
 .ticket_linebreak {
-    margin: 0;
-    border-color:var(--theme-line-break);
+  margin: 0;
+  border-color: var(--theme-line-break);
+}
+.ticket_name {
+  font-size: 15px;
 }
 .collateralAmount {
-    font-weight: 600;
+  font-weight: 600;
 }

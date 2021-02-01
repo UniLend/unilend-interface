@@ -32,7 +32,7 @@ const Redeem: FC<Props> = (props) => {
           <div className="row mt-3">
             <div className="col-6">
               <img className="ticker_img  mr-2" src={eth} alt="Eth" />
-              <strong className="ticker_name">uWETH</strong>
+              <span className="ticker_name">uWETH</span>
             </div>
             <div className="col-6" style={{ textAlign: "right" }}>
               <p className="collateralAmount">0</p>
@@ -42,7 +42,7 @@ const Redeem: FC<Props> = (props) => {
           <div className="row mt-3">
             <div className="col-6">
               <img className="ticker_img  mr-2" src={eth} alt="Eth" />
-              <strong className="ticker_name">ETH</strong>
+              <span className="ticker_name">ETH</span>
             </div>
             <div className="col-6" style={{ textAlign: "right" }}>
               <p className="collateralAmount">0</p>
@@ -65,7 +65,7 @@ const Redeem: FC<Props> = (props) => {
         <div className="price_head py-3">
           <div className="price_aa">
             <div className="price-list">
-              Liquidity Available<span className="price">-</span>
+              Liquidity Available ( ETH )<span className="price">-</span>
             </div>
           </div>
         </div>
