@@ -10,7 +10,7 @@ const Lend: FC<Props> = (props) => {
   const state: any = useStore()[0];
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
-  const [yourLend, setYourLend] = useState("eth");
+  const [yourLend, setYourLend] = useState("ht");
   const handleModelClose = () => {
     setShowModel(false);
   };

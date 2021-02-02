@@ -11,7 +11,7 @@ const Redeem: FC<Props> = (props) => {
   const state: any = useStore()[0];
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
-  const [youRedeem, setYouRedeem] = useState("eth");
+  const [youRedeem, setYouRedeem] = useState("ht");
   const handleModelClose = () => {
     setShowModel(false);
   };

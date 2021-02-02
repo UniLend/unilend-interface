@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import "./FieldCard.scss";
-import icon from "../../../../assets/logo.svg";
+import icon from "../../../../assets/htLogo.svg";
 import dropdown from "../../../../assets/dropdown.svg";
 interface Props {
   fieldLabel: String;

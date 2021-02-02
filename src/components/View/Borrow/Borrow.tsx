@@ -13,7 +13,7 @@ const Borrow: FC<Props> = (props) => {
   const [showModel, setShowModel] = useState(false);
   const setMessage = useState("")[1];
   const [currFieldName, setCurrFieldName] = useState("");
-  const [collateralBal, setCollateralBal] = useState("eth");
+  const [collateralBal, setCollateralBal] = useState("ht");
   const [received, setReceived] = useState("eth");
   const connectWallet = async () => {
     dispatch("CONNECT_WALLET", {});

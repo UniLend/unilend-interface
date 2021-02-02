@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef } from "react";
 import { Button, ListGroup, Modal } from "react-bootstrap";
 import { useStore } from "../../../../store/store";
 import "./CurrencySelectModel.scss";
-import Logo from "../../../../assets/logo.svg";
+import Logo from "../../../../assets/htLogo.svg";
 import Edit from "../../../../assets/edit.svg";
 interface Props {
   show: boolean;

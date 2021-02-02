@@ -53,6 +53,11 @@
 .modal-footer {
   border-top: none;
 }
+
+.modal-dialog {
+  margin: 5.5rem auto;
+}
+
 .model-title-custom {
   width: 100%;
 }
@@ -69,6 +74,12 @@
 @media (min-width: 576px) {
   .modal-sm {
     max-width: 410px;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-dialog {
+    width: 80%;
   }
 }
 

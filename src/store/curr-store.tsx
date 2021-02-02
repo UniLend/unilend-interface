@@ -10,11 +10,16 @@ const configureCrrStore = () => {
     currency: [
       {
         id: 1,
+        name: "ht",
+        desc: "ht",
+      },
+      {
+        id: 2,
         name: "eth",
         desc: "Ether",
       },
       {
-        id: 2,
+        id: 3,
         name: "aave",
         desc: "aave",
       },

@@ -12,7 +12,7 @@ const Repay: FC<Props> = (props) => {
   const state: any = useStore()[0];
   const dispatch: any = useStore(true)[1];
   const [showModel, setShowModel] = useState(false);
-  const [youRepay, setYouRepay] = useState("eth");
+  const [youRepay, setYouRepay] = useState("ht");
   const handleChange = () => {
     dispatch("LIST_CURRENCY", {});
     console.log(state);
