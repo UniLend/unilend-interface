@@ -35,7 +35,7 @@ const FieldCard: FC<Props> = (props) => {
                   <img className="curr-image" src={icon} alt="Curr" />
                   <p className="curr-text">{props.selectValue}</p>
                   <img
-                    style={{ paddingLeft: "4px", width: "18px" }}
+                    style={{ paddingLeft: "4px", width: "15px" }}
                     src={dropdown}
                     alt="Curr"
                   />

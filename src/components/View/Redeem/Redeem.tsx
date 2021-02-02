@@ -59,7 +59,7 @@ const Redeem: FC<Props> = (props) => {
         />
         <div className="d-grid pt-4">
           <button className="btn btn-lg btn-custom-primary" type="button">
-            Connect Wallet
+            Redeem
           </button>
         </div>
         <div className="price_head py-3">

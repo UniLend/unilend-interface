@@ -49,7 +49,7 @@ const Borrow: FC<Props> = (props) => {
           <FieldCard
             handleModelOpen={() => handleModelOpen("borrowCollateral")}
             fieldLabel="Your Collateral"
-            selectLabel="Balance: -"
+            selectLabel="Balance"
             selectValue={collateralBal}
             list={state.currency}
           />

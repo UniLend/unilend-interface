@@ -34,7 +34,7 @@ const NavBar: React.FC<Props> = (props) => {
         className={`navbar navbar-expand-sm navbar-${state.theme} bg-${state.theme}`}
       >
         <div className="container-fluid">
-          <Link className="navbar-brand" to="#">
+          <Link className="navbar-brand navbar-brand-custom" to="#">
             <img
               src={logo}
               alt="Logo"
@@ -159,7 +159,13 @@ const NavBar: React.FC<Props> = (props) => {
               state.theme === "dark" && "btn-dark"
             } btn-custom-secondary btn-theme-icon`}
           >
-            {<img width="20" src={state.theme === "light" ? sun : moon } alt="theme"/>}
+            {
+              <img
+                width="20"
+                src={state.theme === "light" ? sun : moon}
+                alt="theme"
+              />
+            }
           </button>
         </div>
       </nav>

@@ -31,7 +31,7 @@ const Lend: FC<Props> = (props) => {
           handleModelOpen={() => handleModelOpen("yourLend")}
           fieldLabel="You Lend"
           selectValue={yourLend}
-          selectLabel="Balance: -"
+          selectLabel=""
           list={state.currency}
         />
         <div className="price_head py-4">
@@ -46,7 +46,7 @@ const Lend: FC<Props> = (props) => {
         </div>
         <div className="d-grid py-3">
           <button className="btn btn-lg btn-custom-primary" type="button">
-            Connect Wallet
+            Lend
           </button>
         </div>
         <CurrencySelectModel

@@ -57,7 +57,7 @@ const Repay: FC<Props> = (props) => {
         </div>
         <FieldCard
           fieldLabel="You Repay"
-          selectLabel="Balance: -"
+          selectLabel=""
           selectValue={youRepay}
           handleModelOpen={handleModelOpen}
           list={state.currency}
@@ -68,7 +68,7 @@ const Repay: FC<Props> = (props) => {
             className="btn btn-lg btn-custom-primary"
             type="button"
           >
-            Connect Wallet
+            Redeem
           </button>
         </div>
         <CurrencySelectModel
