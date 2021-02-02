@@ -68,8 +68,15 @@ const Repay: FC<Props> = (props) => {
             className="btn btn-lg btn-custom-primary"
             type="button"
           >
-            Redeem
+            Repay
           </button>
+        </div>
+        <div className="price_head py-3">
+          <div className="price_aa">
+            <div className="price-list">
+              Liquidity Available ( ETH )<span className="price">-</span>
+            </div>
+          </div>
         </div>
         <CurrencySelectModel
           currFieldName={""}
