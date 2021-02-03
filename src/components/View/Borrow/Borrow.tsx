@@ -4,6 +4,8 @@ import switchIcon from "../../../assets/switch.svg";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import { useStore } from "../../../store/store";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
+import web3 from "../../../ethereum/web3";
+import { web3Service } from "../../../ethereum/web3Service";
 
 interface Props {}
 
@@ -15,12 +17,16 @@ const Borrow: FC<Props> = (props) => {
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [received, setReceived] = useState("eth");
+
   const connectWallet = async () => {
-    dispatch("CONNECT_WALLET", {});
     setMessage("Waiting on transaction success...");
+    let accounts;
+    accounts = await web3Service.getAccounts();
+    dispatch("CONNECT_WALLET", { accounts });
     console.log(state.walletConnected);
     setMessage("You have been entered!");
   };
+
   const handleModelClose = () => {
     setShowModel(false);
   };
@@ -47,6 +53,9 @@ const Borrow: FC<Props> = (props) => {
       <ContentCard title="Borrow">
         <div className="swap-root">
           <FieldCard
+            onF1Change={(e: any) => {
+              console.log(e);
+            }}
             handleModelOpen={() => handleModelOpen("borrowCollateral")}
             fieldLabel="Your Collateral"
             selectLabel="Balance"
@@ -55,6 +64,9 @@ const Borrow: FC<Props> = (props) => {
           />
           <div className="pt-3"></div>
           <FieldCard
+            onF1Change={(e: any) => {
+              console.log(e);
+            }}
             fieldLabel="Received"
             selectLabel=""
             selectValue={received}
@@ -62,13 +74,22 @@ const Borrow: FC<Props> = (props) => {
             list={state.currency}
           />
           <div className="d-grid py-3">
-            <button
-              className="btn btn-lg btn-custom-primary"
-              onClick={connectWallet}
-              type="button"
-            >
-              Connect Wallet
-            </button>
+            {state.accounts.length > 0 ? (
+              <button
+                className="btn btn-lg btn-custom-primary"
+                onClick={connectWallet}
+                type="button"
+              >
+                Borrow
+              </button>
+            ) : (
+              <button
+                className="btn btn-lg btn-custom-primary"
+                onClick={connectWallet}
+              >
+                Connect Wallet
+              </button>
+            )}
           </div>
           <div className="price_head">
             <div className="price_aa">

@@ -6,11 +6,14 @@ import FieldCard from "../UI/FieldsCard/FieldCard";
 import eth from "../../../assets/eth.svg";
 import uft from "../../../assets/uft.svg";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
+import { web3Service } from "../../../ethereum/web3Service";
 interface Props extends RouteComponentProps<any> {}
 
 const Repay: FC<Props> = (props) => {
   const state: any = useStore()[0];
   const dispatch: any = useStore(true)[1];
+  const setMessage = useState("")[1];
+
   const [showModel, setShowModel] = useState(false);
   const [youRepay, setYouRepay] = useState("ht");
   const handleChange = () => {
@@ -28,6 +31,14 @@ const Repay: FC<Props> = (props) => {
   const handleCurrChange = (selectedField: any) => {
     setYouRepay(selectedField.name);
     setShowModel(false);
+  };
+  const connectWallet = async () => {
+    setMessage("Waiting on transaction success...");
+    let accounts;
+    accounts = await web3Service.getAccounts();
+    dispatch("CONNECT_WALLET", { accounts });
+    console.log(state.walletConnected);
+    setMessage("You have been entered!");
   };
   return (
     <>
@@ -56,6 +67,9 @@ const Repay: FC<Props> = (props) => {
           </div>
         </div>
         <FieldCard
+          onF1Change={(e: any) => {
+            console.log(e);
+          }}
           fieldLabel="You Repay"
           selectLabel=""
           selectValue={youRepay}
@@ -63,13 +77,22 @@ const Repay: FC<Props> = (props) => {
           list={state.currency}
         />
         <div className="d-grid pt-4">
-          <button
-            onClick={handleChange}
-            className="btn btn-lg btn-custom-primary"
-            type="button"
-          >
-            Repay
-          </button>
+          {state.accounts.length > 0 ? (
+            <button
+              className="btn btn-lg btn-custom-primary"
+              onClick={connectWallet}
+              type="button"
+            >
+              Repay
+            </button>
+          ) : (
+            <button
+              className="btn btn-lg btn-custom-primary"
+              onClick={connectWallet}
+            >
+              Connect Wallet
+            </button>
+          )}
         </div>
         <div className="price_head py-3">
           <div className="price_aa">

@@ -8,6 +8,10 @@ import sun from "../../../../assets/sun.svg";
 import moon from "../../../../assets/moon.svg";
 
 import { useStore } from "../../../../store/store";
+import web3 from "../../../../ethereum/web3";
+import { shortenAddress } from "../../../../utils";
+import { web3Service } from "../../../../ethereum/web3Service";
+import { UnilendLBFactory } from "../../../../ethereum/contracts/UnilendLBFactory";
 interface Props extends RouteComponentProps<any> {}
 
 const NavBar: React.FC<Props> = (props) => {
@@ -19,8 +23,14 @@ const NavBar: React.FC<Props> = (props) => {
     setCurrentPage(props.location.pathname);
   }, [props.location.pathname]);
 
-  const connectWallet = () => {
-    dispatch("CONNECT_WALLET", {});
+  const connectWallet = async () => {
+    let accounts;
+    accounts = await web3Service.getAccounts();
+    dispatch("CONNECT_WALLET", { accounts });
+    var unilendLBFactory = UnilendLBFactory();
+    unilendLBFactory.methods.router().call((error: any, result: any) => {
+      dispatch("LB_FACTORY", { unilendLbRouter: result });
+    });
     console.log(state);
   };
 
@@ -138,21 +148,32 @@ const NavBar: React.FC<Props> = (props) => {
               </li> */}
             </ul>
           </div>
-          <button
-            className={`d-flex btn ${
-              state.theme === "dark" && "btn-dark"
-            } btn-custom-secondary`}
-            onClick={connectWallet}
-          >
-            <img
-              src={state.theme === "light" ? walletlight : walletdark}
-              width="26"
-              alt="Wallet"
-              className="d-inline-block px-1"
-            />
-            Connect wallet
-          </button>
-
+          {(state.accounts && state.accounts.length) ||
+          state.walletConnected ? (
+            <button
+              className={`d-flex btn ${
+                state.theme === "dark" && "btn-dark"
+              } btn-custom-secondary`}
+              onClick={connectWallet}
+            >
+              {shortenAddress(state.accounts[0])}
+            </button>
+          ) : (
+            <button
+              className={`d-flex btn ${
+                state.theme === "dark" && "btn-dark"
+              } btn-custom-secondary`}
+              onClick={connectWallet}
+            >
+              <img
+                src={state.theme === "light" ? walletlight : walletdark}
+                width="26"
+                alt="Wallet"
+                className="d-inline-block px-1"
+              />
+              Connect wallet
+            </button>
+          )}
           <button
             onClick={() => handleUpdate()}
             className={`d-flex ml-3 btn ${

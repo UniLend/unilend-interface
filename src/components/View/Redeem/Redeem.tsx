@@ -5,10 +5,13 @@ import FieldCard from "../UI/FieldsCard/FieldCard";
 import eth from "../../../assets/eth.svg";
 import "./Redeem.scss";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
+import { web3Service } from "../../../ethereum/web3Service";
 interface Props {}
 
 const Redeem: FC<Props> = (props) => {
   const state: any = useStore()[0];
+  const dispatch: any = useStore(true)[1];
+  const setMessage = useState("")[1];
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
   const [youRedeem, setYouRedeem] = useState("ht");
@@ -25,6 +28,16 @@ const Redeem: FC<Props> = (props) => {
     setYouRedeem(selectedField.name);
     setShowModel(false);
   };
+
+  const connectWallet = async () => {
+    setMessage("Waiting on transaction success...");
+    let accounts;
+    accounts = await web3Service.getAccounts();
+    dispatch("CONNECT_WALLET", { accounts });
+    console.log(state.walletConnected);
+    setMessage("You have been entered!");
+  };
+
   return (
     <>
       <ContentCard title="Redeem">
@@ -51,6 +64,9 @@ const Redeem: FC<Props> = (props) => {
           </div>
         </div>
         <FieldCard
+          onF1Change={(e: any) => {
+            console.log(e);
+          }}
           handleModelOpen={() => handleModelOpen("youRedeem")}
           fieldLabel="You Redeem"
           selectLabel=""
@@ -58,9 +74,22 @@ const Redeem: FC<Props> = (props) => {
           list={state.currency}
         />
         <div className="d-grid pt-4">
-          <button className="btn btn-lg btn-custom-primary" type="button">
-            Redeem
-          </button>
+          {state.accounts.length > 0 ? (
+            <button
+              className="btn btn-lg btn-custom-primary"
+              onClick={connectWallet}
+              type="button"
+            >
+              Redeem
+            </button>
+          ) : (
+            <button
+              className="btn btn-lg btn-custom-primary"
+              onClick={connectWallet}
+            >
+              Connect Wallet
+            </button>
+          )}
         </div>
         <div className="price_head py-3">
           <div className="price_aa">

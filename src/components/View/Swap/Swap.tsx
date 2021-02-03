@@ -37,6 +37,9 @@ const Swap: FC<Props> = (props) => {
     <ContentCard title="Swap">
       <div className="swap-root">
         <FieldCard
+          onF1Change={(e: any) => {
+            console.log(e);
+          }}
           fieldLabel="Your Collateral"
           selectLabel="Balance: -"
           selectValue={""}
@@ -49,6 +52,9 @@ const Swap: FC<Props> = (props) => {
           </button>
         </div>
         <FieldCard
+          onF1Change={(e: any) => {
+            console.log(e);
+          }}
           fieldLabel="Received"
           selectLabel=""
           selectValue={""}
