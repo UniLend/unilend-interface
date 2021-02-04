@@ -6,23 +6,32 @@ import { useStore } from "../../../store/store";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import web3 from "../../../ethereum/web3";
 import { web3Service } from "../../../ethereum/web3Service";
+import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
+import { assetAddress, collateralAddress } from "../../../ethereum/contracts";
+import { UnilendLBFactory } from "../../../ethereum/contracts/UnilendLBFactory";
 
 interface Props {}
 
 const Borrow: FC<Props> = (props) => {
   const state: any = useStore()[0];
   const dispatch: any = useStore(true)[1];
+  const [yourCollateral, setYourCollateral] = useState("");
+  const [borrowReceived, setBorrowReceived] = useState("");
   const [showModel, setShowModel] = useState(false);
   const setMessage = useState("")[1];
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
-  const [received, setReceived] = useState("eth");
+  const [receivedType, setReceived] = useState("eth");
 
   const connectWallet = async () => {
     setMessage("Waiting on transaction success...");
     let accounts;
     accounts = await web3Service.getAccounts();
     dispatch("CONNECT_WALLET", { accounts });
+    var unilendLBFactory = UnilendLBFactory();
+    unilendLBFactory.methods.router().call((error: any, result: any) => {
+      dispatch("LB_FACTORY", { unilendLbRouter: result });
+    });
     console.log(state.walletConnected);
     setMessage("You have been entered!");
   };
@@ -35,6 +44,7 @@ const Borrow: FC<Props> = (props) => {
     setCurrFieldName(fieldName);
     setShowModel(true);
   };
+
   const handleCurrChange = (selectedField: any) => {
     switch (currFieldName) {
       case "borrowCollateral":
@@ -48,16 +58,35 @@ const Borrow: FC<Props> = (props) => {
     }
     setShowModel(false);
   };
+
+  const handleBorrow = async () => {
+    const unilendLB = UnilendLBContract(state.unilendLbRouter);
+    const amount1 = web3.utils.toWei(yourCollateral, "ether");
+    const amount2 = web3.utils.toWei(borrowReceived, "ether");
+    unilendLB.methods
+      .borrow(collateralAddress, assetAddress, amount1, amount2)
+      .send({
+        from: state.accounts[0],
+      })
+      .on("transactionHash", (result: any) => {
+        console.log(result);
+      })
+      .on("error", function (error: any) {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <ContentCard title="Borrow">
         <div className="swap-root">
           <FieldCard
             onF1Change={(e: any) => {
-              console.log(e);
+              setYourCollateral(e.target.value);
             }}
             handleModelOpen={() => handleModelOpen("borrowCollateral")}
             fieldLabel="Your Collateral"
+            fieldType="text"
             selectLabel="Balance"
             selectValue={collateralBal}
             list={state.currency}
@@ -65,11 +94,12 @@ const Borrow: FC<Props> = (props) => {
           <div className="pt-3"></div>
           <FieldCard
             onF1Change={(e: any) => {
-              console.log(e);
+              setBorrowReceived(e.target.value);
             }}
             fieldLabel="Received"
+            fieldType="text"
             selectLabel=""
-            selectValue={received}
+            selectValue={receivedType}
             handleModelOpen={() => handleModelOpen("borrowReceived")}
             list={state.currency}
           />
@@ -77,7 +107,7 @@ const Borrow: FC<Props> = (props) => {
             {state.accounts.length > 0 ? (
               <button
                 className="btn btn-lg btn-custom-primary"
-                onClick={connectWallet}
+                onClick={handleBorrow}
                 type="button"
               >
                 Borrow
