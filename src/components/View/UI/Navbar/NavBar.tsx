@@ -8,30 +8,27 @@ import sun from "../../../../assets/sun.svg";
 import moon from "../../../../assets/moon.svg";
 
 import { useStore } from "../../../../store/store";
-import web3 from "../../../../ethereum/web3";
 import { shortenAddress } from "../../../../utils";
 import { web3Service } from "../../../../ethereum/web3Service";
-import { UnilendLBFactory } from "../../../../ethereum/contracts/UnilendLBFactory";
+import { getUniLendLbRouter } from "../../../../services/contractService";
+import { useActions } from "../../../../hooks/useActions";
+import { useTypedSelector } from "../../../../hooks/useTypedSelector";
 interface Props extends RouteComponentProps<any> {}
 
 const NavBar: React.FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState("");
   const state: any = useStore()[0];
   const dispatch: any = useStore(true)[1];
-
+  const { connectWalletAction } = useActions();
+  const { accounts, walletConnected } = useTypedSelector(
+    (state) => state.configureWallet
+  );
   useEffect(() => {
     setCurrentPage(props.location.pathname);
   }, [props.location.pathname]);
 
   const connectWallet = async () => {
-    let accounts;
-    accounts = await web3Service.getAccounts();
-    dispatch("CONNECT_WALLET", { accounts });
-    var unilendLBFactory = UnilendLBFactory();
-    unilendLBFactory.methods.router().call((error: any, result: any) => {
-      dispatch("LB_FACTORY", { unilendLbRouter: result });
-    });
-    console.log(state);
+    connectWalletAction();
   };
 
   const handleUpdate = () => {
@@ -148,15 +145,14 @@ const NavBar: React.FC<Props> = (props) => {
               </li> */}
             </ul>
           </div>
-          {(state.accounts && state.accounts.length) ||
-          state.walletConnected ? (
+          {(accounts && accounts.length) || walletConnected ? (
             <button
               className={`d-flex btn ${
                 state.theme === "dark" && "btn-dark"
               } btn-custom-secondary`}
               onClick={connectWallet}
             >
-              {shortenAddress(state.accounts[0])}
+              {shortenAddress(accounts[0])}
             </button>
           ) : (
             <button
