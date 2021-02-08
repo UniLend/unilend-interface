@@ -1,5 +1,5 @@
 import { ActionType } from "../action-types";
-import { Action } from "../actions";
+import { Action } from "../actions/connectWalletA";
 
 interface ConfigureWalletState {
   loading: boolean;
@@ -10,6 +10,7 @@ interface ConfigureWalletState {
   unilendLbRouter: string;
   assetPoolAddress: string;
   collateralPoolAddress: string;
+  accountBalance: string;
 }
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
   loading: false,
   error: null,
   data: [],
+  accountBalance: "",
 };
 
 const configureWalletReducer = (
@@ -31,7 +33,6 @@ const configureWalletReducer = (
     case ActionType.CONNECT_WALLET:
       return { ...state, loading: true, error: null, data: [] };
     case ActionType.CONNECT_WALLET_SUCCESS:
-      console.log(action);
       return {
         ...state,
         loading: false,
@@ -41,6 +42,19 @@ const configureWalletReducer = (
       };
     case ActionType.CONNECT_WALLET_ERROR:
       return { ...state, loading: false, error: action.payload, data: [] };
+    case ActionType.LB_FACTORY:
+      return { ...state, unilendLbRouter: action.payload };
+    case ActionType.SET_POOL_ADDRESS:
+      return {
+        ...state,
+        assetPoolAddress: action.payload[0],
+        collateralPoolAddress: action.payload[1],
+      };
+    case ActionType.ACCOUNT_BALANCE:
+      return {
+        ...state,
+        accountBalance: action.payload,
+      };
     default:
       return state;
   }
