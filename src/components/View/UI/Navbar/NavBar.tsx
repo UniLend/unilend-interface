@@ -9,8 +9,6 @@ import moon from "../../../../assets/moon.svg";
 
 import { useStore } from "../../../../store/store";
 import { shortenAddress } from "../../../../utils";
-import { web3Service } from "../../../../ethereum/web3Service";
-import { getUniLendLbRouter } from "../../../../services/contractService";
 import { useActions } from "../../../../hooks/useActions";
 import { useTypedSelector } from "../../../../hooks/useTypedSelector";
 interface Props extends RouteComponentProps<any> {}

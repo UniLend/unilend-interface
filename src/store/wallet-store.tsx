@@ -1,5 +1,3 @@
-import { UnilendLBFactory } from "../ethereum/contracts/UnilendLBFactory";
-import web3 from "../ethereum/web3";
 import { initStore } from "./store";
 
 const configureWalletStore = () => {
@@ -20,11 +18,19 @@ const configureWalletStore = () => {
     LB_FACTORY: (curState: any, payload: any) => {
       return { unilendLbRouter: payload.unilendLbRouter };
     },
+    SET_POOL_ADDRESS: (curState: any, payload: any) => {
+      return {
+        assetPoolAddress: payload.assetPoolAddress,
+        collateralPoolAddress: payload.collateralPoolAddress,
+      };
+    },
   };
   initStore(actions, {
     walletConnected: false,
     accounts: [],
     unilendLbRouter: "",
+    assetPoolAddress: "",
+    collateralPoolAddress: "",
   });
 };
 

@@ -7,6 +7,7 @@ interface Props {
   selectLabel: String;
   selectValue: String;
   list: any;
+  fieldType: string;
   handleModelOpen: () => void;
   onF1Change: (e: any) => void;
 }
@@ -19,7 +20,7 @@ const FieldCard: FC<Props> = (props) => {
             <div className=" col-6 col-sm-7">
               <label className="form-label">{props.fieldLabel}</label>
               <input
-                type="text"
+                type={props.fieldType}
                 className="form-control field-input"
                 placeholder="0.0"
                 onChange={props.onF1Change}

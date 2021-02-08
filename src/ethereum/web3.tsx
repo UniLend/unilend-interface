@@ -1,7 +1,6 @@
 import Web3 from "web3";
 
 let web3: any;
-console.log((window as any).ethereum);
 // if (typeof window !== 'undefined' && typeof (window as any).web3 !== 'undefined') {
 // We are in the browser and metamask is running.
 web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
