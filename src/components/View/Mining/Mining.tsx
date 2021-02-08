@@ -1,18 +1,33 @@
-import React, { FC } from 'react'
-import ContentCard from '../UI/ContentCard/ContentCard';
+import React, { FC, useState } from "react";
+import { useActions } from "../../../hooks/useActions";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import ContentCard from "../UI/ContentCard/ContentCard";
 
-interface Props {
-
-}
+interface Props {}
 
 const Mining: FC<Props> = (props) => {
-    return (
-        <>
-            <ContentCard title="Mining">
-                <h1>Hello Mining</h1>
-            </ContentCard>
-        </>
-    )
-}
+  const setMessage = useState("")[1];
+  const { connectWalletAction } = useActions();
+  const { accounts } = useTypedSelector((state) => state.configureWallet);
+
+  const connectWallet = async () => {
+    setMessage("Waiting on transaction success...");
+
+    connectWalletAction();
+  };
+  return (
+    <>
+      <ContentCard title="Mining">
+        <button
+          className="btn btn-lg btn-custom-primary"
+          onClick={connectWallet}
+        >
+          Connect Wallet
+        </button>
+        <p>{accounts[0]}</p>
+      </ContentCard>
+    </>
+  );
+};
 
 export default Mining;

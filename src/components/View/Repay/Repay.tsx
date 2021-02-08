@@ -119,7 +119,7 @@ const Repay: FC<Props> = (props) => {
           }}
           fieldType="text"
           fieldLabel="You Repay"
-          selectLabel={`Balance:${accountBalance}`}
+          selectLabel={accountBalance ? `Balance:${accountBalance}` : ""}
           selectValue={youRepay}
           handleModelOpen={handleModelOpen}
           list={state.currency}

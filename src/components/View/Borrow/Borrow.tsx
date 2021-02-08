@@ -1,20 +1,18 @@
 import React, { FC, useState } from "react";
 import ContentCard from "../UI/ContentCard/ContentCard";
-import switchIcon from "../../../assets/switch.svg";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import { useStore } from "../../../store/store";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import web3 from "../../../ethereum/web3";
-import { web3Service } from "../../../ethereum/web3Service";
 import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
 import { assetAddress, collateralAddress } from "../../../ethereum/contracts";
-import { UnilendLBFactory } from "../../../ethereum/contracts/UnilendLBFactory";
+import { useActions } from "../../../hooks/useActions";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 interface Props {}
 
 const Borrow: FC<Props> = (props) => {
   const state: any = useStore()[0];
-  const dispatch: any = useStore(true)[1];
   const [yourCollateral, setYourCollateral] = useState("");
   const [borrowReceived, setBorrowReceived] = useState("");
   const [showModel, setShowModel] = useState(false);
@@ -22,17 +20,13 @@ const Borrow: FC<Props> = (props) => {
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-
+  const { connectWalletAction } = useActions();
+  const { accounts, walletConnected } = useTypedSelector(
+    (state) => state.configureWallet
+  );
   const connectWallet = async () => {
     setMessage("Waiting on transaction success...");
-    let accounts;
-    accounts = await web3Service.getAccounts();
-    dispatch("CONNECT_WALLET", { accounts });
-    var unilendLBFactory = UnilendLBFactory();
-    unilendLBFactory.methods.router().call((error: any, result: any) => {
-      dispatch("LB_FACTORY", { unilendLbRouter: result });
-    });
-    console.log(state.walletConnected);
+    connectWalletAction();
     setMessage("You have been entered!");
   };
 
@@ -69,7 +63,7 @@ const Borrow: FC<Props> = (props) => {
         from: state.accounts[0],
       })
       .on("transactionHash", (result: any) => {
-        console.log(result);
+        // console.log(result);
       })
       .on("error", function (error: any) {
         console.log(error);
@@ -104,7 +98,7 @@ const Borrow: FC<Props> = (props) => {
             list={state.currency}
           />
           <div className="d-grid py-3">
-            {state.accounts.length > 0 ? (
+            {(accounts && accounts.length) || walletConnected ? (
               <button
                 className="btn btn-lg btn-custom-primary"
                 onClick={handleBorrow}

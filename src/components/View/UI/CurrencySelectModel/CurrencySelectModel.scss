@@ -37,9 +37,9 @@
       color: white;
     }
   }
-  .modal-body {
-    border-bottom: 1px solid #2d2f36;
-  }
+  // .modal-body {
+  //   border-bottom: 1px solid #2d2f36;
+  // }
 }
 
 .modal-header {
@@ -47,7 +47,7 @@
 }
 
 .modal-body {
-  border-bottom: 1px solid #edeef28a;
+  border-bottom: none;
   padding: 0;
 }
 .modal-footer {

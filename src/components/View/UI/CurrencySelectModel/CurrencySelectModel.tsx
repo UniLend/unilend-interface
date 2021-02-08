@@ -1,9 +1,8 @@
-import React, { FC, useEffect, useRef } from "react";
-import { Button, ListGroup, Modal } from "react-bootstrap";
+import React, { FC, useRef } from "react";
+import { ListGroup, Modal } from "react-bootstrap";
 import { useStore } from "../../../../store/store";
 import "./CurrencySelectModel.scss";
 import Logo from "../../../../assets/htLogo.svg";
-import Edit from "../../../../assets/edit.svg";
 interface Props {
   show: boolean;
   handleClose: () => void;
@@ -81,12 +80,12 @@ const CurrencySelectModel: FC<Props> = ({
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div className="align-center">
+          {/* <div className="align-center">
             <Button className="footer-btn">
               <img style={{ stroke: "rgb(33, 114, 229)" }} src={Edit} alt="" />
               Manage
             </Button>
-          </div>
+          </div> */}
         </Modal.Footer>
       </Modal>
     </>

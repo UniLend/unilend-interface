@@ -6,11 +6,15 @@ import eth from "../../../assets/eth.svg";
 import "./Redeem.scss";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import { web3Service } from "../../../ethereum/web3Service";
+import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
+import web3 from "../../../ethereum/web3";
+import { getUniLendLbRouter } from "../../../services/contractService";
 interface Props {}
 
 const Redeem: FC<Props> = (props) => {
   const state: any = useStore()[0];
   const dispatch: any = useStore(true)[1];
+  const [redeemAmount, setRedeemAmount] = useState("");
   const setMessage = useState("")[1];
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
@@ -34,8 +38,23 @@ const Redeem: FC<Props> = (props) => {
     let accounts;
     accounts = await web3Service.getAccounts();
     dispatch("CONNECT_WALLET", { accounts });
-    console.log(state.walletConnected);
+    await getUniLendLbRouter(dispatch);
     setMessage("You have been entered!");
+  };
+
+  const handleRedeem = async () => {
+    debugger;
+    const unilendLB = UnilendLBContract(state.unilendLbRouter);
+    let fullAmount = web3.utils.toWei(redeemAmount, "ether");
+    unilendLB.methods.redeemETH(fullAmount).send({
+      from: state.accounts[0],
+    });
+    // .on("transactionHash", (result: any) => {
+    //   console.log(result);
+    // })
+    // .on("error", function (error: Error) {
+    //   console.log(error);
+    // });
   };
 
   return (
@@ -65,8 +84,9 @@ const Redeem: FC<Props> = (props) => {
         </div>
         <FieldCard
           onF1Change={(e: any) => {
-            console.log(e);
+            setRedeemAmount(e.target.value);
           }}
+          fieldType="number"
           handleModelOpen={() => handleModelOpen("youRedeem")}
           fieldLabel="You Redeem"
           selectLabel=""
@@ -77,7 +97,7 @@ const Redeem: FC<Props> = (props) => {
           {state.accounts.length > 0 ? (
             <button
               className="btn btn-lg btn-custom-primary"
-              onClick={connectWallet}
+              onClick={handleRedeem}
               type="button"
             >
               Redeem

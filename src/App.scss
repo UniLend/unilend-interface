@@ -93,7 +93,10 @@
   background: transparent;
   padding: 0.375rem;
 }
-
+.btn.disabled,
+.btn:disabled {
+  cursor: not-allowed;
+}
 .bg-light {
   background-color: #f3f5f9 !important;
 }

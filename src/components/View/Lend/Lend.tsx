@@ -1,8 +1,8 @@
 import React, { FC, useState } from "react";
 import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
-import { UnilendLBFactory } from "../../../ethereum/contracts/UnilendLBFactory";
 import web3 from "../../../ethereum/web3";
 import { web3Service } from "../../../ethereum/web3Service";
+import { getUniLendLbRouter } from "../../../services/contractService";
 import { useStore } from "../../../store/store";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
@@ -28,10 +28,8 @@ const Lend: FC<Props> = (props) => {
     let accounts;
     accounts = await web3Service.getAccounts();
     dispatch("CONNECT_WALLET", { accounts });
-    var unilendLBFactory = UnilendLBFactory();
-    unilendLBFactory.methods.router().call((error: any, result: any) => {
-      dispatch("LB_FACTORY", { unilendLbRouter: result });
-    });
+    await getUniLendLbRouter(dispatch);
+
     console.log(state.walletConnected);
     setMessage("You have been entered!");
   };
@@ -49,9 +47,8 @@ const Lend: FC<Props> = (props) => {
 
   const handleLend = async () => {
     console.log(state);
-    debugger;
-    const lend = UnilendLBContract(state.unilendLbRouter);
-    lend.methods.lendETH().send({
+    const unilendLB = UnilendLBContract(state.unilendLbRouter);
+    unilendLB.methods.lendETH().send({
       from: state.accounts[0],
       value: web3.utils.toWei(lendAmount, "ether"),
     });
@@ -70,6 +67,7 @@ const Lend: FC<Props> = (props) => {
           onF1Change={(e: any) => {
             setLendAmount(e.target.value);
           }}
+          fieldType="text"
           handleModelOpen={() => handleModelOpen("yourLend")}
           fieldLabel="You Lend"
           selectValue={yourLend}
