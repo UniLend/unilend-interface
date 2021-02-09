@@ -28,9 +28,6 @@ export const connectWalletAction = () => {
     try {
       let accounts: any;
       accounts = await web3Service.getAccounts();
-      accounts.on("accountsChanged", (accounts: any) => {
-        console.log(accounts);
-      });
 
       if (window && !(window as any).ethereum.selectedAddress) {
         (window as any).ethereum.enable().then(() => {
