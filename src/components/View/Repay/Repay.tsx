@@ -10,21 +10,18 @@ import { web3Service } from "../../../ethereum/web3Service";
 import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
 import { UnilendLBPool } from "../../../ethereum/contracts/UnilendLBPool";
 import web3 from "../../../ethereum/web3";
-import { collateralAddress } from "../../../ethereum/contracts";
+import { collateralAddress, currencyList } from "../../../ethereum/contracts";
 import { getUniLendLbRouter } from "../../../services/contractService";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 interface Props extends RouteComponentProps<any> {}
 
 const Repay: FC<Props> = (props) => {
-  const state: any = useStore()[0];
-  const dispatch: any = useStore(true)[1];
-  const setMessage = useState("")[1];
   const [tAmount, setTAmount] = useState(0);
   const [showModel, setShowModel] = useState(false);
   const [youRepay, setYouRepay] = useState("ht");
   const [repayValue, setRepayValue] = useState("");
-  const { getOweValue } = useActions();
+  const { getOweValue, connectWalletAction } = useActions();
   const { youOwe } = useTypedSelector((state) => state.repay);
   const {
     accounts,
@@ -62,20 +59,14 @@ const Repay: FC<Props> = (props) => {
   };
 
   const connectWallet = async () => {
-    setMessage("Waiting on transaction success...");
-    let accounts;
-    accounts = await web3Service.getAccounts();
-    dispatch("CONNECT_WALLET", { accounts });
-    await getUniLendLbRouter(dispatch);
-
-    setMessage("You have been entered!");
+    connectWalletAction();
   };
 
   const handleRepay = async () => {
-    const unilendLB = UnilendLBContract(state.unilendLbRouter);
+    const unilendLB = UnilendLBContract(unilendLbRouter);
     let fullAmount = web3.utils.toWei(repayValue, "ether");
     unilendLB.methods.repayETH(collateralAddress).send({
-      from: state.accounts[0],
+      from: accounts[0],
       value: fullAmount,
     });
     // .on("transactionHash", (result: any) => {
@@ -122,10 +113,10 @@ const Repay: FC<Props> = (props) => {
           selectLabel={accountBalance ? `Balance:${accountBalance}` : ""}
           selectValue={youRepay}
           handleModelOpen={handleModelOpen}
-          list={state.currency}
+          list={currencyList}
         />
         <div className="d-grid pt-4">
-          {state.accounts.length > 0 ? (
+          {accounts.length > 0 ? (
             <button
               disabled={repayValue.length < 1}
               className="btn btn-lg btn-custom-primary"
