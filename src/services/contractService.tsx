@@ -1,7 +1,9 @@
 import { assetAddress, collateralAddress } from "../ethereum/contracts";
-import { UnilendLBContract } from "../ethereum/contracts/UnilendLBContract";
-import { UnilendLBFactory } from "../ethereum/contracts/UnilendLBFactory";
-import { UnilendLBPool } from "../ethereum/contracts/UnilendLBPool";
+import {
+  UnilendLBContract,
+  UnilendLBFactory,
+  UnilendLBPool,
+} from "../ethereum/contracts/UnilendLB";
 import web3 from "../ethereum/web3";
 var unilendLBFactory = UnilendLBFactory();
 

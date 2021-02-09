@@ -4,7 +4,7 @@ import FieldCard from "../UI/FieldsCard/FieldCard";
 import { useStore } from "../../../store/store";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import web3 from "../../../ethereum/web3";
-import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
+import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
 import { assetAddress, collateralAddress } from "../../../ethereum/contracts";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";

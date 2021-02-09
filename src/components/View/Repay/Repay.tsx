@@ -1,17 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { useStore } from "../../../store/store";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import eth from "../../../assets/eth.svg";
 import uft from "../../../assets/uft.svg";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
-import { web3Service } from "../../../ethereum/web3Service";
-import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
-import { UnilendLBPool } from "../../../ethereum/contracts/UnilendLBPool";
+import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
+import { UnilendLBPool } from "../../../ethereum/contracts/UnilendLB";
 import web3 from "../../../ethereum/web3";
 import { collateralAddress, currencyList } from "../../../ethereum/contracts";
-import { getUniLendLbRouter } from "../../../services/contractService";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 interface Props extends RouteComponentProps<any> {}
@@ -53,12 +50,13 @@ const Repay: FC<Props> = (props) => {
   const handleModelOpen = () => {
     setShowModel(true);
   };
+
   const handleCurrChange = (selectedField: any) => {
     setYouRepay(selectedField.name);
     setShowModel(false);
   };
 
-  const connectWallet = async () => {
+  const connectWallet = () => {
     connectWalletAction();
   };
 

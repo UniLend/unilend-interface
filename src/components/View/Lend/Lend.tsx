@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
+import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
 import web3 from "../../../ethereum/web3";
 import { web3Service } from "../../../ethereum/web3Service";
 import { getUniLendLbRouter } from "../../../services/contractService";

@@ -7,7 +7,7 @@ import {
 import web3 from "../../ethereum/web3";
 import { ActionType } from "../action-types";
 import { RedeemAction } from "../actions/redeemA";
-import BigNumber from "bignumber.js";
+// import BigNumber from "bignumber.js";
 
 export const getCollateralAmount = (
   assetPoolAddress: any,
@@ -81,10 +81,10 @@ export const getTSupply = (assetPoolAddress: string) => {
 
         var _percTotBorrow: any = 0;
         if (totalLend !== 0 && totalBorrowed !== 0) {
-          _percTotBorrow = new BigNumber(totalBorrowed)
-            .multipliedBy(100)
-            .dividedBy(totalLend);
-          console.log(_percTotBorrow);
+          //   _percTotBorrow = new BigNumber(totalBorrowed)
+          //     .multipliedBy(100)
+          //     .dividedBy(totalLend);
+          //   console.log(_percTotBorrow);
         }
 
         if (_percTotBorrow !== 0) {
