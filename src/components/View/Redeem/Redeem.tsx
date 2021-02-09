@@ -1,24 +1,41 @@
-import React, { FC, useState } from "react";
-import { useStore } from "../../../store/store";
+import React, { FC, useEffect, useState } from "react";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import eth from "../../../assets/eth.svg";
 import "./Redeem.scss";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
-import { web3Service } from "../../../ethereum/web3Service";
-import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLBContract";
-import web3 from "../../../ethereum/web3";
-import { getUniLendLbRouter } from "../../../services/contractService";
+import { useActions } from "../../../hooks/useActions";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import { currencyList } from "../../../ethereum/contracts";
 interface Props {}
 
 const Redeem: FC<Props> = (props) => {
-  const state: any = useStore()[0];
-  const dispatch: any = useStore(true)[1];
   const [redeemAmount, setRedeemAmount] = useState("");
-  const setMessage = useState("")[1];
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
   const [youRedeem, setYouRedeem] = useState("ht");
+  const {
+    getCollateralAmount,
+    getCollateralAmountBase,
+    handleRedeemAction,
+    connectWalletAction,
+  } = useActions();
+  const { accounts, unilendLbRouter, assetPoolAddress } = useTypedSelector(
+    (state) => state.configureWallet
+  );
+  const { collateralShare, collateralShareBase } = useTypedSelector(
+    (state) => state.redeem
+  );
+  // const { youOwe } = useTypedSelector((state) => state.repay);
+
+  useEffect(() => {
+    if (assetPoolAddress) {
+      getCollateralAmount(assetPoolAddress, accounts[0]);
+      getCollateralAmountBase(assetPoolAddress, accounts[0]);
+      // getTSupply(assetPoolAddress);
+    }
+  }, [assetPoolAddress]);
+
   const handleModelClose = () => {
     setShowModel(false);
   };
@@ -27,34 +44,18 @@ const Redeem: FC<Props> = (props) => {
     setCurrFieldName(fieldName);
     setShowModel(true);
   };
+
   const handleCurrChange = (selectedField: any) => {
-    console.log("selected", selectedField);
     setYouRedeem(selectedField.name);
     setShowModel(false);
   };
 
-  const connectWallet = async () => {
-    setMessage("Waiting on transaction success...");
-    let accounts;
-    accounts = await web3Service.getAccounts();
-    dispatch("CONNECT_WALLET", { accounts });
-    await getUniLendLbRouter(dispatch);
-    setMessage("You have been entered!");
+  const connectWallet = () => {
+    connectWalletAction();
   };
 
   const handleRedeem = async () => {
-    debugger;
-    const unilendLB = UnilendLBContract(state.unilendLbRouter);
-    let fullAmount = web3.utils.toWei(redeemAmount, "ether");
-    unilendLB.methods.redeemETH(fullAmount).send({
-      from: state.accounts[0],
-    });
-    // .on("transactionHash", (result: any) => {
-    //   console.log(result);
-    // })
-    // .on("error", function (error: Error) {
-    //   console.log(error);
-    // });
+    handleRedeemAction(unilendLbRouter, redeemAmount, accounts);
   };
 
   return (
@@ -67,7 +68,7 @@ const Redeem: FC<Props> = (props) => {
               <span className="ticker_name">uWETH</span>
             </div>
             <div className="col-6" style={{ textAlign: "right" }}>
-              <p className="collateralAmount">0</p>
+              <p className="collateralAmount">{collateralShare}</p>
             </div>
           </div>
           <hr className="ticket_linebreak" />
@@ -77,7 +78,11 @@ const Redeem: FC<Props> = (props) => {
               <span className="ticker_name">ETH</span>
             </div>
             <div className="col-6" style={{ textAlign: "right" }}>
-              <p className="collateralAmount">0</p>
+              <p className="collateralAmount">
+                {collateralShareBase === "0"
+                  ? collateralShareBase
+                  : `~${collateralShareBase}`}
+              </p>
             </div>
             <hr className="ticket_linebreak" />
           </div>
@@ -91,11 +96,12 @@ const Redeem: FC<Props> = (props) => {
           fieldLabel="You Redeem"
           selectLabel=""
           selectValue={youRedeem}
-          list={state.currency}
+          list={currencyList}
         />
         <div className="d-grid pt-4">
-          {state.accounts.length > 0 ? (
+          {accounts.length > 0 ? (
             <button
+              disabled={redeemAmount.length < 1}
               className="btn btn-lg btn-custom-primary"
               onClick={handleRedeem}
               type="button"

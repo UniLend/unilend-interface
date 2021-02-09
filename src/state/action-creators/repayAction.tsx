@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { collateralAddress } from "../../ethereum/contracts";
-import { UnilendLBContract } from "../../ethereum/contracts/UnilendLBContract";
+import { UnilendLBContract } from "../../ethereum/contracts/UnilendLB";
 import { ActionType } from "../action-types";
 import { RepayAction } from "../actions/repayA";
 

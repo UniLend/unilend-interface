@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { assetAddress, collateralAddress } from "../../ethereum/contracts";
-import { UnilendLBFactory } from "../../ethereum/contracts/UnilendLBFactory";
+import { UnilendLBFactory } from "../../ethereum/contracts/UnilendLB";
 import { web3Service } from "../../ethereum/web3Service";
 import { ActionType } from "../action-types";
 import { Action } from "../actions/connectWalletA";
