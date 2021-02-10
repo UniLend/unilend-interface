@@ -10,4 +10,18 @@ interface BorrowLtv {
   payload: string;
 }
 
-export type BorrowAction = BorrowInterest | BorrowLtv;
+interface BorrowLbv {
+  type: ActionType.BORROW_LBV;
+  payload: string;
+}
+
+interface LiquidityAvailable {
+  type: ActionType.LIQUIDITY_AVAILABLE;
+  payload: string;
+}
+
+export type BorrowAction =
+  | BorrowInterest
+  | BorrowLtv
+  | BorrowLbv
+  | LiquidityAvailable;

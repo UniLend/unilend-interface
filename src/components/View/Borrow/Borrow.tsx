@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import { useStore } from "../../../store/store";
@@ -12,6 +12,7 @@ import {
 } from "../../../ethereum/contracts";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import borrowReducer from "../../../state/reducers/borrowReducer";
 
 interface Props {}
 
@@ -24,10 +25,20 @@ const Borrow: FC<Props> = (props) => {
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-  const { connectWalletAction } = useActions();
-  const { accounts, walletConnected } = useTypedSelector(
+  const { connectWalletAction, getBorrowInterest } = useActions();
+  const { accounts, walletConnected, assetPoolAddress } = useTypedSelector(
     (state) => state.configureWallet
   );
+  const { borrowInterest, borrowLtv, borrowLbv } = useTypedSelector(
+    (state) => state.borrow
+  );
+
+  useEffect(() => {
+    if (assetPoolAddress) {
+      getBorrowInterest(assetPoolAddress);
+    }
+  }, [assetPoolAddress]);
+
   const connectWallet = async () => {
     setMessage("Waiting on transaction success...");
     connectWalletAction();
@@ -122,13 +133,22 @@ const Borrow: FC<Props> = (props) => {
           <div className="price_head">
             <div className="price_aa">
               <div className="price-list">
-                Borrow APR <span className="price">0.05678 ETH</span>
+                Borrow APR{" "}
+                <span className="price">
+                  {borrowInterest === "" ? "-" : borrowInterest}
+                </span>
               </div>
               <div className="price-list">
-                LTV <span className="price ltv">-</span>
+                LTV{" "}
+                <span className="price ltv">
+                  {borrowLtv === "" ? "-" : borrowLtv}
+                </span>
               </div>
               <div className="price-list">
-                LBV <span className="price lbv">-</span>
+                LBV{" "}
+                <span className="price lbv">
+                  {borrowLbv === "" ? "-" : borrowLbv}
+                </span>
               </div>
               <div className="price-list">
                 Liquidity Available <span className="price avail">-</span>

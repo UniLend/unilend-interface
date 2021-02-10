@@ -4,11 +4,13 @@ import { BorrowAction } from "../actions/borrowA";
 interface BorrowState {
   borrowInterest: string;
   borrowLtv: string;
+  borrowLbv: string;
 }
 
 const initialState = {
   borrowInterest: "",
   borrowLtv: "",
+  borrowLbv: "",
 };
 
 const borrowReducer = (
@@ -20,6 +22,8 @@ const borrowReducer = (
       return { ...state, borrowInterest: action.payload };
     case ActionType.BORROW_LTV:
       return { ...state, borrowLtv: action.payload };
+    case ActionType.BORROW_LBV:
+      return { ...state, borrowLbv: action.payload };
     default:
       return state;
   }
