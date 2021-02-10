@@ -13,12 +13,18 @@ import LoadingPage from "./components/View/UI/LoadingPage/LoadingPage";
 import Redeem from "./components/View/Redeem/Redeem";
 import Repay from "./components/View/Repay/Repay";
 import { useTypedSelector } from "./hooks/useTypedSelector";
+import { useActions } from "./hooks/useActions";
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const { connectWalletAction } = useActions();
   const { theme } = useTypedSelector((state) => state.settings);
 
   useEffect(() => {
+    (window as any).ethereum.on("disconnect", () => {});
+    (window as any).ethereum.on("accountsChanged", (accounts: any) => {
+      connectWalletAction();
+    });
     setTimeout(() => {
       setLoading(false);
     }, 2000);
@@ -26,10 +32,6 @@ function App() {
   return (
     <div className={`App ${theme}`}>
       {loading ? (
-        // <Transition in={loading} timeout={300}>
-        //   {state => { <div style={{ opacity: state === 'exited' ? 0 : 1 }}><LoadingPage /> </div> }}
-
-        // </Transition>
         <LoadingPage />
       ) : (
         <Layout>
