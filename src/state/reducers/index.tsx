@@ -2,11 +2,13 @@ import { combineReducers } from "redux";
 import configureWalletReducer from "./configureWalletReducer";
 import redeemReducer from "./redeemReducer";
 import repayReducer from "./repayReducer";
+import settingsReducer from "./settingsReducer";
 
 const reducers = combineReducers({
   configureWallet: configureWalletReducer,
   repay: repayReducer,
   redeem: redeemReducer,
+  settings: settingsReducer,
 });
 
 export default reducers;

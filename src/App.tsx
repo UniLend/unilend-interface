@@ -12,22 +12,21 @@ import Swap from "./components/View/Swap/Swap";
 import LoadingPage from "./components/View/UI/LoadingPage/LoadingPage";
 import Redeem from "./components/View/Redeem/Redeem";
 import Repay from "./components/View/Repay/Repay";
-import { useStore } from "./store/store";
-import currService from "./services/currService";
+import { useTypedSelector } from "./hooks/useTypedSelector";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const state: any = useStore()[0];
-
+  // const { themeChange } = useActions();
+  const { theme } = useTypedSelector((state) => state.settings);
   useEffect(() => {
-    currService.fetchItems().then((response) => {});
+    // currService.fetchItems().then((response) => {});
     setTimeout(() => {
       setLoading(false);
     }, 2000);
   }, []);
 
   return (
-    <div className={`App ${state.theme}`}>
+    <div className={`App ${theme}`}>
       {loading ? (
         // <Transition in={loading} timeout={300}>
         //   {state => { <div style={{ opacity: state === 'exited' ? 0 : 1 }}><LoadingPage /> </div> }}
@@ -37,7 +36,7 @@ function App() {
       ) : (
         <Layout>
           <div className={`app-bg`}>
-            <div className={`bg-vector ${state.theme}`}>
+            <div className={`bg-vector ${theme}`}>
               <div
                 className="pt-6"
                 style={{ height: "100%", overflow: "auto", paddingTop: "60px" }}

@@ -1,8 +1,9 @@
 import React, { FC, useState } from "react";
+import { currencyList } from "../../../ethereum/contracts";
 import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
 import web3 from "../../../ethereum/web3";
-import { web3Service } from "../../../ethereum/web3Service";
-import { getUniLendLbRouter } from "../../../services/contractService";
+import { useActions } from "../../../hooks/useActions";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useStore } from "../../../store/store";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
@@ -12,26 +13,24 @@ interface Props {}
 
 const Lend: FC<Props> = (props) => {
   const state: any = useStore()[0];
-  const dispatch: any = useStore()[1];
-  const setMessage = useState("")[1];
   const [showModel, setShowModel] = useState(false);
-  const [lendAmount, setLendAmount] = useState();
+  const [lendAmount, setLendAmount] = useState("");
   const [currFieldName, setCurrFieldName] = useState("");
   const [yourLend, setYourLend] = useState("ht");
-
+  const { connectWalletAction } = useActions();
+  const {
+    accounts,
+    walletConnected,
+    unilendLbRouter,
+    // assetPoolAddress,
+    accountBalance,
+  } = useTypedSelector((state) => state.configureWallet);
   const handleModelClose = () => {
     setShowModel(false);
   };
 
   const connectWallet = async () => {
-    setMessage("Waiting on transaction success...");
-    let accounts;
-    accounts = await web3Service.getAccounts();
-    dispatch("CONNECT_WALLET", { accounts });
-    await getUniLendLbRouter(dispatch);
-
-    console.log(state.walletConnected);
-    setMessage("You have been entered!");
+    connectWalletAction();
   };
 
   const handleModelOpen = (fieldName: string) => {
@@ -47,9 +46,9 @@ const Lend: FC<Props> = (props) => {
 
   const handleLend = async () => {
     console.log(state);
-    const unilendLB = UnilendLBContract(state.unilendLbRouter);
+    const unilendLB = UnilendLBContract(unilendLbRouter);
     unilendLB.methods.lendETH().send({
-      from: state.accounts[0],
+      from: accounts[0],
       value: web3.utils.toWei(lendAmount, "ether"),
     });
     // .on("transactionHash", (result: any) => {
@@ -71,13 +70,16 @@ const Lend: FC<Props> = (props) => {
           handleModelOpen={() => handleModelOpen("yourLend")}
           fieldLabel="You Lend"
           selectValue={yourLend}
-          selectLabel=""
-          list={state.currency}
+          selectLabel={accountBalance ? `Balance:${accountBalance}` : ""}
+          list={currencyList}
         />
         <div className="price_head py-4">
           <div className="price_aa">
             <div className="price-list">
-              Balance <span className="price">-</span>
+              Balance{" "}
+              <span className="price">
+                {accountBalance ? `${accountBalance}` : ""}
+              </span>
             </div>
             <div className="price-list">
               Deposit APY <span className="price">-</span>
@@ -85,8 +87,9 @@ const Lend: FC<Props> = (props) => {
           </div>
         </div>
         <div className="d-grid py-3">
-          {state.walletConnected ? (
+          {walletConnected ? (
             <button
+              disabled={lendAmount.length < 1}
               className="btn btn-lg btn-custom-primary"
               onClick={handleLend}
               type="button"

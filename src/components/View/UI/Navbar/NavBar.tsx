@@ -6,8 +6,6 @@ import walletlight from "../../../../assets/wallet-light.svg";
 import walletdark from "../../../../assets/wallet-dark.svg";
 import sun from "../../../../assets/sun.svg";
 import moon from "../../../../assets/moon.svg";
-
-import { useStore } from "../../../../store/store";
 import { shortenAddress } from "../../../../utils";
 import { useActions } from "../../../../hooks/useActions";
 import { useTypedSelector } from "../../../../hooks/useTypedSelector";
@@ -15,9 +13,8 @@ interface Props extends RouteComponentProps<any> {}
 
 const NavBar: React.FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState("");
-  const state: any = useStore()[0];
-  const dispatch: any = useStore(true)[1];
-  const { connectWalletAction } = useActions();
+  const { theme } = useTypedSelector((state) => state.settings);
+  const { themeChange, connectWalletAction } = useActions();
   const { accounts, walletConnected } = useTypedSelector(
     (state) => state.configureWallet
   );
@@ -30,14 +27,12 @@ const NavBar: React.FC<Props> = (props) => {
   };
 
   const handleUpdate = () => {
-    dispatch("THEME_CHANGE", {});
+    themeChange(theme);
   };
 
   return (
     <>
-      <nav
-        className={`navbar navbar-expand-sm navbar-${state.theme} bg-${state.theme}`}
-      >
+      <nav className={`navbar navbar-expand-sm navbar-${theme} bg-${theme}`}>
         <div className="container-fluid">
           <Link className="navbar-brand navbar-brand-custom" to="#">
             <img
@@ -146,7 +141,7 @@ const NavBar: React.FC<Props> = (props) => {
           {(accounts && accounts.length) || walletConnected ? (
             <button
               className={`d-flex btn ${
-                state.theme === "dark" && "btn-dark"
+                theme === "dark" && "btn-dark"
               } btn-custom-secondary`}
               onClick={connectWallet}
             >
@@ -155,12 +150,12 @@ const NavBar: React.FC<Props> = (props) => {
           ) : (
             <button
               className={`d-flex btn ${
-                state.theme === "dark" && "btn-dark"
+                theme === "dark" && "btn-dark"
               } btn-custom-secondary`}
               onClick={connectWallet}
             >
               <img
-                src={state.theme === "light" ? walletlight : walletdark}
+                src={theme === "light" ? walletlight : walletdark}
                 width="26"
                 alt="Wallet"
                 className="d-inline-block px-1"
@@ -171,13 +166,13 @@ const NavBar: React.FC<Props> = (props) => {
           <button
             onClick={() => handleUpdate()}
             className={`d-flex ml-3 btn ${
-              state.theme === "dark" && "btn-dark"
+              theme === "dark" && "btn-dark"
             } btn-custom-secondary btn-theme-icon`}
           >
             {
               <img
                 width="20"
-                src={state.theme === "light" ? sun : moon}
+                src={theme === "light" ? sun : moon}
                 alt="theme"
               />
             }
