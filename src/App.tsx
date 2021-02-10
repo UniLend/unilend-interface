@@ -16,15 +16,13 @@ import { useTypedSelector } from "./hooks/useTypedSelector";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  // const { themeChange } = useActions();
   const { theme } = useTypedSelector((state) => state.settings);
+
   useEffect(() => {
-    // currService.fetchItems().then((response) => {});
     setTimeout(() => {
       setLoading(false);
     }, 2000);
   }, []);
-
   return (
     <div className={`App ${theme}`}>
       {loading ? (

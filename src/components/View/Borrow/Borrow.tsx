@@ -5,7 +5,11 @@ import { useStore } from "../../../store/store";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import web3 from "../../../ethereum/web3";
 import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
-import { assetAddress, collateralAddress } from "../../../ethereum/contracts";
+import {
+  assetAddress,
+  collateralAddress,
+  currencyList,
+} from "../../../ethereum/contracts";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
@@ -83,7 +87,7 @@ const Borrow: FC<Props> = (props) => {
             fieldType="text"
             selectLabel="Balance"
             selectValue={collateralBal}
-            list={state.currency}
+            list={currencyList}
           />
           <div className="pt-3"></div>
           <FieldCard
@@ -95,7 +99,7 @@ const Borrow: FC<Props> = (props) => {
             selectLabel=""
             selectValue={receivedType}
             handleModelOpen={() => handleModelOpen("borrowReceived")}
-            list={state.currency}
+            list={currencyList}
           />
           <div className="d-grid py-3">
             {(accounts && accounts.length) || walletConnected ? (

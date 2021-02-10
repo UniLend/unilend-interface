@@ -17,7 +17,7 @@ const Lend: FC<Props> = (props) => {
   const [lendAmount, setLendAmount] = useState("");
   const [currFieldName, setCurrFieldName] = useState("");
   const [yourLend, setYourLend] = useState("ht");
-  const { connectWalletAction } = useActions();
+  const { connectWalletAction, handleLendAction } = useActions();
   const {
     accounts,
     walletConnected,
@@ -39,24 +39,12 @@ const Lend: FC<Props> = (props) => {
   };
 
   const handleCurrChange = (selectedField: any) => {
-    console.log("selected", selectedField);
     setYourLend(selectedField.name);
     setShowModel(false);
   };
 
   const handleLend = async () => {
-    console.log(state);
-    const unilendLB = UnilendLBContract(unilendLbRouter);
-    unilendLB.methods.lendETH().send({
-      from: accounts[0],
-      value: web3.utils.toWei(lendAmount, "ether"),
-    });
-    // .on("transactionHash", (result: any) => {
-    //   console.log(result);
-    // })
-    // .on("error", function (error: Error) {
-    //   console.log(error);
-    // });
+    handleLendAction(unilendLbRouter, accounts, lendAmount);
   };
 
   return (
