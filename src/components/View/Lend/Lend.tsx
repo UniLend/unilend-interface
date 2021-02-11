@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { currencyList } from "../../../ethereum/contracts";
 import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
 import web3 from "../../../ethereum/web3";
@@ -17,14 +17,26 @@ const Lend: FC<Props> = (props) => {
   const [lendAmount, setLendAmount] = useState("");
   const [currFieldName, setCurrFieldName] = useState("");
   const [yourLend, setYourLend] = useState("ht");
-  const { connectWalletAction, handleLendAction } = useActions();
+  const {
+    connectWalletAction,
+    handleLendAction,
+    getBorrowInterest,
+  } = useActions();
   const {
     accounts,
     walletConnected,
     unilendLbRouter,
-    // assetPoolAddress,
+    assetPoolAddress,
     accountBalance,
   } = useTypedSelector((state) => state.configureWallet);
+
+  const { lendInterest } = useTypedSelector((state) => state.borrow);
+
+  useEffect(() => {
+    if (assetPoolAddress) {
+      getBorrowInterest(assetPoolAddress);
+    }
+  }, [assetPoolAddress]);
   const handleModelClose = () => {
     setShowModel(false);
   };
@@ -70,7 +82,10 @@ const Lend: FC<Props> = (props) => {
               </span>
             </div>
             <div className="price-list">
-              Deposit APY <span className="price">-</span>
+              Deposit APY{" "}
+              <span className="price">
+                {lendInterest === "" ? "-" : lendInterest}
+              </span>
             </div>
           </div>
         </div>
