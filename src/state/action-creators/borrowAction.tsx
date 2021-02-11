@@ -1,10 +1,14 @@
 import { Dispatch } from "redux";
-import { UnilendLBPool } from "../../ethereum/contracts/UnilendLB";
+import {
+  UnilendLBContract,
+  UnilendLBPool,
+} from "../../ethereum/contracts/UnilendLB";
 import { ActionType } from "../action-types";
 import { BorrowAction } from "../actions/borrowA";
 import { toDecimalPlace } from "../../utils/index";
 import { BigNumber } from "bignumber.js";
 import web3 from "../../ethereum/web3";
+import { assetAddress, collateralAddress } from "../../ethereum/contracts";
 export const getBorrowInterest = (assetPoolAddress: any) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
     let unilendLB = UnilendLBPool(assetPoolAddress);
@@ -65,8 +69,6 @@ export const getBorrowInterest = (assetPoolAddress: any) => {
         }
 
         var _percTotBorrow: any = 0;
-        var percTotBorrow: any = 0;
-        var lendAPY: any = 0;
         var _lendAPY: any = 0;
         if (totalLend !== 0 && totalBorrowed !== 0) {
           _percTotBorrow = new BigNumber(totalBorrowed)
@@ -101,48 +103,71 @@ export const getBorrowInterest = (assetPoolAddress: any) => {
   };
 };
 
-export const getTSupply = (assetPoolAddress: string, borrowAPY: string) => {
+export const handleBorrowAction = (
+  yourCollateral: any,
+  unilendLbRouter: any
+) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
-    let unilendLB = UnilendLBPool(assetPoolAddress);
-    unilendLB.methods.tsupplyAmount().call((error: any, result: any) => {
-      console.log("tsupplyAmount", result);
+    console.log(yourCollateral);
+    var fullAmount = web3.utils.toWei(yourCollateral, "ether");
+    console.log(fullAmount);
+    let unilendLB = UnilendLBContract(unilendLbRouter);
+    if (new BigNumber(fullAmount).isGreaterThan(0)) {
+      unilendLB.methods
+        .getEstimateAssetAmount(collateralAddress, assetAddress, fullAmount)
+        .call((error: any, result: any) => {
+          // console.log(error, result);
 
-      if (!error && result) {
-        var totalLend = result.toString();
-      }
+          var nValue: any = 0;
+          if (!error && result) {
+            // result = new BigNumber(result.toString()).minus(100).toString();
+            nValue = web3.utils.fromWei(result, "ether");
+          }
 
-      unilendLB.methods.tborrowAmount().call((error1: any, result1: any) => {
-        if (!error1 && result1) {
-          var totalBorrowed = result1.toString();
-          console.log("totalBorrowed", totalBorrowed);
-        }
+          if (nValue === "0") {
+            //     $(".lbamount2").val(0);
+            dispatch({
+              type: ActionType.LB_AMOUNT_2,
+              payload: 0,
+            });
+          } else {
+            //     $(".lbamount2").val(nValue);
+            dispatch({
+              type: ActionType.LB_AMOUNT_2,
+              payload: nValue,
+            });
+          }
+        });
+    } else {
+      unilendLB.methods
+        .getEstimateAssetAmountFromAsset(
+          collateralAddress,
+          assetAddress,
+          fullAmount
+        )
+        .call((error: any, result: any) => {
+          // console.log(error, result);
 
-        var _percTotBorrow: any = 0;
-        var percTotBorrow: any = 0;
-        var lendAPY: any = 0;
-        if (totalLend !== 0 && totalBorrowed !== 0) {
-          _percTotBorrow = new BigNumber(totalBorrowed)
-            .multipliedBy(100)
-            .dividedBy(totalLend);
-          percTotBorrow = _percTotBorrow * Math.pow(10, 18);
-          console.log(percTotBorrow);
-        }
+          var nValue: any = 0;
+          if (!error && result) {
+            result = new BigNumber(result.toString()).plus(1000).toString();
+            nValue = web3.utils.fromWei(result, "ether");
+          }
 
-        if (_percTotBorrow !== 0) {
-          console.log(borrowAPY);
-
-          lendAPY = new BigNumber(borrowAPY)
-            .multipliedBy(percTotBorrow)
-            .dividedBy(100);
-          console.log(lendAPY);
-        }
-
-        // $(".lend_interest").text(toDecimalPlace(lendAPY, 4)+"%");
-
-        // var aBorrowWei = (new BigNumber(totalLend).minus(new BigNumber(totalBorrowed))).toString();
-        // let availableBorrow = web3.utils.fromWei(aBorrowWei, 'ether');
-        // $(".avail").text(availableBorrow);
-      });
-    });
+          if (nValue === "0") {
+            // $(".lbamount1").val(0);
+            dispatch({
+              type: ActionType.LB_AMOUNT_1,
+              payload: 0,
+            });
+          } else {
+            // $(".lbamount1").val(nValue);
+            dispatch({
+              type: ActionType.LB_AMOUNT_1,
+              payload: nValue,
+            });
+          }
+        });
+    }
   };
 };

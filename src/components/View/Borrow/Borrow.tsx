@@ -12,28 +12,36 @@ import {
 } from "../../../ethereum/contracts";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import borrowReducer from "../../../state/reducers/borrowReducer";
 
 interface Props {}
 
 const Borrow: FC<Props> = (props) => {
   const state: any = useStore()[0];
-  const [yourCollateral, setYourCollateral] = useState("");
-  const [borrowReceived, setBorrowReceived] = useState("");
+  const [yourCollateral, setYourCollateral] = useState(0);
+  const [borrowReceived, setBorrowReceived] = useState(0);
   const [showModel, setShowModel] = useState(false);
   const setMessage = useState("")[1];
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-  const { connectWalletAction, getBorrowInterest, getTSupply } = useActions();
-  const { accounts, walletConnected, assetPoolAddress } = useTypedSelector(
-    (state) => state.configureWallet
-  );
+  const {
+    connectWalletAction,
+    getBorrowInterest,
+    handleBorrowAction,
+  } = useActions();
+  const {
+    accounts,
+    walletConnected,
+    assetPoolAddress,
+    unilendLbRouter,
+  } = useTypedSelector((state) => state.configureWallet);
   const {
     borrowInterest,
     borrowLtv,
     borrowLbv,
     liquidityAvailable,
+    lbAmount1,
+    lbAmount2,
   } = useTypedSelector((state) => state.borrow);
 
   useEffect(() => {
@@ -41,7 +49,9 @@ const Borrow: FC<Props> = (props) => {
       getBorrowInterest(assetPoolAddress);
       // getTSupply(assetPoolAddress, borrowInterest);
     }
-  }, [assetPoolAddress]);
+    setYourCollateral(lbAmount1);
+    setBorrowReceived(lbAmount2);
+  }, [assetPoolAddress, lbAmount2, lbAmount1]);
 
   const connectWallet = async () => {
     setMessage("Waiting on transaction success...");
@@ -73,13 +83,13 @@ const Borrow: FC<Props> = (props) => {
   };
 
   const handleBorrow = async () => {
-    const unilendLB = UnilendLBContract(state.unilendLbRouter);
+    const unilendLB = UnilendLBContract(unilendLbRouter);
     const amount1 = web3.utils.toWei(yourCollateral, "ether");
     const amount2 = web3.utils.toWei(borrowReceived, "ether");
     unilendLB.methods
       .borrow(collateralAddress, assetAddress, amount1, amount2)
       .send({
-        from: state.accounts[0],
+        from: accounts[0],
       })
       .on("transactionHash", (result: any) => {
         // console.log(result);
@@ -96,10 +106,14 @@ const Borrow: FC<Props> = (props) => {
           <FieldCard
             onF1Change={(e: any) => {
               setYourCollateral(e.target.value);
+              setTimeout(() => {
+                handleBorrowAction(e.target.value, unilendLbRouter);
+                // setBorrowReceived(lbAmount1);
+              }, 5000);
             }}
             handleModelOpen={() => handleModelOpen("borrowCollateral")}
             fieldLabel="Your Collateral"
-            fieldType="text"
+            fieldType="number"
             selectLabel="Balance"
             selectValue={collateralBal}
             list={currencyList}

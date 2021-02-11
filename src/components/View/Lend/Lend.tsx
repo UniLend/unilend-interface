@@ -1,7 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { currencyList } from "../../../ethereum/contracts";
-import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
-import web3 from "../../../ethereum/web3";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useStore } from "../../../store/store";
@@ -12,7 +10,6 @@ import FieldCard from "../UI/FieldsCard/FieldCard";
 interface Props {}
 
 const Lend: FC<Props> = (props) => {
-  const state: any = useStore()[0];
   const [showModel, setShowModel] = useState(false);
   const [lendAmount, setLendAmount] = useState("");
   const [currFieldName, setCurrFieldName] = useState("");

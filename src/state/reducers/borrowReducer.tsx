@@ -7,6 +7,8 @@ interface BorrowState {
   borrowLbv: string;
   liquidityAvailable: string;
   lendInterest: string;
+  lbAmount1: number;
+  lbAmount2: number;
 }
 
 const initialState = {
@@ -15,6 +17,8 @@ const initialState = {
   borrowLbv: "",
   liquidityAvailable: "",
   lendInterest: "",
+  lbAmount1: 0,
+  lbAmount2: 0,
 };
 
 const borrowReducer = (
@@ -32,6 +36,10 @@ const borrowReducer = (
       return { ...state, liquidityAvailable: action.payload };
     case ActionType.LEND_INTEREST:
       return { ...state, lendInterest: action.payload };
+    case ActionType.LB_AMOUNT_1:
+      return { ...state, lbAmount1: action.payload };
+    case ActionType.LB_AMOUNT_2:
+      return { ...state, lbAmount2: action.payload };
     default:
       return state;
   }

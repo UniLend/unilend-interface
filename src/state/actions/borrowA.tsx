@@ -25,9 +25,21 @@ interface LendInterest {
   payload: string;
 }
 
+interface LbAmount1 {
+  type: ActionType.LB_AMOUNT_1;
+  payload: number;
+}
+
+interface LbAmount2 {
+  type: ActionType.LB_AMOUNT_2;
+  payload: number;
+}
+
 export type BorrowAction =
   | BorrowInterest
   | BorrowLtv
   | BorrowLbv
   | LiquidityAvailable
-  | LendInterest;
+  | LendInterest
+  | LbAmount1
+  | LbAmount2;
