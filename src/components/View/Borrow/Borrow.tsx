@@ -25,17 +25,21 @@ const Borrow: FC<Props> = (props) => {
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-  const { connectWalletAction, getBorrowInterest } = useActions();
+  const { connectWalletAction, getBorrowInterest, getTSupply } = useActions();
   const { accounts, walletConnected, assetPoolAddress } = useTypedSelector(
     (state) => state.configureWallet
   );
-  const { borrowInterest, borrowLtv, borrowLbv } = useTypedSelector(
-    (state) => state.borrow
-  );
+  const {
+    borrowInterest,
+    borrowLtv,
+    borrowLbv,
+    liquidityAvailable,
+  } = useTypedSelector((state) => state.borrow);
 
   useEffect(() => {
     if (assetPoolAddress) {
       getBorrowInterest(assetPoolAddress);
+      // getTSupply(assetPoolAddress, borrowInterest);
     }
   }, [assetPoolAddress]);
 
@@ -151,7 +155,10 @@ const Borrow: FC<Props> = (props) => {
                 </span>
               </div>
               <div className="price-list">
-                Liquidity Available <span className="price avail">-</span>
+                Liquidity Available{" "}
+                <span className="price avail">
+                  {liquidityAvailable === "" ? "-" : liquidityAvailable}
+                </span>
               </div>
             </div>
           </div>
