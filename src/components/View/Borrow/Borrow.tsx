@@ -17,8 +17,8 @@ interface Props {}
 
 const Borrow: FC<Props> = (props) => {
   const state: any = useStore()[0];
-  const [yourCollateral, setYourCollateral] = useState(0);
-  const [borrowReceived, setBorrowReceived] = useState(0);
+  const [yourCollateral, setYourCollateral] = useState("");
+  const [borrowReceived, setBorrowReceived] = useState("");
   const [showModel, setShowModel] = useState(false);
   const setMessage = useState("")[1];
   const [currFieldName, setCurrFieldName] = useState("");
@@ -27,7 +27,7 @@ const Borrow: FC<Props> = (props) => {
   const {
     connectWalletAction,
     getBorrowInterest,
-    handleBorrowAction,
+    handleBorrowValueChange,
   } = useActions();
   const {
     accounts,
@@ -49,9 +49,9 @@ const Borrow: FC<Props> = (props) => {
       getBorrowInterest(assetPoolAddress);
       // getTSupply(assetPoolAddress, borrowInterest);
     }
-    setYourCollateral(lbAmount1);
+    // setYourCollateral(lbAmount1);
     setBorrowReceived(lbAmount2);
-  }, [assetPoolAddress, lbAmount2, lbAmount1]);
+  }, [assetPoolAddress, lbAmount1, lbAmount2]);
 
   const connectWallet = async () => {
     setMessage("Waiting on transaction success...");
@@ -84,6 +84,7 @@ const Borrow: FC<Props> = (props) => {
 
   const handleBorrow = async () => {
     const unilendLB = UnilendLBContract(unilendLbRouter);
+    debugger;
     const amount1 = web3.utils.toWei(yourCollateral, "ether");
     const amount2 = web3.utils.toWei(borrowReceived, "ether");
     unilendLB.methods
@@ -106,13 +107,16 @@ const Borrow: FC<Props> = (props) => {
           <FieldCard
             onF1Change={(e: any) => {
               setYourCollateral(e.target.value);
-              setTimeout(() => {
-                handleBorrowAction(e.target.value, unilendLbRouter);
-                // setBorrowReceived(lbAmount1);
-              }, 5000);
+              if (walletConnected) {
+                setTimeout(() => {
+                  handleBorrowValueChange(e.target.value, unilendLbRouter);
+                  // setBorrowReceived(lbAmount1);
+                }, 1000);
+              }
             }}
             handleModelOpen={() => handleModelOpen("borrowCollateral")}
             fieldLabel="Your Collateral"
+            fieldValue={lbAmount1}
             fieldType="number"
             selectLabel="Balance"
             selectValue={collateralBal}
@@ -124,6 +128,7 @@ const Borrow: FC<Props> = (props) => {
               setBorrowReceived(e.target.value);
             }}
             fieldLabel="Received"
+            fieldValue={lbAmount2}
             fieldType="text"
             selectLabel=""
             selectValue={receivedType}
