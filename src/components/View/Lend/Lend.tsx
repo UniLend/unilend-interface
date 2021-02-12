@@ -64,6 +64,7 @@ const Lend: FC<Props> = (props) => {
             setLendAmount(e.target.value);
           }}
           fieldType="text"
+          fieldValue=""
           handleModelOpen={() => handleModelOpen("yourLend")}
           fieldLabel="You Lend"
           selectValue={yourLend}

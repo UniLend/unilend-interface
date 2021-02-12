@@ -92,6 +92,7 @@ const Redeem: FC<Props> = (props) => {
             setRedeemAmount(e.target.value);
           }}
           fieldType="number"
+          fieldValue=""
           handleModelOpen={() => handleModelOpen("youRedeem")}
           fieldLabel="You Redeem"
           selectLabel=""

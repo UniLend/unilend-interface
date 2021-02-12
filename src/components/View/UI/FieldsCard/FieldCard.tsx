@@ -1,9 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import "./FieldCard.scss";
 import icon from "../../../../assets/htLogo.svg";
 import dropdown from "../../../../assets/dropdown.svg";
 interface Props {
   fieldLabel: String;
+  fieldValue: any;
   selectLabel: String;
   selectValue: String;
   list: any;
@@ -12,6 +13,12 @@ interface Props {
   onF1Change: (e: any) => void;
 }
 const FieldCard: FC<Props> = (props) => {
+  const field1: any = useRef(null);
+
+  useEffect(() => {
+    field1.current.value = props.fieldValue;
+    console.log(field1);
+  }, [props.fieldValue]);
   return (
     <>
       <div className="card field-card">
@@ -21,6 +28,7 @@ const FieldCard: FC<Props> = (props) => {
               <label className="form-label">{props.fieldLabel}</label>
               <input
                 type={props.fieldType}
+                ref={field1}
                 className="form-control field-input"
                 placeholder="0.0"
                 onChange={props.onF1Change}

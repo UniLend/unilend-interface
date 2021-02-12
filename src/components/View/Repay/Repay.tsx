@@ -107,6 +107,7 @@ const Repay: FC<Props> = (props) => {
             setRepayValue(e.target.value);
           }}
           fieldType="text"
+          fieldValue=""
           fieldLabel="You Repay"
           selectLabel={accountBalance ? `Balance:${accountBalance}` : ""}
           selectValue={youRepay}

@@ -40,6 +40,7 @@ const Swap: FC<Props> = (props) => {
           onF1Change={(e: any) => {
             console.log(e);
           }}
+          fieldValue=""
           fieldType="number"
           fieldLabel="Your Collateral"
           selectLabel="Balance: -"
@@ -57,6 +58,7 @@ const Swap: FC<Props> = (props) => {
             console.log(e);
           }}
           fieldType="number"
+          fieldValue=""
           fieldLabel="Received"
           selectLabel=""
           selectValue={""}
