@@ -27,12 +27,12 @@ interface LendInterest {
 
 interface LbAmount1 {
   type: ActionType.LB_AMOUNT_1;
-  payload: number;
+  payload: any;
 }
 
 interface LbAmount2 {
   type: ActionType.LB_AMOUNT_2;
-  payload: number;
+  payload: any;
 }
 
 export type BorrowAction =

@@ -14,7 +14,6 @@ export const getBorrowInterest = (assetPoolAddress: any) => {
     let unilendLB = UnilendLBPool(assetPoolAddress);
     let borrowAPY: any;
     unilendLB.methods.blockinterestRate().call((error: any, result: any) => {
-      // console.log(error, result);
       if (!error && result) {
         borrowAPY = (parseInt(result) * 4 * 60 * 24 * 365) / 10 ** 12;
         console.log(borrowAPY + "%");
@@ -57,7 +56,6 @@ export const getBorrowInterest = (assetPoolAddress: any) => {
     });
     unilendLB.methods.tsupplyAmount().call((error: any, result: any) => {
       console.log("tsupplyAmount", result);
-
       if (!error && result) {
         var totalLend = result.toString();
       }
@@ -65,7 +63,6 @@ export const getBorrowInterest = (assetPoolAddress: any) => {
       unilendLB.methods.tborrowAmount().call((error1: any, result1: any) => {
         if (!error1 && result1) {
           var totalBorrowed = result1.toString();
-          console.log("totalBorrowed", totalBorrowed);
         }
 
         var _percTotBorrow: any = 0;
@@ -81,34 +78,33 @@ export const getBorrowInterest = (assetPoolAddress: any) => {
             .multipliedBy(_percTotBorrow)
             .dividedBy(100);
         }
-        console.log(toDecimalPlace(_lendAPY, 4));
+
         dispatch({
           type: ActionType.LEND_INTEREST,
           payload: toDecimalPlace(_lendAPY, 4),
         });
-        // $(".lend_interest").text(toDecimalPlace(lendAPY, 4)+"%");
 
         var aBorrowWei = new BigNumber(totalLend)
           .minus(new BigNumber(totalBorrowed))
           .toString();
         let availableBorrow = web3.utils.fromWei(aBorrowWei, "ether");
-        console.log(availableBorrow);
         dispatch({
           type: ActionType.LIQUIDITY_AVAILABLE,
           payload: availableBorrow,
         });
-        // $(".avail").text(availableBorrow);
       });
     });
   };
 };
 
-export const handleBorrowAction = (
+export const handleBorrowValueChange = (
   yourCollateral: any,
   unilendLbRouter: any
 ) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
     console.log(yourCollateral);
+    debugger;
+
     var fullAmount = web3.utils.toWei(yourCollateral, "ether");
     console.log(fullAmount);
     let unilendLB = UnilendLBContract(unilendLbRouter);
@@ -155,7 +151,6 @@ export const handleBorrowAction = (
           }
 
           if (nValue === "0") {
-            // $(".lbamount1").val(0);
             dispatch({
               type: ActionType.LB_AMOUNT_1,
               payload: 0,

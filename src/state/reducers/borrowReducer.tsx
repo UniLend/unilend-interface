@@ -7,8 +7,8 @@ interface BorrowState {
   borrowLbv: string;
   liquidityAvailable: string;
   lendInterest: string;
-  lbAmount1: number;
-  lbAmount2: number;
+  lbAmount1: string;
+  lbAmount2: string;
 }
 
 const initialState = {
@@ -17,8 +17,8 @@ const initialState = {
   borrowLbv: "",
   liquidityAvailable: "",
   lendInterest: "",
-  lbAmount1: 0,
-  lbAmount2: 0,
+  lbAmount1: "",
+  lbAmount2: "",
 };
 
 const borrowReducer = (
