@@ -14,17 +14,19 @@ import Redeem from "./components/View/Redeem/Redeem";
 import Repay from "./components/View/Repay/Repay";
 import { useTypedSelector } from "./hooks/useTypedSelector";
 import { useActions } from "./hooks/useActions";
-
+declare const window: any;
 function App() {
   const [loading, setLoading] = useState(true);
   const { connectWalletAction } = useActions();
   const { theme } = useTypedSelector((state) => state.settings);
 
   useEffect(() => {
-    (window as any).ethereum.on("disconnect", () => {});
-    (window as any).ethereum.on("accountsChanged", (accounts: any) => {
-      connectWalletAction();
-    });
+    if (window && window.ethereum !== undefined && window !== undefined) {
+      window.ethereum.on("disconnect", () => {});
+      window.ethereum.on("accountsChanged", (accounts: any) => {
+        connectWalletAction();
+      });
+    }
     setTimeout(() => {
       setLoading(false);
     }, 2000);
@@ -42,7 +44,7 @@ function App() {
                 style={{ height: "100%", overflow: "auto", paddingTop: "60px" }}
               >
                 <Switch>
-                  <Route path="/swap" exact component={Swap} />
+                  {/* <Route path="/swap" exact component={Swap} /> */}
                   <Route path="/lend" exact component={Lend} />
                   <Route path="/borrow" exact component={Borrow} />
                   <Route path="/migrate" exact component={Migrate} />
