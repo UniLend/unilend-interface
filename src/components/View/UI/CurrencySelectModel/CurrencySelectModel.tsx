@@ -1,8 +1,12 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useRef, Children } from "react";
 import { ListGroup, Modal } from "react-bootstrap";
-import { useStore } from "../../../../store/store";
 import "./CurrencySelectModel.scss";
 import Logo from "../../../../assets/htLogo.svg";
+import { useTypedSelector } from "hooks/useTypedSelector";
+import { useActions } from "hooks/useActions";
+import { currencyList } from "ethereum/contracts";
+
+// ! Let React Handle Keys
 interface Props {
   show: boolean;
   handleClose: () => void;
@@ -16,12 +20,14 @@ const CurrencySelectModel: FC<Props> = ({
   currFieldName,
   handleCurrChange,
 }) => {
-  const state: any = useStore()[0];
   const search: any = useRef("");
+  const { theme } = useTypedSelector((state) => state.settings);
+  const { themeChange } = useActions();
+
   return (
     <>
       <Modal
-        className={state.theme === "dark" ? "dark" : ""}
+        className={theme === "dark" ? "dark" : ""}
         animation={false}
         size="sm"
         show={show}
@@ -45,37 +51,43 @@ const CurrencySelectModel: FC<Props> = ({
         <Modal.Body>
           <div className="curr-list-group">
             <ListGroup>
-              {state.currency.map((currency: any) => (
-                <ListGroup.Item
-                  key={currency.id}
-                  action
-                  onClick={() => handleCurrChange(currency)}
-                >
-                  <div className="row">
-                    <div className="col-2 px-0 curr-list">
-                      <img width="24" className="list-icon" src={Logo} alt="" />
-                    </div>
-                    <div className="col-10">
-                      <div className="row">
-                        <h6
-                          className="mb-0"
-                          style={{ textTransform: "uppercase" }}
-                        >
-                          {currency.name}
-                        </h6>
+              {Children.toArray(
+                currencyList.currency.map((currency: any) => (
+                  <ListGroup.Item
+                    action
+                    onClick={() => handleCurrChange(currency)}
+                  >
+                    <div className="row">
+                      <div className="col-2 px-0 curr-list">
+                        <img
+                          width="24"
+                          className="list-icon"
+                          src={Logo}
+                          alt=""
+                        />
                       </div>
-                      <div className="row">
-                        <p
-                          className="mb-0 list-desc"
-                          style={{ textTransform: "capitalize" }}
-                        >
-                          {currency.desc}
-                        </p>
+                      <div className="col-10">
+                        <div className="row">
+                          <h6
+                            className="mb-0"
+                            style={{ textTransform: "uppercase" }}
+                          >
+                            {currency.name}
+                          </h6>
+                        </div>
+                        <div className="row">
+                          <p
+                            className="mb-0 list-desc"
+                            style={{ textTransform: "capitalize" }}
+                          >
+                            {currency.desc}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </ListGroup.Item>
-              ))}
+                  </ListGroup.Item>
+                ))
+              )}
             </ListGroup>
           </div>
         </Modal.Body>

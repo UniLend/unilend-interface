@@ -102,67 +102,68 @@ export const handleBorrowValueChange = (
   unilendLbRouter: any
 ) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
-    console.log(yourCollateral);
-    debugger;
+    try {
+      var fullAmount = web3.utils.toWei(yourCollateral, "ether");
+      console.log(fullAmount);
+      let unilendLB = UnilendLBContract(unilendLbRouter);
+      if (new BigNumber(fullAmount).isGreaterThan(0)) {
+        unilendLB.methods
+          .getEstimateAssetAmount(collateralAddress, assetAddress, fullAmount)
+          .call((error: any, result: any) => {
+            // console.log(error, result);
 
-    var fullAmount = web3.utils.toWei(yourCollateral, "ether");
-    console.log(fullAmount);
-    let unilendLB = UnilendLBContract(unilendLbRouter);
-    if (new BigNumber(fullAmount).isGreaterThan(0)) {
-      unilendLB.methods
-        .getEstimateAssetAmount(collateralAddress, assetAddress, fullAmount)
-        .call((error: any, result: any) => {
-          // console.log(error, result);
+            var nValue: any = 0;
+            if (!error && result) {
+              // result = new BigNumber(result.toString()).minus(100).toString();
+              nValue = web3.utils.fromWei(result, "ether");
+            }
 
-          var nValue: any = 0;
-          if (!error && result) {
-            // result = new BigNumber(result.toString()).minus(100).toString();
-            nValue = web3.utils.fromWei(result, "ether");
-          }
+            if (nValue === "0") {
+              //     $(".lbamount2").val(0);
+              dispatch({
+                type: ActionType.LB_AMOUNT_2,
+                payload: 0,
+              });
+            } else {
+              //     $(".lbamount2").val(nValue);
+              dispatch({
+                type: ActionType.LB_AMOUNT_2,
+                payload: nValue,
+              });
+            }
+          });
+      } else {
+        unilendLB.methods
+          .getEstimateAssetAmountFromAsset(
+            collateralAddress,
+            assetAddress,
+            fullAmount
+          )
+          .call((error: any, result: any) => {
+            // console.log(error, result);
 
-          if (nValue === "0") {
-            //     $(".lbamount2").val(0);
-            dispatch({
-              type: ActionType.LB_AMOUNT_2,
-              payload: 0,
-            });
-          } else {
-            //     $(".lbamount2").val(nValue);
-            dispatch({
-              type: ActionType.LB_AMOUNT_2,
-              payload: nValue,
-            });
-          }
-        });
-    } else {
-      unilendLB.methods
-        .getEstimateAssetAmountFromAsset(
-          collateralAddress,
-          assetAddress,
-          fullAmount
-        )
-        .call((error: any, result: any) => {
-          // console.log(error, result);
+            var nValue: any = 0;
+            if (!error && result) {
+              result = new BigNumber(result.toString()).plus(1000).toString();
+              nValue = web3.utils.fromWei(result, "ether");
+            }
 
-          var nValue: any = 0;
-          if (!error && result) {
-            result = new BigNumber(result.toString()).plus(1000).toString();
-            nValue = web3.utils.fromWei(result, "ether");
-          }
-
-          if (nValue === "0") {
-            dispatch({
-              type: ActionType.LB_AMOUNT_1,
-              payload: 0,
-            });
-          } else {
-            // $(".lbamount1").val(nValue);
-            dispatch({
-              type: ActionType.LB_AMOUNT_1,
-              payload: nValue,
-            });
-          }
-        });
+            if (nValue === "0") {
+              dispatch({
+                type: ActionType.LB_AMOUNT_1,
+                payload: 0,
+              });
+            } else {
+              // $(".lbamount1").val(nValue);
+              dispatch({
+                type: ActionType.LB_AMOUNT_1,
+                payload: nValue,
+              });
+            }
+          });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 };
