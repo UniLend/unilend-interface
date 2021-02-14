@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
-import { currencyList } from "../../../ethereum/contracts";
-import { useActions } from "../../../hooks/useActions";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { useStore } from "../../../store/store";
+import { currencyList } from "ethereum/contracts";
+import { useActions } from "hooks/useActions";
+import { useTypedSelector } from "hooks/useTypedSelector";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import FieldCard from "../UI/FieldsCard/FieldCard";
@@ -33,6 +32,7 @@ const Lend: FC<Props> = (props) => {
     if (assetPoolAddress) {
       getBorrowInterest(assetPoolAddress);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetPoolAddress]);
   const handleModelClose = () => {
     setShowModel(false);

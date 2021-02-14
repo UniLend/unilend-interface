@@ -2,15 +2,15 @@ import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
-import eth from "../../../assets/eth.svg";
-import uft from "../../../assets/uft.svg";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
-import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
-import { UnilendLBPool } from "../../../ethereum/contracts/UnilendLB";
-import web3 from "../../../ethereum/web3";
-import { collateralAddress, currencyList } from "../../../ethereum/contracts";
-import { useActions } from "../../../hooks/useActions";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import eth from "assets/eth.svg";
+import uft from "assets/uft.svg";
+import { UnilendLBContract } from "ethereum/contracts/UnilendLB";
+import { UnilendLBPool } from "ethereum/contracts/UnilendLB";
+import web3 from "ethereum/web3";
+import { collateralAddress, currencyList } from "ethereum/contracts";
+import { useActions } from "hooks/useActions";
+import { useTypedSelector } from "hooks/useTypedSelector";
 interface Props extends RouteComponentProps<any> {}
 
 const Repay: FC<Props> = (props) => {
@@ -41,6 +41,7 @@ const Repay: FC<Props> = (props) => {
         });
       getOweValue(unilendLbRouter, accounts[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, assetPoolAddress]);
 
   const handleModelClose = () => {

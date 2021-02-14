@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useState } from "react";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
-import { useStore } from "../../../store/store";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
-import web3 from "../../../ethereum/web3";
-import { UnilendLBContract } from "../../../ethereum/contracts/UnilendLB";
+import web3 from "ethereum/web3";
+import { UnilendLBContract } from "ethereum/contracts/UnilendLB";
 import {
   assetAddress,
   collateralAddress,
@@ -16,7 +15,6 @@ import { useTypedSelector } from "../../../hooks/useTypedSelector";
 interface Props {}
 
 const Borrow: FC<Props> = (props) => {
-  const state: any = useStore()[0];
   const [yourCollateral, setYourCollateral] = useState("");
   const [borrowReceived, setBorrowReceived] = useState("");
   const [showModel, setShowModel] = useState(false);
@@ -51,6 +49,7 @@ const Borrow: FC<Props> = (props) => {
     }
     // setYourCollateral(lbAmount1);
     setBorrowReceived(lbAmount2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetPoolAddress, lbAmount1, lbAmount2]);
 
   const connectWallet = async () => {
@@ -129,7 +128,7 @@ const Borrow: FC<Props> = (props) => {
             }}
             fieldLabel="Received"
             fieldValue={lbAmount2}
-            fieldType="text"
+            fieldType="number"
             selectLabel=""
             selectValue={receivedType}
             handleModelOpen={() => handleModelOpen("borrowReceived")}
@@ -138,6 +137,7 @@ const Borrow: FC<Props> = (props) => {
           <div className="d-grid py-3">
             {(accounts && accounts.length) || walletConnected ? (
               <button
+                disabled={collateralBal === "" && borrowReceived === ""}
                 className="btn btn-lg btn-custom-primary"
                 onClick={handleBorrow}
                 type="button"

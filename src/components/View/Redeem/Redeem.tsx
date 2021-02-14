@@ -1,12 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
-import eth from "../../../assets/eth.svg";
+import eth from "assets/eth.svg";
 import "./Redeem.scss";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
-import { useActions } from "../../../hooks/useActions";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { currencyList } from "../../../ethereum/contracts";
+import { useActions } from "hooks/useActions";
+import { useTypedSelector } from "hooks/useTypedSelector";
+import { currencyList } from "ethereum/contracts";
 interface Props {}
 
 const Redeem: FC<Props> = (props) => {
@@ -27,18 +27,22 @@ const Redeem: FC<Props> = (props) => {
     (state) => state.redeem
   );
   // const { youOwe } = useTypedSelector((state) => state.repay);
+  const handleFieldValue = useCallback(() => {
+    getCollateralAmount(assetPoolAddress, accounts[0]);
+    getCollateralAmountBase(assetPoolAddress, accounts[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assetPoolAddress]);
 
   useEffect(() => {
     if (assetPoolAddress) {
-      getCollateralAmount(assetPoolAddress, accounts[0]);
-      getCollateralAmountBase(assetPoolAddress, accounts[0]);
+      handleFieldValue();
       // getTSupply(assetPoolAddress);
     }
-  }, [assetPoolAddress]);
+  }, [assetPoolAddress, handleFieldValue]);
 
-  const handleModelClose = () => {
+  function handleModelClose() {
     setShowModel(false);
-  };
+  }
 
   const handleModelOpen = (fieldName: string) => {
     setCurrFieldName(fieldName);
