@@ -7,7 +7,6 @@ interface Props {
   fieldValue: any;
   selectLabel: String;
   selectValue: String;
-  list: any;
   fieldType: string;
   handleModelOpen: () => void;
   onF1Change: (e: any) => void;
@@ -17,7 +16,6 @@ const FieldCard: FC<Props> = (props) => {
 
   useEffect(() => {
     field1.current.value = props.fieldValue;
-    console.log(field1);
   }, [props.fieldValue]);
   return (
     <>

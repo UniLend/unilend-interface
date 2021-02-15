@@ -3,7 +3,6 @@ import { ListGroup, Modal } from "react-bootstrap";
 import "./CurrencySelectModel.scss";
 import Logo from "../../../../assets/htLogo.svg";
 import { useTypedSelector } from "hooks/useTypedSelector";
-import { useActions } from "hooks/useActions";
 import { currencyList } from "ethereum/contracts";
 
 // ! Let React Handle Keys
@@ -22,7 +21,6 @@ const CurrencySelectModel: FC<Props> = ({
 }) => {
   const search: any = useRef("");
   const { theme } = useTypedSelector((state) => state.settings);
-  const { themeChange } = useActions();
 
   return (
     <>

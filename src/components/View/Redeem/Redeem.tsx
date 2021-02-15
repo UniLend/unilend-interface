@@ -6,7 +6,6 @@ import "./Redeem.scss";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
-import { currencyList } from "ethereum/contracts";
 interface Props {}
 
 const Redeem: FC<Props> = (props) => {
@@ -101,7 +100,6 @@ const Redeem: FC<Props> = (props) => {
           fieldLabel="You Redeem"
           selectLabel=""
           selectValue={youRedeem}
-          list={currencyList}
         />
         <div className="d-grid pt-4">
           {accounts.length > 0 ? (

@@ -8,15 +8,15 @@ import Layout from "./components/Layout/Layout";
 import Lend from "./components/View/Lend/Lend";
 import Migrate from "./components/View/Migrate/Migrate";
 import Mining from "./components/View/Mining/Mining";
-import Swap from "./components/View/Swap/Swap";
 import LoadingPage from "./components/View/UI/LoadingPage/LoadingPage";
 import Redeem from "./components/View/Redeem/Redeem";
 import Repay from "./components/View/Repay/Repay";
 import { useTypedSelector } from "./hooks/useTypedSelector";
 import { useActions } from "./hooks/useActions";
+import Swap from "components/View/Swap/Swap";
 declare const window: any;
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<Boolean>(true);
   const { connectWalletAction } = useActions();
   const { theme } = useTypedSelector((state) => state.settings);
 
@@ -26,11 +26,16 @@ function App() {
       window.ethereum.on("accountsChanged", (accounts: any) => {
         connectWalletAction();
       });
+      window.ethereum.on("chainChanged", (chainId: any) => {
+        window.location.reload();
+      });
     }
     setTimeout(() => {
       setLoading(false);
     }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div className={`App ${theme}`}>
       {loading ? (
@@ -44,7 +49,7 @@ function App() {
                 style={{ height: "100%", overflow: "auto", paddingTop: "60px" }}
               >
                 <Switch>
-                  {/* <Route path="/swap" exact component={Swap} /> */}
+                  <Route path="/swap" exact component={Swap} />
                   <Route path="/lend" exact component={Lend} />
                   <Route path="/borrow" exact component={Borrow} />
                   <Route path="/migrate" exact component={Migrate} />
