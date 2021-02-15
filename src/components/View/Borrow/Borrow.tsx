@@ -1,16 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import web3 from "ethereum/web3";
 import { UnilendLBContract } from "ethereum/contracts/UnilendLB";
-import {
-  assetAddress,
-  collateralAddress,
-  currencyList,
-} from "../../../ethereum/contracts";
-import { useActions } from "../../../hooks/useActions";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import { assetAddress, collateralAddress } from "ethereum/contracts";
+import { useActions } from "hooks/useActions";
+import { useTypedSelector } from "hooks/useTypedSelector";
 
 interface Props {}
 
@@ -40,12 +36,12 @@ const Borrow: FC<Props> = (props) => {
     liquidityAvailable,
     lbAmount1,
     lbAmount2,
+    tokenBalance,
   } = useTypedSelector((state) => state.borrow);
 
   useEffect(() => {
     if (assetPoolAddress) {
-      getBorrowInterest(assetPoolAddress);
-      // getTSupply(assetPoolAddress, borrowInterest);
+      getBorrowInterest(assetPoolAddress, accounts[0]);
     }
     // setYourCollateral(lbAmount1);
     setBorrowReceived(lbAmount2);
@@ -53,7 +49,7 @@ const Borrow: FC<Props> = (props) => {
   }, [assetPoolAddress, lbAmount1, lbAmount2]);
 
   const connectWallet = async () => {
-    setMessage("Waiting on transaction success...");
+    console.log("CONNECTING WALLET");
     connectWalletAction();
     setMessage("You have been entered!");
   };
@@ -81,7 +77,7 @@ const Borrow: FC<Props> = (props) => {
     setShowModel(false);
   };
 
-  const handleBorrow = async () => {
+  const handleBorrow = useCallback(async () => {
     const unilendLB = UnilendLBContract(unilendLbRouter);
     debugger;
     const amount1 = web3.utils.toWei(yourCollateral, "ether");
@@ -97,8 +93,49 @@ const Borrow: FC<Props> = (props) => {
       .on("error", function (error: any) {
         console.log(error);
       });
+  }, [accounts, borrowReceived, unilendLbRouter, yourCollateral]);
+  let curencySelectModel = (
+    <CurrencySelectModel
+      currFieldName={currFieldName}
+      handleCurrChange={(selectedField) => handleCurrChange(selectedField)}
+      show={showModel}
+      handleClose={handleModelClose}
+    />
+  );
+  const handleMainButton = () => {
+    if (
+      accounts &&
+      accounts.length &&
+      yourCollateral <= tokenBalance &&
+      walletConnected
+    ) {
+      return (
+        <button
+          disabled={yourCollateral === ""}
+          className="btn btn-lg btn-custom-primary"
+          onClick={handleBorrow}
+          type="button"
+        >
+          Borrow
+        </button>
+      );
+    } else if (walletConnected && yourCollateral > tokenBalance) {
+      return (
+        <button className="btn btn-lg btn-custom-primary" disabled>
+          Insufficient Balance
+        </button>
+      );
+    } else {
+      return (
+        <button
+          className="btn btn-lg btn-custom-primary"
+          onClick={connectWallet}
+        >
+          Connect Wallet
+        </button>
+      );
+    }
   };
-
   return (
     <>
       <ContentCard title="Borrow">
@@ -106,10 +143,9 @@ const Borrow: FC<Props> = (props) => {
           <FieldCard
             onF1Change={(e: any) => {
               setYourCollateral(e.target.value);
-              if (walletConnected) {
+              if (walletConnected && yourCollateral <= tokenBalance) {
                 setTimeout(() => {
                   handleBorrowValueChange(e.target.value, unilendLbRouter);
-                  // setBorrowReceived(lbAmount1);
                 }, 1000);
               }
             }}
@@ -117,9 +153,8 @@ const Borrow: FC<Props> = (props) => {
             fieldLabel="Your Collateral"
             fieldValue={lbAmount1}
             fieldType="number"
-            selectLabel="Balance"
+            selectLabel={`Balance: ${tokenBalance}`}
             selectValue={collateralBal}
-            list={currencyList}
           />
           <div className="pt-3"></div>
           <FieldCard
@@ -132,27 +167,8 @@ const Borrow: FC<Props> = (props) => {
             selectLabel=""
             selectValue={receivedType}
             handleModelOpen={() => handleModelOpen("borrowReceived")}
-            list={currencyList}
           />
-          <div className="d-grid py-3">
-            {(accounts && accounts.length) || walletConnected ? (
-              <button
-                disabled={collateralBal === "" && borrowReceived === ""}
-                className="btn btn-lg btn-custom-primary"
-                onClick={handleBorrow}
-                type="button"
-              >
-                Borrow
-              </button>
-            ) : (
-              <button
-                className="btn btn-lg btn-custom-primary"
-                onClick={connectWallet}
-              >
-                Connect Wallet
-              </button>
-            )}
-          </div>
+          <div className="d-grid py-3">{handleMainButton()}</div>
           <div className="price_head">
             <div className="price_aa">
               <div className="price-list">
@@ -182,12 +198,7 @@ const Borrow: FC<Props> = (props) => {
             </div>
           </div>
         </div>
-        <CurrencySelectModel
-          currFieldName={currFieldName}
-          handleCurrChange={(selectedField) => handleCurrChange(selectedField)}
-          show={showModel}
-          handleClose={handleModelClose}
-        />
+        {curencySelectModel}
       </ContentCard>
     </>
   );
