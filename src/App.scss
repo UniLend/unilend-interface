@@ -128,3 +128,40 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.btn-icon {
+  background: #f9fbfd;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 27px;
+}
+
+.switch-body {
+  text-align: center;
+}
+
+.price_head {
+  color: #7d7878;
+}
+
+.price_aa {
+  font-size: small;
+  color: var(--theme-price-text);
+}
+.price-list {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.price {
+  // color: #2c6def;
+  float: right;
+}
+
+@keyframes run {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
