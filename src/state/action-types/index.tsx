@@ -19,4 +19,5 @@ export enum ActionType {
   LEND_INTEREST = "LEND_INTEREST",
   LB_AMOUNT_1 = "LB_AMOUNT_1",
   LB_AMOUNT_2 = "LB_AMOUNT_2",
+  TOK_BALANCE = "TOK_BALANCE",
 }

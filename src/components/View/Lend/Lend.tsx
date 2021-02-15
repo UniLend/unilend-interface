@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import { currencyList } from "ethereum/contracts";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
 import ContentCard from "../UI/ContentCard/ContentCard";
@@ -30,7 +29,7 @@ const Lend: FC<Props> = (props) => {
 
   useEffect(() => {
     if (assetPoolAddress) {
-      getBorrowInterest(assetPoolAddress);
+      getBorrowInterest(assetPoolAddress, accounts[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetPoolAddress]);
@@ -68,8 +67,11 @@ const Lend: FC<Props> = (props) => {
           handleModelOpen={() => handleModelOpen("yourLend")}
           fieldLabel="You Lend"
           selectValue={yourLend}
-          selectLabel={accountBalance ? `Balance:${accountBalance}` : ""}
-          list={currencyList}
+          selectLabel={
+            accountBalance && accountBalance !== "0"
+              ? `Balance:${accountBalance}`
+              : ""
+          }
         />
         <div className="price_head py-4">
           <div className="price_aa">

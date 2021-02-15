@@ -9,6 +9,7 @@ interface BorrowState {
   lendInterest: string;
   lbAmount1: string;
   lbAmount2: string;
+  tokenBalance: string;
 }
 
 const initialState = {
@@ -19,6 +20,7 @@ const initialState = {
   lendInterest: "",
   lbAmount1: "",
   lbAmount2: "",
+  tokenBalance: "",
 };
 
 const borrowReducer = (
@@ -40,6 +42,8 @@ const borrowReducer = (
       return { ...state, lbAmount1: action.payload };
     case ActionType.LB_AMOUNT_2:
       return { ...state, lbAmount2: action.payload };
+    case ActionType.TOK_BALANCE:
+      return { ...state, tokenBalance: action.payload };
     default:
       return state;
   }

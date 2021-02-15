@@ -15,7 +15,9 @@ export const getAccountBalance = (selectedAccount: string) => {
         type: ActionType.ACCOUNT_BALANCE,
         payload: ethBalDeci,
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 };
 

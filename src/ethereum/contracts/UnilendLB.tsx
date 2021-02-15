@@ -1,6 +1,6 @@
 import web3 from "../web3";
 import UnilendLB from "../build/UnilendLB.json";
-import { unilendFactorycontract } from ".";
+import { collateralAddress, unilendFactorycontract } from ".";
 
 export const UnilendLBPool = (assetPoolAddress: any) => {
   return new web3.eth.Contract(UnilendLB.ubpool, assetPoolAddress);
@@ -16,4 +16,8 @@ export const UnilendLBContract = (unilendLbRouter: any) => {
 
 export const UnilendLBToken = (assetPoolAddress: any) => {
   return new web3.eth.Contract(UnilendLB.erc20, assetPoolAddress);
+};
+
+export const UnilendLBTokenColl = () => {
+  return new web3.eth.Contract(UnilendLB.erc20, collateralAddress);
 };

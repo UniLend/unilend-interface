@@ -35,6 +35,11 @@ interface LbAmount2 {
   payload: any;
 }
 
+interface TokenBalance {
+  type: ActionType.TOK_BALANCE;
+  payload: string;
+}
+
 export type BorrowAction =
   | BorrowInterest
   | BorrowLtv
@@ -42,4 +47,5 @@ export type BorrowAction =
   | LiquidityAvailable
   | LendInterest
   | LbAmount1
-  | LbAmount2;
+  | LbAmount2
+  | TokenBalance;
