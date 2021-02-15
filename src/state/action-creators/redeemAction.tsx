@@ -48,11 +48,8 @@ export const getCollateralAmountBase = (
       unilendLB.methods
         .lendingBalanceOf(selectedAccount)
         .call((error: any, result: any) => {
-          console.log(error, result);
-
           if (!error && result) {
             let colleteralFull = web3.utils.fromWei(result.toString(), "ether");
-            console.log(result);
             dispatch({
               type: ActionType.REDEEM_COLLATERAL_AMOUNT_BASE,
               payload: colleteralFull,

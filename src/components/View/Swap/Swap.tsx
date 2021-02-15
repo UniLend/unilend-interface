@@ -5,7 +5,6 @@ import FieldCard from "../UI/FieldsCard/FieldCard";
 import "./Swap.scss";
 import switchIcon from "../../../assets/switch.svg";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
-import { currencyList } from "ethereum/contracts";
 import { useTypedSelector } from "hooks/useTypedSelector";
 interface Props {}
 
@@ -13,7 +12,7 @@ const Swap: FC<Props> = (props) => {
   const setMessage = useState("")[1];
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
-  const { accounts, walletConnected } = useTypedSelector(
+  const { walletConnected } = useTypedSelector(
     (state) => state.configureWallet
   );
   useEffect(() => {}, []);
@@ -48,7 +47,6 @@ const Swap: FC<Props> = (props) => {
           selectLabel="Balance: -"
           selectValue={""}
           handleModelOpen={() => handleModelOpen("collateralBalance")}
-          list={currencyList.currency}
         />
         <div className="switch-body py-3">
           <button className="btn btn-icon align-center">
@@ -65,7 +63,6 @@ const Swap: FC<Props> = (props) => {
           selectLabel=""
           selectValue={""}
           handleModelOpen={() => handleModelOpen("received")}
-          list={currencyList.currency}
         />
         <div className="d-grid py-3">
           <button

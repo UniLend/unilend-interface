@@ -15,7 +15,7 @@ const NavBar: React.FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState("");
   const { theme } = useTypedSelector((state) => state.settings);
   const { themeChange, connectWalletAction } = useActions();
-  const { accounts, walletConnected } = useTypedSelector(
+  const { accounts, walletConnected, loading } = useTypedSelector(
     (state) => state.configureWallet
   );
   useEffect(() => {
@@ -154,13 +154,21 @@ const NavBar: React.FC<Props> = (props) => {
               } btn-custom-secondary`}
               onClick={connectWallet}
             >
-              <img
-                src={theme === "light" ? walletlight : walletdark}
-                width="26"
-                alt="Wallet"
-                className="d-inline-block px-1"
-              />
-              Connect wallet
+              {!loading ? (
+                <span>
+                  <img
+                    src={theme === "light" ? walletlight : walletdark}
+                    width="26"
+                    alt="Wallet"
+                    className="d-inline-block px-1"
+                  />
+                  Connect wallet
+                </span>
+              ) : (
+                <div className="spinner-border" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              )}
             </button>
           )}
           <button

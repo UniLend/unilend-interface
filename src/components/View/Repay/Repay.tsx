@@ -8,7 +8,7 @@ import uft from "assets/uft.svg";
 import { UnilendLBContract } from "ethereum/contracts/UnilendLB";
 import { UnilendLBPool } from "ethereum/contracts/UnilendLB";
 import web3 from "ethereum/web3";
-import { collateralAddress, currencyList } from "ethereum/contracts";
+import { collateralAddress } from "ethereum/contracts";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
 interface Props extends RouteComponentProps<any> {}
@@ -110,10 +110,9 @@ const Repay: FC<Props> = (props) => {
           fieldType="text"
           fieldValue=""
           fieldLabel="You Repay"
-          selectLabel={accountBalance ? `Balance:${accountBalance}` : ""}
+          selectLabel=""
           selectValue={youRepay}
           handleModelOpen={handleModelOpen}
-          list={currencyList}
         />
         <div className="d-grid pt-4">
           {accounts.length > 0 ? (
@@ -136,6 +135,12 @@ const Repay: FC<Props> = (props) => {
         </div>
         <div className="price_head py-3">
           <div className="price_aa">
+            <div className="price-list">
+              Balance{" "}
+              <span className="price">
+                {accountBalance ? `${accountBalance}` : ""}
+              </span>
+            </div>
             <div className="price-list">
               Liquidity Available ( ETH )<span className="price">-</span>
             </div>

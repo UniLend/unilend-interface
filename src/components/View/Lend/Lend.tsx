@@ -67,11 +67,7 @@ const Lend: FC<Props> = (props) => {
           handleModelOpen={() => handleModelOpen("yourLend")}
           fieldLabel="You Lend"
           selectValue={yourLend}
-          selectLabel={
-            accountBalance && accountBalance !== "0"
-              ? `Balance:${accountBalance}`
-              : ""
-          }
+          selectLabel=""
         />
         <div className="price_head py-4">
           <div className="price_aa">
