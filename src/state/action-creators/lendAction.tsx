@@ -19,6 +19,8 @@ export const handleLendAction = (
       dispatch({
         type: ActionType.HANDLE_LEND,
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 };

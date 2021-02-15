@@ -14,20 +14,27 @@ export const getCollateralAmount = (
   selectedAccount: any
 ) => {
   return async (dispatch: Dispatch<RedeemAction>) => {
-    const unilendLB = UnilendLBToken(assetPoolAddress);
-    unilendLB.methods
-      .balanceOf(selectedAccount)
-      .call((error: any, result: any) => {
-        if (!error && result) {
-          let colleteralShare = web3.utils.fromWei(result.toString(), "ether");
-          dispatch({
-            type: ActionType.REDEEM_COLLATERAL_AMOUNT,
-            payload: colleteralShare,
-          });
-        } else {
-          console.log("colleteralShare", error);
-        }
-      });
+    try {
+      const unilendLB = UnilendLBToken(assetPoolAddress);
+      unilendLB.methods
+        .balanceOf(selectedAccount)
+        .call((error: any, result: any) => {
+          if (!error && result) {
+            let colleteralShare = web3.utils.fromWei(
+              result.toString(),
+              "ether"
+            );
+            dispatch({
+              type: ActionType.REDEEM_COLLATERAL_AMOUNT,
+              payload: colleteralShare,
+            });
+          } else {
+            console.log("colleteralShare", error);
+          }
+        });
+    } catch (e) {
+      console.log(e);
+    }
   };
 };
 
@@ -36,28 +43,32 @@ export const getCollateralAmountBase = (
   selectedAccount: any
 ) => {
   return async (dispatch: Dispatch<RedeemAction>) => {
-    const unilendLB = UnilendLBPool(assetPoolAddress);
-    unilendLB.methods
-      .lendingBalanceOf(selectedAccount)
-      .call((error: any, result: any) => {
-        console.log(error, result);
+    try {
+      const unilendLB = UnilendLBPool(assetPoolAddress);
+      unilendLB.methods
+        .lendingBalanceOf(selectedAccount)
+        .call((error: any, result: any) => {
+          console.log(error, result);
 
-        if (!error && result) {
-          let colleteralFull = web3.utils.fromWei(result.toString(), "ether");
-          console.log(result);
-          dispatch({
-            type: ActionType.REDEEM_COLLATERAL_AMOUNT_BASE,
-            payload: colleteralFull,
-          });
-          // $(".collateralAmountBase").text("~ "+colleteralFull);
-        } else {
-          // $(".collateralAmountBase").text('0');
-          dispatch({
-            type: ActionType.REDEEM_COLLATERAL_AMOUNT_BASE,
-            payload: "",
-          });
-        }
-      });
+          if (!error && result) {
+            let colleteralFull = web3.utils.fromWei(result.toString(), "ether");
+            console.log(result);
+            dispatch({
+              type: ActionType.REDEEM_COLLATERAL_AMOUNT_BASE,
+              payload: colleteralFull,
+            });
+            // $(".collateralAmountBase").text("~ "+colleteralFull);
+          } else {
+            // $(".collateralAmountBase").text('0');
+            dispatch({
+              type: ActionType.REDEEM_COLLATERAL_AMOUNT_BASE,
+              payload: "",
+            });
+          }
+        });
+    } catch (e) {
+      console.log(e);
+    }
   };
 };
 
@@ -67,24 +78,28 @@ export const handleRedeemAction = (
   accounts: any
 ) => {
   return async (dispatch: Dispatch<RedeemAction>) => {
-    const unilendLB = UnilendLBContract(unilendLbRouter);
-    let fullAmount = web3.utils.toWei(redeemAmount, "ether");
-    unilendLB.methods
-      .redeemETH(fullAmount)
-      .send({
-        from: accounts[0],
-      })
-      .on("transactionHash", (result: any) => {
-        dispatch({
-          type: ActionType.REDEEM_ACTION_SUCCESS,
-          payload: result,
+    try {
+      const unilendLB = UnilendLBContract(unilendLbRouter);
+      let fullAmount = web3.utils.toWei(redeemAmount, "ether");
+      unilendLB.methods
+        .redeemETH(fullAmount)
+        .send({
+          from: accounts[0],
+        })
+        .on("transactionHash", (result: any) => {
+          dispatch({
+            type: ActionType.REDEEM_ACTION_SUCCESS,
+            payload: result,
+          });
+        })
+        .on("error", function (error: Error) {
+          dispatch({
+            type: ActionType.REDEEM_ACTION_FAILED,
+            payload: error,
+          });
         });
-      })
-      .on("error", function (error: Error) {
-        dispatch({
-          type: ActionType.REDEEM_ACTION_FAILED,
-          payload: error,
-        });
-      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 };

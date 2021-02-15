@@ -9,23 +9,27 @@ export const getOweValue = (
   selectedAccount: string
 ) => {
   return async (dispatch: Dispatch<RepayAction>) => {
-    let unilendLBRouter = UnilendLBContract(unilendLbRouter);
-    unilendLBRouter.methods
-      .getCollateralAmount(collateralAddress, selectedAccount)
-      .call((error: any, result: any) => {
-        // console.log(error, result);
+    try {
+      let unilendLBRouter = UnilendLBContract(unilendLbRouter);
+      unilendLBRouter.methods
+        .getCollateralAmount(collateralAddress, selectedAccount)
+        .call((error: any, result: any) => {
+          // console.log(error, result);
 
-        if (!error && result) {
-          dispatch({
-            type: ActionType.YOU_OWE,
-            payload: result,
-          });
-        } else {
-          dispatch({
-            type: ActionType.YOU_OWE,
-            payload: "0",
-          });
-        }
-      });
+          if (!error && result) {
+            dispatch({
+              type: ActionType.YOU_OWE,
+              payload: result,
+            });
+          } else {
+            dispatch({
+              type: ActionType.YOU_OWE,
+              payload: "0",
+            });
+          }
+        });
+    } catch (e) {
+      console.log(e);
+    }
   };
 };
