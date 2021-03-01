@@ -4,6 +4,7 @@ import { useTypedSelector } from "hooks/useTypedSelector";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import FieldCard from "../UI/FieldsCard/FieldCard";
+import useWalletConnect from "hooks/useWalletConnect";
 
 interface Props {}
 
@@ -12,14 +13,9 @@ const Lend: FC<Props> = (props) => {
   const [lendAmount, setLendAmount] = useState("");
   const [currFieldName, setCurrFieldName] = useState("");
   const [yourLend, setYourLend] = useState("ht");
+  const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
+  const { handleLendAction, getBorrowInterest } = useActions();
   const {
-    connectWalletAction,
-    handleLendAction,
-    getBorrowInterest,
-  } = useActions();
-  const {
-    accounts,
-    walletConnected,
     unilendLbRouter,
     assetPoolAddress,
     accountBalance,
@@ -35,10 +31,6 @@ const Lend: FC<Props> = (props) => {
   }, [assetPoolAddress]);
   const handleModelClose = () => {
     setShowModel(false);
-  };
-
-  const connectWallet = async () => {
-    connectWalletAction();
   };
 
   const handleModelOpen = (fieldName: string) => {
@@ -98,7 +90,7 @@ const Lend: FC<Props> = (props) => {
           ) : (
             <button
               className="btn btn-lg btn-custom-primary"
-              onClick={connectWallet}
+              onClick={handleWalletConnect}
             >
               Connect Wallet
             </button>

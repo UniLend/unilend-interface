@@ -7,6 +7,7 @@ import { UnilendLBContract } from "ethereum/contracts/UnilendLB";
 import { assetAddress, collateralAddress } from "ethereum/contracts";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
+import useWalletConnect from "hooks/useWalletConnect";
 
 interface Props {}
 
@@ -14,21 +15,15 @@ const Borrow: FC<Props> = (props) => {
   const [yourCollateral, setYourCollateral] = useState("");
   const [borrowReceived, setBorrowReceived] = useState("");
   const [showModel, setShowModel] = useState(false);
-  const setMessage = useState("")[1];
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-  const {
-    connectWalletAction,
-    getBorrowInterest,
-    handleBorrowValueChange,
-  } = useActions();
-  const {
-    accounts,
-    walletConnected,
-    assetPoolAddress,
-    unilendLbRouter,
-  } = useTypedSelector((state) => state.configureWallet);
+  const { getBorrowInterest, handleBorrowValueChange } = useActions();
+  const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
+
+  const { assetPoolAddress, unilendLbRouter } = useTypedSelector(
+    (state) => state.configureWallet
+  );
   const {
     borrowInterest,
     borrowLtv,
@@ -47,12 +42,6 @@ const Borrow: FC<Props> = (props) => {
     setBorrowReceived(lbAmount2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetPoolAddress, lbAmount1, lbAmount2]);
-
-  const connectWallet = async () => {
-    console.log("CONNECTING WALLET");
-    connectWalletAction();
-    setMessage("You have been entered!");
-  };
 
   const handleModelClose = () => {
     setShowModel(false);
@@ -129,7 +118,7 @@ const Borrow: FC<Props> = (props) => {
       return (
         <button
           className="btn btn-lg btn-custom-primary"
-          onClick={connectWallet}
+          onClick={handleWalletConnect}
         >
           Connect Wallet
         </button>

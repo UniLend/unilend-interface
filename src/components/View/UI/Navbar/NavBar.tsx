@@ -9,22 +9,25 @@ import moon from "../../../../assets/moon.svg";
 import { shortenAddress } from "../../../../utils";
 import { useActions } from "../../../../hooks/useActions";
 import { useTypedSelector } from "../../../../hooks/useTypedSelector";
+import useWalletConnect from "hooks/useWalletConnect";
 interface Props extends RouteComponentProps<any> {}
 
 const NavBar: React.FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState("");
   const { theme } = useTypedSelector((state) => state.settings);
-  const { themeChange, connectWalletAction } = useActions();
-  const { accounts, walletConnected, loading } = useTypedSelector(
-    (state) => state.configureWallet
-  );
+  const { themeChange } = useActions();
+  const {
+    walletConnected,
+    accounts,
+    handleWalletConnect,
+    loading,
+  } = useWalletConnect();
+  // const { accounts, walletConnected, loading } = useTypedSelector(
+  //   (state) => state.configureWallet
+  // );
   useEffect(() => {
     setCurrentPage(props.location.pathname);
   }, [props.location.pathname]);
-
-  const connectWallet = async () => {
-    connectWalletAction();
-  };
 
   const handleUpdate = () => {
     themeChange(theme);
@@ -143,7 +146,7 @@ const NavBar: React.FC<Props> = (props) => {
               className={`d-flex btn ${
                 theme === "dark" && "btn-dark"
               } btn-custom-secondary`}
-              onClick={connectWallet}
+              onClick={handleWalletConnect}
             >
               {shortenAddress(accounts[0])}
             </button>
@@ -152,7 +155,7 @@ const NavBar: React.FC<Props> = (props) => {
               className={`d-flex btn ${
                 theme === "dark" && "btn-dark"
               } btn-custom-secondary`}
-              onClick={connectWallet}
+              onClick={handleWalletConnect}
             >
               {!loading ? (
                 <span>

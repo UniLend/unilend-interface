@@ -11,6 +11,7 @@ import web3 from "ethereum/web3";
 import { collateralAddress } from "ethereum/contracts";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
+import useWalletConnect from "hooks/useWalletConnect";
 interface Props extends RouteComponentProps<any> {}
 
 const Repay: FC<Props> = (props) => {
@@ -18,10 +19,11 @@ const Repay: FC<Props> = (props) => {
   const [showModel, setShowModel] = useState(false);
   const [youRepay, setYouRepay] = useState("ht");
   const [repayValue, setRepayValue] = useState("");
-  const { getOweValue, connectWalletAction } = useActions();
+  const { accounts, handleWalletConnect } = useWalletConnect();
+  const { getOweValue } = useActions();
   const { youOwe } = useTypedSelector((state) => state.repay);
+
   const {
-    accounts,
     unilendLbRouter,
     assetPoolAddress,
     accountBalance,
@@ -55,10 +57,6 @@ const Repay: FC<Props> = (props) => {
   const handleCurrChange = (selectedField: any) => {
     setYouRepay(selectedField.name);
     setShowModel(false);
-  };
-
-  const connectWallet = () => {
-    connectWalletAction();
   };
 
   const handleRepay = async () => {
@@ -127,7 +125,7 @@ const Repay: FC<Props> = (props) => {
           ) : (
             <button
               className="btn btn-lg btn-custom-primary"
-              onClick={connectWallet}
+              onClick={handleWalletConnect}
             >
               Connect Wallet
             </button>

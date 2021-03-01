@@ -6,6 +6,7 @@ import "./Redeem.scss";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
+import useWalletConnect from "hooks/useWalletConnect";
 interface Props {}
 
 const Redeem: FC<Props> = (props) => {
@@ -13,13 +14,13 @@ const Redeem: FC<Props> = (props) => {
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
   const [youRedeem, setYouRedeem] = useState("ht");
+  const { accounts, handleWalletConnect } = useWalletConnect();
   const {
     getCollateralAmount,
     getCollateralAmountBase,
     handleRedeemAction,
-    connectWalletAction,
   } = useActions();
-  const { accounts, unilendLbRouter, assetPoolAddress } = useTypedSelector(
+  const { unilendLbRouter, assetPoolAddress } = useTypedSelector(
     (state) => state.configureWallet
   );
   const { collateralShare, collateralShareBase } = useTypedSelector(
@@ -51,10 +52,6 @@ const Redeem: FC<Props> = (props) => {
   const handleCurrChange = (selectedField: any) => {
     setYouRedeem(selectedField.name);
     setShowModel(false);
-  };
-
-  const connectWallet = () => {
-    connectWalletAction();
   };
 
   const handleRedeem = async () => {
@@ -114,7 +111,7 @@ const Redeem: FC<Props> = (props) => {
           ) : (
             <button
               className="btn btn-lg btn-custom-primary"
-              onClick={connectWallet}
+              onClick={handleWalletConnect}
             >
               Connect Wallet
             </button>
