@@ -14,6 +14,7 @@ import Repay from "./components/View/Repay/Repay";
 import { useTypedSelector } from "./hooks/useTypedSelector";
 import { useActions } from "./hooks/useActions";
 import Swap from "components/View/Swap/Swap";
+import dotEnv from "dotenv";
 declare const window: any;
 function App() {
   const [loading, setLoading] = useState<Boolean>(true);
@@ -21,6 +22,7 @@ function App() {
   const { theme } = useTypedSelector((state) => state.settings);
 
   useEffect(() => {
+    dotEnv.config();
     if (window && window.ethereum !== undefined && window !== undefined) {
       window.ethereum.on("disconnect", () => {});
       window.ethereum.on("accountsChanged", (accounts: any) => {
