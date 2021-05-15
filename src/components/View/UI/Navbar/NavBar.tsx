@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 
-import logo from "../../../../assets/logo.svg";
+import logo from "../../../../assets/download.png";
 import walletlight from "../../../../assets/wallet-light.svg";
 import walletdark from "../../../../assets/wallet-dark.svg";
 import sun from "../../../../assets/sun.svg";
@@ -15,13 +15,10 @@ interface Props extends RouteComponentProps<any> {}
 const NavBar: React.FC<Props> = (props) => {
   const [currentPage, setCurrentPage] = useState("");
   const { theme } = useTypedSelector((state) => state.settings);
+  const { lendLoading } = useTypedSelector((state) => state.lend);
   const { themeChange } = useActions();
-  const {
-    walletConnected,
-    accounts,
-    handleWalletConnect,
-    loading,
-  } = useWalletConnect();
+  const { walletConnected, accounts, handleWalletConnect, loading } =
+    useWalletConnect();
   // const { accounts, walletConnected, loading } = useTypedSelector(
   //   (state) => state.configureWallet
   // );

@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import borrowReducer from "./borrowReducer";
 import configureWalletReducer from "./configureWalletReducer";
+import lendReducer from "./lendReducer";
 import redeemReducer from "./redeemReducer";
 import repayReducer from "./repayReducer";
 import settingsReducer from "./settingsReducer";
@@ -10,6 +11,7 @@ const reducers = combineReducers({
   repay: repayReducer,
   redeem: redeemReducer,
   borrow: borrowReducer,
+  lend: lendReducer,
   settings: settingsReducer,
 });
 

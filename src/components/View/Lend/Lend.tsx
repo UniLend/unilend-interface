@@ -5,6 +5,7 @@ import ContentCard from "../UI/ContentCard/ContentCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import useWalletConnect from "hooks/useWalletConnect";
+import TransactionPopup from "../UI/TransactionLoaderPopup/TransactionLoader";
 
 interface Props {}
 
@@ -15,13 +16,12 @@ const Lend: FC<Props> = (props) => {
   const [yourLend, setYourLend] = useState("ht");
   const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
   const { handleLendAction, getBorrowInterest } = useActions();
-  const {
-    unilendLbRouter,
-    assetPoolAddress,
-    accountBalance,
-  } = useTypedSelector((state) => state.configureWallet);
-
+  const { unilendLbRouter, assetPoolAddress, accountBalance } =
+    useTypedSelector((state) => state.configureWallet);
+  const { lendLoading, lendTransHx, lendTransHxReceived, lendErrorMessage } =
+    useTypedSelector((state) => state.lend);
   const { lendInterest } = useTypedSelector((state) => state.borrow);
+  const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
 
   useEffect(() => {
     if (assetPoolAddress) {
@@ -44,6 +44,7 @@ const Lend: FC<Props> = (props) => {
   };
 
   const handleLend = async () => {
+    setTransModalInfo(true);
     handleLendAction(unilendLbRouter, accounts, lendAmount);
   };
 
@@ -103,6 +104,20 @@ const Lend: FC<Props> = (props) => {
           handleClose={handleModelClose}
         />
       </ContentCard>
+      {transModalInfo && (
+        <TransactionPopup
+          handleClose={() => {
+            setTransModalInfo(false);
+          }}
+          mode={
+            !lendTransHxReceived && !lendErrorMessage
+              ? "loading"
+              : lendTransHxReceived
+              ? "success"
+              : "failure"
+          }
+        />
+      )}
     </>
   );
 };
