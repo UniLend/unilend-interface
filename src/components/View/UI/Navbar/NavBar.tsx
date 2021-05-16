@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 
-import logo from "../../../../assets/download.png";
+import logo from "../../../../assets/logo.svg";
 import walletlight from "../../../../assets/wallet-light.svg";
 import walletdark from "../../../../assets/wallet-dark.svg";
 import sun from "../../../../assets/sun.svg";
