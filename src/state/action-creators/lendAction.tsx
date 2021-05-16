@@ -21,7 +21,13 @@ export const handleLendAction = (
           from: accounts[0],
           value: web3.utils.toWei(lendAmount, "ether"),
         })
-        .on("receipt", (res: any) => {})
+
+        .on("receipt", (res: any) => {
+          dispatch({
+            type: ActionType.LEND_SUCCESS,
+            payload: true,
+          });
+        })
         .on("transactionHash", (hash: any) => {
           dispatch({ type: ActionType.LEND_HASH, payload: hash });
         })

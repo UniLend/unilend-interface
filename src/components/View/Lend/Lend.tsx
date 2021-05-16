@@ -18,7 +18,7 @@ const Lend: FC<Props> = (props) => {
   const { handleLendAction, getBorrowInterest } = useActions();
   const { unilendLbRouter, assetPoolAddress, accountBalance } =
     useTypedSelector((state) => state.configureWallet);
-  const { lendLoading, lendTransHx, lendTransHxReceived, lendErrorMessage } =
+  const { lendLoading, lendTransHx, lendTransHxReceived, lendErrorMessage ,lendSuccessMessage} =
     useTypedSelector((state) => state.lend);
   const { lendInterest } = useTypedSelector((state) => state.borrow);
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);

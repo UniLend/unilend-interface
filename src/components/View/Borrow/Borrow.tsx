@@ -8,6 +8,7 @@ import { assetAddress, collateralAddress } from "ethereum/contracts";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
 import useWalletConnect from "hooks/useWalletConnect";
+import TransactionPopup from "../UI/TransactionLoaderPopup/TransactionLoader";
 
 interface Props {}
 
@@ -34,6 +35,10 @@ const Borrow: FC<Props> = (props) => {
     lbAmount2,
     tokenBalance,
   } = useTypedSelector((state) => state.borrow);
+
+  const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
+  const { borrowLoading, borrowTransHx, borrowTransHxReceived, borrowErrorMessage } =
+  useTypedSelector((state) => state.borrow);
 
   useEffect(() => {
     if (assetPoolAddress) {
@@ -181,6 +186,20 @@ const Borrow: FC<Props> = (props) => {
         </div>
         {curencySelectModel}
       </ContentCard>
+      {transModalInfo && (
+        <TransactionPopup
+          handleClose={() => {
+            setTransModalInfo(false);
+          }}
+          mode={
+            !borrowTransHxReceived && !borrowErrorMessage
+              ? "loading"
+              : borrowTransHxReceived
+              ? "success"
+              : "failure"
+          }
+        />
+      )}
     </>
   );
 };
