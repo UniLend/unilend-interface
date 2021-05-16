@@ -7,6 +7,8 @@ import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
 import useWalletConnect from "hooks/useWalletConnect";
+import TransactionPopup from "../UI/TransactionLoaderPopup/TransactionLoader";
+
 interface Props {}
 
 const Redeem: FC<Props> = (props) => {
@@ -26,6 +28,9 @@ const Redeem: FC<Props> = (props) => {
   const { collateralShare, collateralShareBase } = useTypedSelector(
     (state) => state.redeem
   );
+  const { redeemLoading, redeemTransHx, redeemTransHxReceived, redeemErrorMessage ,redeemSuccessMessage} =
+    useTypedSelector((state) => state.redeem);
+  const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
   // const { youOwe } = useTypedSelector((state) => state.repay);
   const handleFieldValue = useCallback(() => {
     getCollateralAmount(assetPoolAddress, accounts[0]);
@@ -55,8 +60,10 @@ const Redeem: FC<Props> = (props) => {
   };
 
   const handleRedeem = async () => {
+    setTransModalInfo(true);
     handleRedeemAction(unilendLbRouter, redeemAmount, accounts);
   };
+
 
   return (
     <>
@@ -131,6 +138,21 @@ const Redeem: FC<Props> = (props) => {
           currFieldName={currFieldName}
         />
       </ContentCard>
+
+      {transModalInfo && (
+        <TransactionPopup
+          handleClose={() => {
+            setTransModalInfo(false);
+          }}
+          mode={
+            !redeemTransHxReceived && !redeemErrorMessage
+              ? "loading"
+              : redeemTransHxReceived
+              ? "success"
+              : "failure"
+          }
+        />
+      )}
     </>
   );
 };

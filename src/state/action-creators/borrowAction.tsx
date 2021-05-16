@@ -15,9 +15,11 @@ export const getBorrowInterest = (
   selectedAccount: any
 ) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
+    dispatch({ type: ActionType.BORROW_ACTION,});
     try {
       let unilendLB = UnilendLBPool(assetPoolAddress);
       let borrowAPY: any;
+      
       unilendLB.methods.blockinterestRate().call((error: any, result: any) => {
         if (!error && result) {
           borrowAPY = (parseInt(result) * 4 * 60 * 24 * 365) / 10 ** 12;
@@ -86,7 +88,7 @@ export const getBorrowInterest = (
             type: ActionType.LEND_INTEREST,
             payload: toDecimalPlace(_lendAPY, 4),
           });
-
+          
           var aBorrowWei = new BigNumber(totalLend)
             .minus(new BigNumber(totalBorrowed))
             .toString();
@@ -202,7 +204,9 @@ export const handleBorrowValueChange = (
               });
             }
           });
+          
       }
+      
     } catch (e) {
       console.log(e);
     }

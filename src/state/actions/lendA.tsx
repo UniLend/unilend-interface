@@ -3,6 +3,10 @@ import { ActionType } from "../action-types";
 interface HandleLend {
   type: ActionType.HANDLE_LEND;
 }
+interface LendSuccess {
+  type: ActionType.LEND_SUCCESS;
+  payload: boolean;
+}
 
 interface _LendAction {
   type: ActionType.LEND_ACTION;
@@ -20,4 +24,4 @@ interface LendFailed {
 
 // interface HandleLendSuccess {}
 // interface HandleLendFailed {}
-export type LendAction = HandleLend | _LendAction | LendHash | LendFailed;
+export type LendAction = HandleLend | _LendAction | LendHash | LendFailed |LendSuccess;

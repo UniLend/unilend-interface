@@ -2,6 +2,11 @@ import { ActionType } from "../action-types";
 import { BorrowAction } from "../actions/borrowA";
 
 interface BorrowState {
+  borrowLoading: boolean;
+  borrowTransHx: string;
+  borrowTransHxReceived: boolean;
+  borrowErrorMessage: string;
+
   borrowInterest: string;
   borrowLtv: string;
   borrowLbv: string;
@@ -13,6 +18,11 @@ interface BorrowState {
 }
 
 const initialState = {
+  borrowLoading: false,
+  borrowTransHx: "",
+  borrowTransHxReceived: false,
+  borrowErrorMessage: "",
+
   borrowInterest: "",
   borrowLtv: "",
   borrowLbv: "",
@@ -28,6 +38,16 @@ const borrowReducer = (
   action: BorrowAction
 ): BorrowState => {
   switch (action.type) {
+    case ActionType.BORROW_ACTION:
+      return { ...state, borrowLoading: true };
+    case ActionType.BORROW_HASH:
+      return {
+        ...state,
+        borrowTransHx: action.payload,
+        borrowTransHxReceived: true,
+      };
+    case ActionType.BORROW_FAILED:
+      return { ...state, borrowLoading: false, borrowErrorMessage: action.payload };
     case ActionType.BORROW_INTEREST:
       return { ...state, borrowInterest: action.payload };
     case ActionType.BORROW_LTV:

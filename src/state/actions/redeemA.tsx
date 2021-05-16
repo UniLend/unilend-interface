@@ -1,5 +1,24 @@
 import { ActionType } from "../action-types";
 
+interface RedeemSuccess {
+  type: ActionType.REDEEM_SUCCESS;
+  payload: boolean;
+}
+
+interface _RedeemAction {
+  type: ActionType.REDEEM_ACTION;
+}
+
+interface RedeemHash {
+  type: ActionType.REDEEM_HASH;
+  payload: any;
+}
+
+interface RedeemFailed {
+  type: ActionType.REDEEM_FAILED;
+  payload: string;
+}
+
 interface RedeemCollateralAmount {
   type: ActionType.REDEEM_COLLATERAL_AMOUNT;
   payload: string;
@@ -21,6 +40,10 @@ interface RedeemActionFailed {
 }
 
 export type RedeemAction =
+  | RedeemSuccess
+  | _RedeemAction
+  | RedeemHash
+  | RedeemFailed
   | RedeemCollateralAmount
   | RedeemCollateralAmountBase
   | RedeemActionSuccess
