@@ -122,6 +122,31 @@ export const getBorrowInterest = (
   };
 };
 
+export const handleBorrowAction = (
+  accounts: any,
+  unilendLbRouter: any,
+  yourCollateral: any,
+  borrowReceived: any
+) => {
+  return async (dispatch: Dispatch<BorrowAction>) => {
+    const unilendLB = UnilendLBContract(unilendLbRouter);
+    debugger;
+    const amount1 = web3.utils.toWei(yourCollateral, "ether");
+    const amount2 = web3.utils.toWei(borrowReceived, "ether");
+    unilendLB.methods
+      .borrow(collateralAddress, assetAddress, amount1, amount2)
+      .send({
+        from: accounts,
+      })
+      .on("transactionHash", (result: any) => {
+        // console.log(result);
+      })
+      .on("error", function (error: any) {
+        console.log("check", error);
+      });
+  };
+};
+
 export const handleBorrowValueChange = (
   yourCollateral: any,
   unilendLbRouter: any

@@ -18,7 +18,8 @@ const Borrow: FC<Props> = (props) => {
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-  const { getBorrowInterest, handleBorrowValueChange } = useActions();
+  const { getBorrowInterest, handleBorrowValueChange, handleBorrowAction } =
+    useActions();
   const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
 
   const { assetPoolAddress, unilendLbRouter } = useTypedSelector(
@@ -67,21 +68,12 @@ const Borrow: FC<Props> = (props) => {
   };
 
   const handleBorrow = useCallback(async () => {
-    const unilendLB = UnilendLBContract(unilendLbRouter);
-    debugger;
-    const amount1 = web3.utils.toWei(yourCollateral, "ether");
-    const amount2 = web3.utils.toWei(borrowReceived, "ether");
-    unilendLB.methods
-      .borrow(collateralAddress, assetAddress, amount1, amount2)
-      .send({
-        from: accounts[0],
-      })
-      .on("transactionHash", (result: any) => {
-        // console.log(result);
-      })
-      .on("error", function (error: any) {
-        console.log(error);
-      });
+    await handleBorrowAction(
+      accounts[0],
+      unilendLbRouter,
+      yourCollateral,
+      borrowReceived
+    );
   }, [accounts, borrowReceived, unilendLbRouter, yourCollateral]);
   let curencySelectModel = (
     <CurrencySelectModel
