@@ -5,13 +5,13 @@ import FieldCard from "../UI/FieldsCard/FieldCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import eth from "assets/eth.svg";
 import uft from "assets/uft.svg";
-import { UnilendLBContract } from "ethereum/contracts/UnilendLB";
 import { UnilendLBPool } from "ethereum/contracts/UnilendLB";
 import web3 from "ethereum/web3";
-import { collateralAddress } from "ethereum/contracts";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
 import useWalletConnect from "hooks/useWalletConnect";
+import TransactionPopup from "../UI/TransactionLoaderPopup/TransactionLoader";
+
 interface Props extends RouteComponentProps<any> {}
 
 const Repay: FC<Props> = (props) => {
@@ -20,9 +20,11 @@ const Repay: FC<Props> = (props) => {
   const [youRepay, setYouRepay] = useState("ht");
   const [repayValue, setRepayValue] = useState("");
   const { accounts, handleWalletConnect } = useWalletConnect();
-  const { getOweValue } = useActions();
+  const { handleRepayAction,getOweValue } = useActions();
   const { youOwe } = useTypedSelector((state) => state.repay);
-
+  const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
+  const { repayLoading, repayTransHx, repayTransHxReceived, repayErrorMessage } =
+    useTypedSelector((state) => state.repay);
   const {
     unilendLbRouter,
     assetPoolAddress,
@@ -59,21 +61,21 @@ const Repay: FC<Props> = (props) => {
     setShowModel(false);
   };
 
+
   const handleRepay = async () => {
-    const unilendLB = UnilendLBContract(unilendLbRouter);
-    let fullAmount = web3.utils.toWei(repayValue, "ether");
-    unilendLB.methods.repayETH(collateralAddress).send({
-      from: accounts[0],
-      value: fullAmount,
-    });
-    // .on("transactionHash", (result: any) => {
-    //   console.log(result);
-    // })
-    // .on("error", function (error: Error) {
-    //   console.log(error);
-    // });
-    setRepayValue("");
+    setTransModalInfo(true);
+    handleRepayAction(unilendLbRouter, accounts, tAmount);
   };
+
+  // const handleRepay = async () => {
+  //   const unilendLB = UnilendLBContract(unilendLbRouter);
+  //   let fullAmount = web3.utils.toWei(repayValue, "ether");
+  //   unilendLB.methods.repayETH(collateralAddress).send({
+  //     from: accounts[0],
+  //     value: fullAmount,
+  //   });
+  //   setRepayValue("");
+  // };
 
   return (
     <>
@@ -151,6 +153,21 @@ const Repay: FC<Props> = (props) => {
           handleClose={handleModelClose}
         />
       </ContentCard>
+
+      {transModalInfo && (
+        <TransactionPopup
+          handleClose={() => {
+            setTransModalInfo(false);
+          }}
+          mode={
+            !repayTransHxReceived && !repayErrorMessage
+              ? "loading"
+              : repayTransHxReceived
+              ? "success"
+              : "failure"
+          }
+        />
+      )}
     </>
   );
 };

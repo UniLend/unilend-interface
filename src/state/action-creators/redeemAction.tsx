@@ -76,6 +76,9 @@ export const handleRedeemAction = (
 ) => {
   return async (dispatch: Dispatch<RedeemAction>) => {
     try {
+      dispatch({
+        type: ActionType.REDEEM_ACTION,
+      });
       const unilendLB = UnilendLBContract(unilendLbRouter);
       let fullAmount = web3.utils.toWei(redeemAmount, "ether");
       unilendLB.methods
@@ -83,17 +86,26 @@ export const handleRedeemAction = (
         .send({
           from: accounts[0],
         })
-        .on("transactionHash", (result: any) => {
+        .on("receipt", (res: any) => {
           dispatch({
-            type: ActionType.REDEEM_ACTION_SUCCESS,
-            payload: result,
+            type: ActionType.REDEEM_SUCCESS,
+            payload: true,
+          });
+        })
+        .on("transactionHash", (hash: any) => {
+          dispatch({
+            type: ActionType.REDEEM_HASH,
+            payload: hash,
           });
         })
         .on("error", function (error: Error) {
           dispatch({
-            type: ActionType.REDEEM_ACTION_FAILED,
-            payload: error,
+            type: ActionType.REDEEM_FAILED,
+            payload: "Transaction Failed",
           });
+        });
+        dispatch({
+          type: ActionType.HANDLE_REDEEM,
         });
     } catch (e) {
       console.log(e);

@@ -5,35 +5,23 @@ import ContentCard from "../UI/ContentCard/ContentCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import useWalletConnect from "hooks/useWalletConnect";
-import AlertToast from "../UI/AlertToast/AlertToast";
-
+import TransactionPopup from "../UI/TransactionLoaderPopup/TransactionLoader";
 
 interface Props {}
 
-interface AlertType {
-  show: boolean;
-}
-
-
 const Lend: FC<Props> = (props) => {
-  const [progressValue, setProgressValue] = useState<Number>(100);
   const [showModel, setShowModel] = useState(false);
   const [lendAmount, setLendAmount] = useState("");
   const [currFieldName, setCurrFieldName] = useState("");
   const [yourLend, setYourLend] = useState("ht");
   const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
   const { handleLendAction, getBorrowInterest } = useActions();
-  const {
-    unilendLbRouter,
-    assetPoolAddress,
-    accountBalance,
-  } = useTypedSelector((state) => state.configureWallet);
-  const [alertInfo, setAlertInfo] = useState<AlertType>({
-    show: false,
-  });
-  
-
+  const { unilendLbRouter, assetPoolAddress, accountBalance } =
+    useTypedSelector((state) => state.configureWallet);
+  const { lendLoading, lendTransHx, lendTransHxReceived, lendErrorMessage ,lendSuccessMessage} =
+    useTypedSelector((state) => state.lend);
   const { lendInterest } = useTypedSelector((state) => state.borrow);
+  const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
 
   useEffect(() => {
     if (assetPoolAddress) {
@@ -56,39 +44,12 @@ const Lend: FC<Props> = (props) => {
   };
 
   const handleLend = async () => {
+    setTransModalInfo(true);
     handleLendAction(unilendLbRouter, accounts, lendAmount);
   };
 
-  const handleToast = (show: boolean) => {
-    setAlertInfo({
-      show,
-    });
-  };
-
   return (
-    <>  
-        {alertInfo.show &&
-          <AlertToast
-            handleClose={() => {
-              handleToast(false);
-            }}
-            now={progressValue}
-            status="failed"
-            message={"Transaction Failed"}
-            activeTab={"lend"}
-          />
-        }
-        {alertInfo.show &&
-          <AlertToast
-            handleClose={() => {
-              handleToast(false);
-            }}
-            now={progressValue}
-            status="success"
-            message={"Transaction success"}
-            activeTab={"lend"}
-          />
-        }
+    <>
       <ContentCard title="Lend">
         <FieldCard
           onF1Change={(e: any) => {
@@ -143,6 +104,20 @@ const Lend: FC<Props> = (props) => {
           handleClose={handleModelClose}
         />
       </ContentCard>
+      {transModalInfo && (
+        <TransactionPopup
+          handleClose={() => {
+            setTransModalInfo(false);
+          }}
+          mode={
+            !lendTransHxReceived && !lendErrorMessage
+              ? "loading"
+              : lendTransHxReceived
+              ? "success"
+              : "failure"
+          }
+        />
+      )}
     </>
   );
 };

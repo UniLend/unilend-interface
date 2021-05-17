@@ -29,7 +29,8 @@ const redeemReducer = (
 ): RedeemState => {
   switch (action.type) {
     case ActionType.REDEEM_ACTION:
-      return { ...state, redeemLoading: true, redeemSuccessMessage :""};
+      return { ...state, redeemLoading: true, redeemSuccessMessage :"",
+      redeemErrorMessage:"",redeemTransHxReceived: false,redeemTransHx:""};
     case ActionType.REDEEM_HASH:
       return {
         ...state,
@@ -38,19 +39,17 @@ const redeemReducer = (
       };
       case ActionType.REDEEM_SUCCESS:
       return { ...state, redeemLoading: false ,redeemSuccessMessage:"successfully",};
-    case ActionType.REDEEM_FAILED:
-      return { ...state, redeemLoading: false, redeemErrorMessage: action.payload };
     case ActionType.REDEEM_COLLATERAL_AMOUNT:
       return { ...state, collateralShare: action.payload };
     case ActionType.REDEEM_COLLATERAL_AMOUNT_BASE:
       return { ...state, collateralShareBase: action.payload };
     case ActionType.REDEEM_ACTION_SUCCESS:
       return state;
-    case ActionType.REDEEM_ACTION_FAILED:
-      return state;
+    case ActionType.REDEEM_FAILED:
+      return {...state,redeemLoading: false, redeemErrorMessage: action.payload};
 
     default:
-      return state;
+      return { ...state };
   }
 };
 
