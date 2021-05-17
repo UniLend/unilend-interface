@@ -4,6 +4,8 @@ export const collateralAddress: string =
   "0x4008a9DC0f231Ab9D6f118624a0800D67Af4D709";
 export const assetAddress: string =
   "0xc778417E063141139Fce010982780140Aa0cD5Ab";
+export const Reciepent: string = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+// UFT address - 0x1434536899Da6e26B2AD6E5Cfd34611B47F993Ef
 export const currencyList: {
   currency: {
     id: number;

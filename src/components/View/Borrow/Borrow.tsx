@@ -7,6 +7,7 @@ import { useTypedSelector } from "hooks/useTypedSelector";
 import useWalletConnect from "hooks/useWalletConnect";
 import TransactionPopup from "../UI/TransactionLoaderPopup/TransactionLoader";
 
+
 interface Props {}
 
 const Borrow: FC<Props> = (props) => {
@@ -16,10 +17,8 @@ const Borrow: FC<Props> = (props) => {
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-  const { getBorrowInterest, handleBorrowValueChange, handleBorrowAction } =
-    useActions();
+  const { getBorrowInterest, handleBorrowValueChange,handleBorrowAction } = useActions();
   const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
-
   const { unilendLbRouter, assetPoolAddress, accountBalance } =
   useTypedSelector((state) => state.configureWallet);
 

@@ -5,4 +5,10 @@ interface Theme {
   payload: string;
 }
 
-export type SettingAction = Theme;
+
+interface ActiveCurrency {
+  type: string;
+  payload: any;
+}
+
+export type SettingAction = Theme | ActiveCurrency;
