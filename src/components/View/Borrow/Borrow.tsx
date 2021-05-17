@@ -8,7 +8,7 @@ import { assetAddress, collateralAddress } from "ethereum/contracts";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
 import useWalletConnect from "hooks/useWalletConnect";
-import TransactionPopup from "../UI/TransactionLoaderPopup/TransactionLoader";
+
 
 interface Props {}
 
@@ -19,8 +19,7 @@ const Borrow: FC<Props> = (props) => {
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-  const { getBorrowInterest, handleBorrowValueChange, handleBorrowAction } =
-    useActions();
+  const { getBorrowInterest, handleBorrowValueChange } = useActions();
   const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
 
   const { assetPoolAddress, unilendLbRouter } = useTypedSelector(
@@ -35,10 +34,6 @@ const Borrow: FC<Props> = (props) => {
     lbAmount2,
     tokenBalance,
   } = useTypedSelector((state) => state.borrow);
-
-  const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
-  const { borrowLoading, borrowTransHx, borrowTransHxReceived, borrowErrorMessage } =
-  useTypedSelector((state) => state.borrow);
 
   useEffect(() => {
     if (assetPoolAddress) {
@@ -73,12 +68,21 @@ const Borrow: FC<Props> = (props) => {
   };
 
   const handleBorrow = useCallback(async () => {
-    await handleBorrowAction(
-      accounts[0],
-      unilendLbRouter,
-      yourCollateral,
-      borrowReceived
-    );
+    const unilendLB = UnilendLBContract(unilendLbRouter);
+    debugger;
+    const amount1 = web3.utils.toWei(yourCollateral, "ether");
+    const amount2 = web3.utils.toWei(borrowReceived, "ether");
+    unilendLB.methods
+      .borrow(collateralAddress, assetAddress, amount1, amount2)
+      .send({
+        from: accounts[0],
+      })
+      .on("transactionHash", (result: any) => {
+        // console.log(result);
+      })
+      .on("error", function (error: any) {
+        console.log(error);
+      });
   }, [accounts, borrowReceived, unilendLbRouter, yourCollateral]);
   let curencySelectModel = (
     <CurrencySelectModel
@@ -186,20 +190,6 @@ const Borrow: FC<Props> = (props) => {
         </div>
         {curencySelectModel}
       </ContentCard>
-      {transModalInfo && (
-        <TransactionPopup
-          handleClose={() => {
-            setTransModalInfo(false);
-          }}
-          mode={
-            !borrowTransHxReceived && !borrowErrorMessage
-              ? "loading"
-              : borrowTransHxReceived
-              ? "success"
-              : "failure"
-          }
-        />
-      )}
     </>
   );
 };

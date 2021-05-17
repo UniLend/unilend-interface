@@ -28,10 +28,36 @@ interface AccountBalance {
   type: ActionType.ACCOUNT_BALANCE;
   payload: string;
 }
+
+interface setSelectedNetworkId {
+  type: ActionType.SELECTED_NETWORK_ID;
+  networkId: number;
+}
+
+interface ActiveNetwork {
+  type: ActionType.ACTIVE_NETWORK;
+  payload: any;
+  networkId: any;
+}
+
+interface CurrentProvider {
+  type: ActionType.CURRENT_PROVIDER;
+  payload: string;
+  provider: any;
+}
+
+interface walletDisconnect {
+  type: ActionType.WALLET_DISCONNECT;
+}
+
 export type Action =
+  | CurrentProvider
+  | walletDisconnect
   | ConnectWalletAction
   | ConnectWalletSuccessAction
   | ConnectWalletErrorAction
   | LbRouter
   | SetPoolAddress
+  | setSelectedNetworkId
+  | ActiveNetwork
   | AccountBalance;

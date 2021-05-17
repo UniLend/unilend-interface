@@ -2,6 +2,7 @@ import React, { FC, useEffect, useRef } from "react";
 import "./FieldCard.scss";
 import icon from "../../../../assets/htLogo.svg";
 import dropdown from "../../../../assets/dropdown.svg";
+
 interface Props {
   fieldLabel: String;
   fieldValue: any;
@@ -21,8 +22,8 @@ const FieldCard: FC<Props> = (props) => {
     <>
       <div className="card field-card">
         <div className="card-body py-2">
-          <div className="row">
-            <div className=" col-6 col-sm-7">
+          <div className="row main__row">
+            <div className=" col-6 col-sm-6">
               <label className="form-label">{props.fieldLabel}</label>
               <input
                 type={props.fieldType}
@@ -32,11 +33,22 @@ const FieldCard: FC<Props> = (props) => {
                 onChange={props.onF1Change}
               />
             </div>
-            <div className=" col-6 col-sm-5">
+            <div className=" col-6 col-sm-6">
               <div className="align-end">
                 <label className="form-label">{props.selectLabel}</label>
               </div>
               <div className="align-end">
+              {/* {activeCurrency.symbol !== "Select Token" &&
+                  props.selectLabel !== "" && ( */}
+                    <button
+                      className="btn btn-max"
+                      onClick={() => {
+                        alert("max button clicked");
+                      }}
+                    >
+                      <p className="max-text">MAX</p>
+                    </button>
+                  {/* )} */}
                 <button
                   className="btn btn-curr"
                   onClick={props.handleModelOpen}

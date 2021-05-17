@@ -1,27 +1,69 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
-
 import logo from "../../../../assets/logo.svg";
-import walletlight from "../../../../assets/wallet-light.svg";
-import walletdark from "../../../../assets/wallet-dark.svg";
-import sun from "../../../../assets/sun.svg";
-import moon from "../../../../assets/moon.svg";
-import { shortenAddress } from "../../../../utils";
+// import { shortenAddress } from "../../../../utils";
 import { useActions } from "../../../../hooks/useActions";
 import { useTypedSelector } from "../../../../hooks/useTypedSelector";
 import useWalletConnect from "hooks/useWalletConnect";
-interface Props extends RouteComponentProps<any> {}
+import { WalletInfoProps } from "../../../Helpers/Types";
+import { NETWORKS } from "components/constants";
+
+import {
+  ThemeButton,
+  AccountBalance,
+  ActiveNetwork,
+  NetworkInfoTab,
+  AddressTab,
+  ConnectWalletButton,
+} from "./Common";
+
+interface Props extends RouteComponentProps<any> {
+  setWalletModalInfo: Dispatch<SetStateAction<boolean>>;
+  setWalletStatusInfo: Dispatch<SetStateAction<WalletInfoProps>>;
+  setSwitchNetworkModal: Dispatch<SetStateAction<boolean>>;
+}
 
 const NavBar: React.FC<Props> = (props) => {
+  const {
+    setWalletModalInfo,
+    setWalletStatusInfo,
+    setSwitchNetworkModal,
+  } = props;
+
   const [currentPage, setCurrentPage] = useState("");
   const { theme } = useTypedSelector((state) => state.settings);
-  const { lendLoading } = useTypedSelector((state) => state.lend);
-  const { themeChange } = useActions();
-  const { walletConnected, accounts, handleWalletConnect, loading } =
-    useWalletConnect();
+  const { themeChange, networkSwitchHandling } = useActions();
+  const {
+    walletConnected,
+    accounts,
+    // handleWalletConnect,
+    currentProvider,
+    loading,
+    accountBalance,
+  } = useWalletConnect();
+
+  const { selectedNetworkId, activeNetWork } = useTypedSelector(
+    (state) => state.configureWallet
+  );
+
+  const networkInfo = NETWORKS.filter(
+    (item) => item.id === selectedNetworkId
+  )[0];
   // const { accounts, walletConnected, loading } = useTypedSelector(
   //   (state) => state.configureWallet
   // );
+  useEffect(() => {
+    if (walletConnected) {
+      networkSwitchHandling(currentProvider);      
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    currentProvider,
+    walletConnected,
+    selectedNetworkId,
+  ]);
+
   useEffect(() => {
     setCurrentPage(props.location.pathname);
   }, [props.location.pathname]);
@@ -43,7 +85,12 @@ const NavBar: React.FC<Props> = (props) => {
               className="d-inline-block align-top"
             />
           </Link>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          {/* <div className="collapse navbar-collapse" id="navbarSupportedContent">
+           */}
+            <div
+            className=" float-right top-nav-links"
+            id="navbarSupportedContent"
+            >
             <ul className="navbar-nav me-auto mb-lg-0">
               {/* <li className="nav-item">
                 <Link
@@ -138,7 +185,60 @@ const NavBar: React.FC<Props> = (props) => {
               </li> */}
             </ul>
           </div>
-          {(accounts && accounts.length) || walletConnected ? (
+          <div className="app-wallet-details">
+            {walletConnected && !loading ? (
+              <ActiveNetwork
+                theme={theme}
+                activeNetWork={activeNetWork}
+                className="btn-custom-secondary"
+              />
+            ) : (
+              ""
+            )}
+            
+            <NetworkInfoTab
+              theme={theme}
+              logo={networkInfo.logo}
+              label={networkInfo.label}
+              onClick={() => {
+                setSwitchNetworkModal(true);
+            }}/>
+            {/* {walletConnected && accounts.length && accountBalance ? ( */}
+              {walletConnected && accounts.length && true ? (
+              <AccountBalance
+                theme={theme}
+                // accountBalance={accountBalance}
+                // tokenType={selectedNetworkId}
+                accountBalance={accountBalance}
+                tokenType={selectedNetworkId}
+                className="acc-balance-header"
+              />
+            ) : (
+              ""
+            )}
+
+            {(accounts && accounts.length) || walletConnected ? (
+              <AddressTab
+                theme={theme}
+                onClick={() =>
+                  setWalletStatusInfo({
+                    show: true,
+                    address: accounts[0],
+                  })
+                }
+                address={accounts[0]}
+              />
+            ) : (
+              <ConnectWalletButton
+                theme={theme}
+                onClick={() => setWalletModalInfo(true)}
+                loading={loading}
+              />
+            )}
+
+          </div>
+
+          {/* {(accounts && accounts.length) || walletConnected ? (
             <button
               className={`d-flex btn ${
                 theme === "dark" && "btn-dark"
@@ -170,8 +270,8 @@ const NavBar: React.FC<Props> = (props) => {
                 </div>
               )}
             </button>
-          )}
-          <button
+          )} */}
+          {/* <button
             onClick={() => handleUpdate()}
             className={`d-flex ml-3 btn ${
               theme === "dark" && "btn-dark"
@@ -184,7 +284,13 @@ const NavBar: React.FC<Props> = (props) => {
                 alt="theme"
               />
             }
-          </button>
+          </button> */}
+           <ThemeButton
+              onClick={handleUpdate}
+              theme={theme}
+              dflex={true}
+              className="ml-3 btn-theme-icon-header btn-h"
+            />
         </div>
       </nav>
     </>

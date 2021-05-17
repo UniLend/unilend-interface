@@ -1,25 +1,3 @@
-export interface Wallet {
-  id: number;
-  name: string;
-  icon: string;
-}
-export type HeadingProps = {
-  className?: string;
-  children?: React.ReactNode;
-};
-
-export type DividerProps = {
-  className?: string;
-};
-
-export type ThemeButtonProps = {
-  onClick: () => void;
-  theme: string;
-  className?: string;
-  dflex?: boolean;
-  children?: React.ReactNode;
-};
-
 export type AccountBalanceProps = {
   accountBalance: string | number;
   tokenType: any;
@@ -28,9 +6,9 @@ export type AccountBalanceProps = {
 };
 
 export type ActiveNetworkProps = {
-  activeNetWork: string;
-  theme: string;
-  className?: string;
+activeNetWork: string;
+theme: string;
+className?: string;
 };
 
 export type NetworkInfoTabProps = {
@@ -41,19 +19,33 @@ export type NetworkInfoTabProps = {
   className?: string;
 };
 
-export type ConnectWalletButtonProps = {
-  theme: string;
-  onClick: () => void;
-  loading: boolean;
-};
-
 export type AddressTabProps = {
   theme: string;
   onClick: () => void;
   address: string;
 };
 
+export type ConnectWalletButtonProps = {
+theme: string;
+onClick: () => void;
+loading: boolean;
+};
+
 export type WalletInfoProps = {
-  show: boolean;
-  address: string;
+show: boolean;
+address: string;
+};
+
+export interface Wallet {
+id: number;
+name: string;
+icon: string;
+}
+
+export type ThemeButtonProps = {
+onClick: () => void;
+theme: string;
+className?: string;
+dflex?: boolean;
+children?: React.ReactNode;
 };
