@@ -3,6 +3,7 @@ import { collateralAddress } from "../../ethereum/contracts";
 import { UnilendLBContract } from "../../ethereum/contracts/UnilendLB";
 import { ActionType } from "../action-types";
 import { RepayAction } from "../actions/repayA";
+import web3 from "../../ethereum/web3";
 
 export const getOweValue = (
   unilendLbRouter: string,
@@ -33,3 +34,50 @@ export const getOweValue = (
     }
   };
 };
+
+
+  export const handleRepayAction = (
+    unilendLbRouter: any,
+    accounts: any,
+    tAmount: any
+  ) => {
+    return async (dispatch: Dispatch<RepayAction>) => {
+      try {
+        console.log("Calliong")
+        dispatch({
+          type: ActionType.REPAY_ACTION,
+        });
+        const unilendLB = UnilendLBContract(unilendLbRouter);
+        let fullAmount = web3.utils.toWei(tAmount, "ether");
+        unilendLB.methods.repayETH(collateralAddress)
+          .send({
+            from: accounts[0],
+            value: fullAmount,
+          })
+          .on("receipt", (res: any) => {
+            dispatch({
+              type: ActionType.REPAY_SUCCESS,
+              payload: true,
+            });
+          })
+          .on("transactionHash", (hash: any) => {
+            dispatch({
+              type: ActionType.REPAY_HASH,
+              payload: hash,
+            });
+          })
+          .on("error", function (error: Error) {
+            dispatch({
+              type: ActionType.REPAY_FAILED,
+              payload: "Transaction Failed",
+            });
+          });
+          dispatch({
+            type: ActionType.HANDLE_REPAY,
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  };
+  

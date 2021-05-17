@@ -2,9 +2,6 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
-import web3 from "ethereum/web3";
-import { UnilendLBContract } from "ethereum/contracts/UnilendLB";
-import { assetAddress, collateralAddress } from "ethereum/contracts";
 import { useActions } from "hooks/useActions";
 import { useTypedSelector } from "hooks/useTypedSelector";
 import useWalletConnect from "hooks/useWalletConnect";
@@ -23,9 +20,9 @@ const Borrow: FC<Props> = (props) => {
     useActions();
   const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
 
-  const { assetPoolAddress, unilendLbRouter } = useTypedSelector(
-    (state) => state.configureWallet
-  );
+  const { unilendLbRouter, assetPoolAddress, accountBalance } =
+  useTypedSelector((state) => state.configureWallet);
+
   const {
     borrowInterest,
     borrowLtv,
@@ -35,7 +32,7 @@ const Borrow: FC<Props> = (props) => {
     lbAmount2,
     tokenBalance,
   } = useTypedSelector((state) => state.borrow);
-
+ 
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
   const { borrowLoading, borrowTransHx, borrowTransHxReceived, borrowErrorMessage } =
   useTypedSelector((state) => state.borrow);
@@ -72,14 +69,11 @@ const Borrow: FC<Props> = (props) => {
     setShowModel(false);
   };
 
-  const handleBorrow = useCallback(async () => {
-    await handleBorrowAction(
-      accounts[0],
-      unilendLbRouter,
-      yourCollateral,
-      borrowReceived
-    );
-  }, [accounts, borrowReceived, unilendLbRouter, yourCollateral]);
+  const handleBorrow = async () => {
+    setTransModalInfo(true);
+    handleBorrowAction( accounts[0],unilendLbRouter,yourCollateral, borrowReceived);
+  };
+
   let curencySelectModel = (
     <CurrencySelectModel
       currFieldName={currFieldName}

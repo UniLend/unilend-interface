@@ -13,10 +13,8 @@ interface RedeemHash {
   type: ActionType.REDEEM_HASH;
   payload: any;
 }
-
-interface RedeemFailed {
-  type: ActionType.REDEEM_FAILED;
-  payload: string;
+interface HandleRedeem {
+  type: ActionType.HANDLE_REDEEM;
 }
 
 interface RedeemCollateralAmount {
@@ -34,17 +32,17 @@ interface RedeemActionSuccess {
   payload: string;
 }
 
-interface RedeemActionFailed {
-  type: ActionType.REDEEM_ACTION_FAILED;
-  payload: Error;
+interface RedeemFailed {
+  type: ActionType.REDEEM_FAILED;
+  payload: string;
 }
 
 export type RedeemAction =
   | RedeemSuccess
   | _RedeemAction
   | RedeemHash
-  | RedeemFailed
+  | HandleRedeem
   | RedeemCollateralAmount
   | RedeemCollateralAmountBase
   | RedeemActionSuccess
-  | RedeemActionFailed;
+  | RedeemFailed;

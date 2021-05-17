@@ -131,6 +131,9 @@ export const handleBorrowAction = (
   borrowReceived: any
 ) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
+    dispatch({
+      type: ActionType.BORROW_ACTION,
+    });
     const unilendLB = UnilendLBContract(unilendLbRouter);
     debugger;
     const amount1 = web3.utils.toWei(yourCollateral, "ether");
@@ -140,12 +143,24 @@ export const handleBorrowAction = (
       .send({
         from: accounts,
       })
-      .on("transactionHash", (result: any) => {
-        // console.log(result);
+      .on("receipt", (res: any) => {
+        dispatch({
+          type: ActionType.BORROW_SUCCESS,
+          payload: true,
+        });
       })
-      .on("error", function (error: any) {
-        console.log("check", error);
+      .on("transactionHash", (hash: any) => {
+        dispatch({ type: ActionType.BORROW_HASH, payload: hash });
+      })
+      .on("error", (error: Error) => {
+        dispatch({
+          type: ActionType.BORROW_FAILED,
+          payload: "Transaction Failed",
+        });
       });
+    dispatch({
+      type: ActionType.HANDLE_BORROW,
+    });
   };
 };
 

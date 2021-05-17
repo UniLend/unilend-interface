@@ -1,6 +1,10 @@
 import { ActionType } from "../action-types";
 
 
+interface BorrowSuccess {
+  type: ActionType.BORROW_SUCCESS;
+  payload: boolean;
+}
 interface _BorrowAction {
   type: ActionType.BORROW_ACTION;
 }
@@ -60,6 +64,7 @@ interface TokenBalance {
 }
 
 export type BorrowAction =
+  | BorrowSuccess
   | _BorrowAction
   | BorrowHash
   | BorrowFailed
