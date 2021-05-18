@@ -51,7 +51,9 @@ const Borrow: FC<Props> = (props) => {
     setBorrowReceived(lbAmount2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetPoolAddress, lbAmount1, lbAmount2]);
-
+  useEffect(() => {
+    handleCollateralChange(lbAmount1);
+  }, [lbAmount1]);
   const handleModelClose = () => {
     setShowModel(false);
   };
@@ -103,7 +105,11 @@ const Borrow: FC<Props> = (props) => {
     ) {
       return (
         <button
-          disabled={yourCollateral === "" || borrowLoading === true}
+          disabled={
+            yourCollateral === "" ||
+            borrowReceived === "" ||
+            borrowLoading === true
+          }
           className="btn btn-lg btn-custom-primary"
           onClick={handleBorrow}
           type="button"
@@ -133,30 +139,30 @@ const Borrow: FC<Props> = (props) => {
       );
     }
   };
+  const handleCollateralChange = (e: any) => {
+    setYourCollateral(e);
+    if (walletConnected && yourCollateral <= tokenBalance) {
+      setTimeout(() => {
+        handleBorrowValueChange(e, unilendLbRouter, currentProvider);
+      }, 1000);
+    }
+  };
   return (
     <>
       <ContentCard title="Borrow">
         <div className="swap-root">
           <FieldCard
             onF1Change={(e: any) => {
-              setYourCollateral(e.target.value);
-              if (walletConnected && yourCollateral <= tokenBalance) {
-                setTimeout(() => {
-                  handleBorrowValueChange(
-                    e.target.value,
-                    unilendLbRouter,
-                    currentProvider
-                  );
-                }, 1000);
-              }
+              handleCollateralChange(e.target.value);
             }}
-            setFieldValue={setYourCollateral}
+            setFieldValue={handleCollateralChange}
             handleModelOpen={() => handleModelOpen("borrowCollateral")}
             fieldLabel="Your Collateral"
-            fieldValue={lbAmount1}
+            fieldValue={yourCollateral}
             fieldType="number"
             selectLabel={`Balance: ${tokenBalance}`}
             selectValue={collateralBal}
+            bal={tokenBalance}
           />
           <div className="pt-3"></div>
           <FieldCard
@@ -165,7 +171,7 @@ const Borrow: FC<Props> = (props) => {
             }}
             setFieldValue={() => {}}
             fieldLabel="Received"
-            fieldValue={setBorrowReceived}
+            fieldValue={lbAmount2}
             fieldType="number"
             selectLabel=""
             selectValue={receivedType}

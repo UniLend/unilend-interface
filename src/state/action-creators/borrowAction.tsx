@@ -168,7 +168,9 @@ export const handleBorrowValueChange = (
 ) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
     try {
-      var fullAmount = web3.utils.toWei(yourCollateral, "ether");
+      var fullAmount = yourCollateral
+        ? web3.utils.toWei(yourCollateral, "ether")
+        : web3.utils.toWei(0, "ether");
       let unilendLB = UnilendLBContract(unilendLbRouter, currentProvider);
       if (new BigNumber(fullAmount).isGreaterThan(0)) {
         unilendLB.methods
@@ -206,10 +208,6 @@ export const handleBorrowValueChange = (
             }
 
             if (nValue === "0") {
-              dispatch({
-                type: ActionType.LB_AMOUNT_1,
-                payload: 0,
-              });
             } else {
               dispatch({
                 type: ActionType.LB_AMOUNT_1,
@@ -219,7 +217,14 @@ export const handleBorrowValueChange = (
           });
       }
     } catch (e) {
-      console.log(e);
+      dispatch({
+        type: ActionType.LB_AMOUNT_2,
+        payload: "",
+      });
+      dispatch({
+        type: ActionType.LB_AMOUNT_1,
+        payload: "",
+      });
     }
   };
 };

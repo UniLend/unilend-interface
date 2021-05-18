@@ -15,6 +15,7 @@ interface Props {
   handleModelOpen: () => void;
   onF1Change: (e: any) => void;
   setFieldValue: any;
+  bal?: any;
 }
 const FieldCard: FC<Props> = (props) => {
   const field1: any = useRef(null);
@@ -59,7 +60,9 @@ const FieldCard: FC<Props> = (props) => {
                 <button
                   className="btn btn-max"
                   onClick={() => {
-                    let bFullAmount = new BigNumber(fullAccountBalance);
+                    let bFullAmount = props.bal
+                      ? new BigNumber(props.bal)
+                      : new BigNumber(fullAccountBalance);
                     props.setFieldValue(bFullAmount.toFixed(18, 1).toString());
                   }}
                 >
