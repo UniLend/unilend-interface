@@ -16,27 +16,25 @@ const Redeem: FC<Props> = (props) => {
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
   const [youRedeem, setYouRedeem] = useState("ht");
-  const { accounts, connectedWallet, handleWalletConnect } = useWalletConnect();
+  const { accounts, connectedWallet, currentProvider, handleWalletConnect } =
+    useWalletConnect();
   const { getCollateralAmount, getCollateralAmountBase, handleRedeemAction } =
     useActions();
   const { unilendLbRouter, assetPoolAddress } = useTypedSelector(
     (state) => state.configureWallet
   );
-  const { collateralShare, collateralShareBase } = useTypedSelector(
-    (state) => state.redeem
-  );
   const {
-    redeemLoading,
-    redeemTransHx,
+    collateralShare,
+    collateralShareBase,
     redeemTransHxReceived,
     redeemErrorMessage,
-    redeemSuccessMessage,
+    redeemLoading,
   } = useTypedSelector((state) => state.redeem);
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
   // const { youOwe } = useTypedSelector((state) => state.repay);
   const handleFieldValue = useCallback(() => {
-    getCollateralAmount(assetPoolAddress, accounts[0]);
-    getCollateralAmountBase(assetPoolAddress, accounts[0]);
+    getCollateralAmount(assetPoolAddress, accounts[0], currentProvider);
+    getCollateralAmountBase(assetPoolAddress, accounts[0], currentProvider);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetPoolAddress]);
 
@@ -63,7 +61,12 @@ const Redeem: FC<Props> = (props) => {
 
   const handleRedeem = async () => {
     setTransModalInfo(true);
-    handleRedeemAction(unilendLbRouter, redeemAmount, accounts);
+    handleRedeemAction(
+      unilendLbRouter,
+      redeemAmount,
+      accounts,
+      currentProvider
+    );
   };
 
   return (
@@ -99,8 +102,9 @@ const Redeem: FC<Props> = (props) => {
           onF1Change={(e: any) => {
             setRedeemAmount(e.target.value);
           }}
+          setFieldValue={setRedeemAmount}
           fieldType="number"
-          fieldValue=""
+          fieldValue={redeemAmount}
           handleModelOpen={() => handleModelOpen("youRedeem")}
           fieldLabel="You Redeem"
           selectLabel=""
@@ -109,12 +113,17 @@ const Redeem: FC<Props> = (props) => {
         <div className="d-grid pt-4">
           {accounts.length > 0 ? (
             <button
-              disabled={redeemAmount.length < 1}
+              disabled={redeemAmount.length < 1 || redeemLoading}
               className="btn btn-lg btn-custom-primary"
               onClick={handleRedeem}
               type="button"
             >
               Redeem
+              {redeemLoading && (
+                <div className="spinner-border approve-loader" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              )}
             </button>
           ) : (
             <button

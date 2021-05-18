@@ -18,8 +18,9 @@ import dotEnv from "dotenv";
 import { Alert } from "react-bootstrap";
 import AlertImg from "assets/warning.svg";
 import useWalletConnect from "hooks/useWalletConnect";
+import { useActions } from "hooks/useActions";
 
-declare const window: any;
+// declare const window: any;
 function App() {
   const [alertShow, setAlertShow] = useState<Boolean>(true);
   const [loading, setLoading] = useState<Boolean>(true);
@@ -34,6 +35,7 @@ function App() {
     currentProvider,
     getAccountBalance,
   } = useWalletConnect();
+  const { getUniLendLbRouter } = useActions();
   useEffect(() => {
     dotEnv.config();
 
@@ -47,8 +49,9 @@ function App() {
   useEffect(() => {
     if (connectedWallet) {
       handleWalletConnect(JSON.parse(connectedWallet));
+      getUniLendLbRouter(currentProvider);
     }
-  }, [walletProvider, connectedWallet]);
+  }, [walletProvider, connectedWallet, currentProvider]);
   useEffect(() => {
     let interval: any;
 

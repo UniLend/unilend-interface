@@ -2,6 +2,9 @@ import React, { FC, useEffect, useRef } from "react";
 import "./FieldCard.scss";
 import icon from "../../../../assets/htLogo.svg";
 import dropdown from "../../../../assets/dropdown.svg";
+import BigNumber from "bignumber.js";
+import { useTypedSelector } from "hooks/useTypedSelector";
+import { floatRegExp } from "Helpers";
 
 interface Props {
   fieldLabel: String;
@@ -11,6 +14,8 @@ interface Props {
   fieldType: string;
   handleModelOpen: () => void;
   onF1Change: (e: any) => void;
+  setFieldValue: any;
+  bal?: any;
 }
 const FieldCard: FC<Props> = (props) => {
   const field1: any = useRef(null);
@@ -18,6 +23,18 @@ const FieldCard: FC<Props> = (props) => {
   useEffect(() => {
     field1.current.value = props.fieldValue;
   }, [props.fieldValue]);
+
+  const { fullAccountBalance } = useTypedSelector(
+    (state) => state.configureWallet
+  );
+  const onHandleTelephoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let inputField = e.target.value;
+    // if value is not blank, then test the regex
+    if (inputField === "" || floatRegExp.test(inputField)) {
+      props.onF1Change(e);
+      // setInputValue(inputField);
+    }
+  };
   return (
     <>
       <div className="card field-card">
@@ -30,7 +47,7 @@ const FieldCard: FC<Props> = (props) => {
                 ref={field1}
                 className="form-control field-input"
                 placeholder="0.0"
-                onChange={props.onF1Change}
+                onChange={(e) => onHandleTelephoneChange(e)}
               />
             </div>
             <div className=" col-6 col-sm-6">
@@ -38,17 +55,20 @@ const FieldCard: FC<Props> = (props) => {
                 <label className="form-label">{props.selectLabel}</label>
               </div>
               <div className="align-end">
-              {/* {activeCurrency.symbol !== "Select Token" &&
+                {/* {activeCurrency.symbol !== "Select Token" &&
                   props.selectLabel !== "" && ( */}
-                    <button
-                      className="btn btn-max"
-                      onClick={() => {
-                        alert("max button clicked");
-                      }}
-                    >
-                      <p className="max-text">MAX</p>
-                    </button>
-                  {/* )} */}
+                <button
+                  className="btn btn-max"
+                  onClick={() => {
+                    let bFullAmount = props.bal
+                      ? new BigNumber(props.bal)
+                      : new BigNumber(fullAccountBalance);
+                    props.setFieldValue(bFullAmount.toFixed(18, 1).toString());
+                  }}
+                >
+                  <p className="max-text">MAX</p>
+                </button>
+                {/* )} */}
                 <button
                   className="btn btn-curr"
                   onClick={props.handleModelOpen}

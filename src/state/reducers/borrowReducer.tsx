@@ -7,7 +7,7 @@ interface BorrowState {
   borrowTransHxReceived: boolean;
   borrowErrorMessage: string;
   borrowSuccessMessage: string;
-  
+
   borrowInterest: string;
   borrowLtv: string;
   borrowLbv: string;
@@ -40,9 +40,14 @@ const borrowReducer = (
 ): BorrowState => {
   switch (action.type) {
     case ActionType.BORROW_ACTION:
-      return { ...state, borrowLoading: true ,
-        borrowSuccessMessage :"",
-        borrowErrorMessage:"",borrowTransHxReceived: false,borrowTransHx:""};
+      return {
+        ...state,
+        borrowLoading: true,
+        borrowSuccessMessage: "",
+        borrowErrorMessage: "",
+        borrowTransHxReceived: false,
+        borrowTransHx: "",
+      };
     case ActionType.BORROW_HASH:
       return {
         ...state,
@@ -50,9 +55,17 @@ const borrowReducer = (
         borrowTransHxReceived: true,
       };
     case ActionType.BORROW_SUCCESS:
-      return { ...state, borrowLoading: false ,borrowSuccessMessage:"lended successfully",};
+      return {
+        ...state,
+        borrowLoading: false,
+        borrowSuccessMessage: "lended successfully",
+      };
     case ActionType.BORROW_FAILED:
-      return { ...state, borrowLoading: false, borrowErrorMessage: action.payload };
+      return {
+        ...state,
+        borrowLoading: false,
+        borrowErrorMessage: action.payload,
+      };
     case ActionType.BORROW_INTEREST:
       return { ...state, borrowInterest: action.payload };
     case ActionType.BORROW_LTV:

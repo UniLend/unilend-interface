@@ -14,24 +14,24 @@ const Lend: FC<Props> = (props) => {
   const [lendAmount, setLendAmount] = useState("");
   const [currFieldName, setCurrFieldName] = useState("");
   const [yourLend, setYourLend] = useState("ht");
-  const { walletConnected, accounts, connectedWallet, handleWalletConnect } =
-    useWalletConnect();
+  const {
+    walletConnected,
+    accounts,
+    connectedWallet,
+    currentProvider,
+    handleWalletConnect,
+  } = useWalletConnect();
   const { handleLendAction, getBorrowInterest } = useActions();
   const { unilendLbRouter, assetPoolAddress, accountBalance } =
     useTypedSelector((state) => state.configureWallet);
-  const {
-    lendLoading,
-    lendTransHx,
-    lendTransHxReceived,
-    lendErrorMessage,
-    lendSuccessMessage,
-  } = useTypedSelector((state) => state.lend);
+  const { lendTransHxReceived, lendErrorMessage, lendLoading } =
+    useTypedSelector((state) => state.lend);
   const { lendInterest } = useTypedSelector((state) => state.borrow);
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
 
   useEffect(() => {
     if (assetPoolAddress) {
-      getBorrowInterest(assetPoolAddress, accounts[0]);
+      getBorrowInterest(assetPoolAddress, accounts[0], currentProvider);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetPoolAddress]);
@@ -51,7 +51,7 @@ const Lend: FC<Props> = (props) => {
 
   const handleLend = async () => {
     setTransModalInfo(true);
-    handleLendAction(unilendLbRouter, accounts, lendAmount);
+    handleLendAction(unilendLbRouter, accounts, lendAmount, currentProvider);
   };
 
   return (
@@ -61,8 +61,9 @@ const Lend: FC<Props> = (props) => {
           onF1Change={(e: any) => {
             setLendAmount(e.target.value);
           }}
+          setFieldValue={setLendAmount}
           fieldType="text"
-          fieldValue=""
+          fieldValue={lendAmount}
           handleModelOpen={() => handleModelOpen("yourLend")}
           fieldLabel="You Lend"
           selectValue={yourLend}
@@ -87,12 +88,17 @@ const Lend: FC<Props> = (props) => {
         <div className="d-grid py-3">
           {walletConnected ? (
             <button
-              disabled={lendAmount.length < 1}
+              disabled={lendAmount.length < 1 || lendLoading}
               className="btn btn-lg btn-custom-primary"
               onClick={handleLend}
               type="button"
             >
               Lend
+              {lendLoading && (
+                <div className="spinner-border approve-loader" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              )}
             </button>
           ) : (
             <button

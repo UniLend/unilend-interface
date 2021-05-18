@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import ContentCard from "../UI/ContentCard/ContentCard";
 import FieldCard from "../UI/FieldsCard/FieldCard";
 import CurrencySelectModel from "../UI/CurrencySelectModel/CurrencySelectModel";
@@ -18,10 +18,16 @@ const Borrow: FC<Props> = (props) => {
   const [receivedType, setReceived] = useState("eth");
   const { getBorrowInterest, handleBorrowValueChange, handleBorrowAction } =
     useActions();
-  const { walletConnected, accounts, connectedWallet, handleWalletConnect } =
-    useWalletConnect();
-  const { unilendLbRouter, assetPoolAddress, accountBalance } =
-    useTypedSelector((state) => state.configureWallet);
+  const {
+    walletConnected,
+    accounts,
+    connectedWallet,
+    currentProvider,
+    handleWalletConnect,
+  } = useWalletConnect();
+  const { unilendLbRouter, assetPoolAddress } = useTypedSelector(
+    (state) => state.configureWallet
+  );
 
   const {
     borrowInterest,
@@ -34,22 +40,20 @@ const Borrow: FC<Props> = (props) => {
   } = useTypedSelector((state) => state.borrow);
 
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
-  const {
-    borrowLoading,
-    borrowTransHx,
-    borrowTransHxReceived,
-    borrowErrorMessage,
-  } = useTypedSelector((state) => state.borrow);
+  const { borrowTransHxReceived, borrowErrorMessage, borrowLoading } =
+    useTypedSelector((state) => state.borrow);
 
   useEffect(() => {
     if (assetPoolAddress) {
-      getBorrowInterest(assetPoolAddress, accounts[0]);
+      getBorrowInterest(assetPoolAddress, accounts[0], currentProvider);
     }
     // setYourCollateral(lbAmount1);
     setBorrowReceived(lbAmount2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetPoolAddress, lbAmount1, lbAmount2]);
-
+  useEffect(() => {
+    handleCollateralChange(lbAmount1);
+  }, [lbAmount1]);
   const handleModelClose = () => {
     setShowModel(false);
   };
@@ -73,13 +77,14 @@ const Borrow: FC<Props> = (props) => {
     setShowModel(false);
   };
 
-  const handleBorrow = async () => {
+  const handleBorrow = () => {
     setTransModalInfo(true);
     handleBorrowAction(
       accounts[0],
       unilendLbRouter,
       yourCollateral,
-      borrowReceived
+      borrowReceived,
+      currentProvider
     );
   };
 
@@ -100,12 +105,21 @@ const Borrow: FC<Props> = (props) => {
     ) {
       return (
         <button
-          disabled={yourCollateral === ""}
+          disabled={
+            yourCollateral === "" ||
+            borrowReceived === "" ||
+            borrowLoading === true
+          }
           className="btn btn-lg btn-custom-primary"
           onClick={handleBorrow}
           type="button"
         >
           Borrow
+          {borrowLoading && (
+            <div className="spinner-border approve-loader" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          )}
         </button>
       );
     } else if (walletConnected && yourCollateral > tokenBalance) {
@@ -125,31 +139,37 @@ const Borrow: FC<Props> = (props) => {
       );
     }
   };
+  const handleCollateralChange = (e: any) => {
+    setYourCollateral(e);
+    if (walletConnected && yourCollateral <= tokenBalance) {
+      setTimeout(() => {
+        handleBorrowValueChange(e, unilendLbRouter, currentProvider);
+      }, 1000);
+    }
+  };
   return (
     <>
       <ContentCard title="Borrow">
         <div className="swap-root">
           <FieldCard
             onF1Change={(e: any) => {
-              setYourCollateral(e.target.value);
-              if (walletConnected && yourCollateral <= tokenBalance) {
-                setTimeout(() => {
-                  handleBorrowValueChange(e.target.value, unilendLbRouter);
-                }, 1000);
-              }
+              handleCollateralChange(e.target.value);
             }}
+            setFieldValue={handleCollateralChange}
             handleModelOpen={() => handleModelOpen("borrowCollateral")}
             fieldLabel="Your Collateral"
-            fieldValue={lbAmount1}
+            fieldValue={yourCollateral}
             fieldType="number"
             selectLabel={`Balance: ${tokenBalance}`}
             selectValue={collateralBal}
+            bal={tokenBalance}
           />
           <div className="pt-3"></div>
           <FieldCard
             onF1Change={(e: any) => {
               setBorrowReceived(e.target.value);
             }}
+            setFieldValue={() => {}}
             fieldLabel="Received"
             fieldValue={lbAmount2}
             fieldType="number"
