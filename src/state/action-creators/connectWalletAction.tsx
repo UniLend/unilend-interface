@@ -1,7 +1,7 @@
 import web3 from "ethereum/web3";
 import { Dispatch } from "redux";
-import { assetAddress, collateralAddress } from "../../ethereum/contracts";
-import { UnilendLBFactory } from "../../ethereum/contracts/UnilendLB";
+// import { assetAddress, collateralAddress } from "../../ethereum/contracts";
+// import { UnilendLBFactory } from "../../ethereum/contracts/UnilendLB";
 import { web3Service } from "../../ethereum/web3Service";
 import { ActionType } from "../action-types";
 import { Action } from "../actions/connectWalletA";
@@ -11,6 +11,8 @@ import { fm, formaticWeb3 } from "ethereum/formatic";
 import { CoinbaseProvider, CoinbaseWeb3 } from "ethereum/coinbaseWeb3";
 import { Wallet } from "components/Helpers/Types";
 import { toFixed } from "Helpers";
+import { UnilendLBFactory } from "ethereum/contracts/UnilendLB";
+import { assetAddress, collateralAddress } from "ethereum/contracts";
 
 export const setSelectedNetworkId = (selectedNetworkId: number) => ({
   type: ActionType.SELECTED_NETWORK_ID,
@@ -598,5 +600,35 @@ export const walletDisconnect = (walletProvider: any) => {
     dispatch({
       type: ActionType.WALLET_DISCONNECT,
     });
+  };
+};
+
+export const getUniLendLbRouter = (currentProvider: any) => {
+  return async (dispatch: Dispatch<Action>) => {
+    UnilendLBFactory(currentProvider)
+      .methods.router()
+      .call((error: any, result: any) => {
+        // dispatch("LB_FACTORY", { unilendLbRouter: result });
+        dispatch({
+          type: ActionType.LB_FACTORY,
+          payload: result,
+        });
+        if (!error && result) {
+          UnilendLBFactory(currentProvider)
+            .methods.getPools([assetAddress, collateralAddress])
+            .call((error1: any, result1: any) => {
+              if (!error1 && result1) {
+                // dispatch("SET_POOL_ADDRESS", {
+                //   assetPoolAddress: result1[0],
+                //   collateralPoolAddress: result1[1],
+                // });
+                dispatch({
+                  type: ActionType.SET_POOL_ADDRESS,
+                  payload: result1,
+                });
+              }
+            });
+        }
+      });
   };
 };

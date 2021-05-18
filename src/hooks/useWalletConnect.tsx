@@ -1,5 +1,5 @@
 import { Wallet } from "components/Helpers/Types";
-import { useCallback } from "react";
+// import { useCallback } from "react";
 
 import { useActions } from "./useActions";
 import { useTypedSelector } from "./useTypedSelector";

@@ -19,21 +19,17 @@ const Repay: FC<Props> = (props) => {
   const [showModel, setShowModel] = useState(false);
   const [youRepay, setYouRepay] = useState("ht");
   const [repayValue, setRepayValue] = useState("");
-  const { accounts, connectedWallet, handleWalletConnect } = useWalletConnect();
+  const { accounts, connectedWallet, currentProvider, handleWalletConnect } =
+    useWalletConnect();
   const { handleRepayAction, getOweValue } = useActions();
-  const { youOwe } = useTypedSelector((state) => state.repay);
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
-  const {
-    repayLoading,
-    repayTransHx,
-    repayTransHxReceived,
-    repayErrorMessage,
-  } = useTypedSelector((state) => state.repay);
+  const { youOwe, repayTransHxReceived, repayErrorMessage, repayLoading } =
+    useTypedSelector((state) => state.repay);
   const { unilendLbRouter, assetPoolAddress, accountBalance } =
     useTypedSelector((state) => state.configureWallet);
   useEffect(() => {
     if (assetPoolAddress) {
-      let unilendLB = UnilendLBPool(assetPoolAddress);
+      let unilendLB = UnilendLBPool(assetPoolAddress, currentProvider);
       unilendLB.methods
         .borrowBalanceOf(accounts[0])
         .call((error: any, result: any) => {
@@ -44,7 +40,7 @@ const Repay: FC<Props> = (props) => {
             console.log(error);
           }
         });
-      getOweValue(unilendLbRouter, accounts[0]);
+      getOweValue(unilendLbRouter, accounts[0], currentProvider);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, assetPoolAddress]);
@@ -64,7 +60,7 @@ const Repay: FC<Props> = (props) => {
 
   const handleRepay = async () => {
     setTransModalInfo(true);
-    handleRepayAction(unilendLbRouter, accounts, tAmount);
+    handleRepayAction(unilendLbRouter, accounts, tAmount, currentProvider);
   };
 
   // const handleRepay = async () => {
@@ -107,8 +103,9 @@ const Repay: FC<Props> = (props) => {
           onF1Change={(e: any) => {
             setRepayValue(e.target.value);
           }}
+          setFieldValue={setRepayValue}
           fieldType="text"
-          fieldValue=""
+          fieldValue={repayValue}
           fieldLabel="You Repay"
           selectLabel=""
           selectValue={youRepay}
@@ -117,12 +114,17 @@ const Repay: FC<Props> = (props) => {
         <div className="d-grid pt-4">
           {accounts.length > 0 ? (
             <button
-              disabled={repayValue.length < 1}
+              disabled={repayValue.length < 1 || repayLoading}
               className="btn btn-lg btn-custom-primary"
               onClick={handleRepay}
               type="button"
             >
               Repay
+              {repayLoading && (
+                <div className="spinner-border approve-loader" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              )}
             </button>
           ) : (
             <button

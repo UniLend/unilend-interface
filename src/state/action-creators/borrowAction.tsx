@@ -12,14 +12,14 @@ import web3 from "../../ethereum/web3";
 import { assetAddress, collateralAddress } from "../../ethereum/contracts";
 export const getBorrowInterest = (
   assetPoolAddress: any,
-  selectedAccount: any
+  selectedAccount: any,
+  currentProvider: any
 ) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
-    dispatch({ type: ActionType.BORROW_ACTION,});
     try {
-      let unilendLB = UnilendLBPool(assetPoolAddress);
+      let unilendLB = UnilendLBPool(assetPoolAddress, currentProvider);
       let borrowAPY: any;
-      
+
       unilendLB.methods.blockinterestRate().call((error: any, result: any) => {
         if (!error && result) {
           borrowAPY = (parseInt(result) * 4 * 60 * 24 * 365) / 10 ** 12;
@@ -88,7 +88,7 @@ export const getBorrowInterest = (
             type: ActionType.LEND_INTEREST,
             payload: toDecimalPlace(_lendAPY, 4),
           });
-          
+
           var aBorrowWei = new BigNumber(totalLend)
             .minus(new BigNumber(totalBorrowed))
             .toString();
@@ -99,7 +99,7 @@ export const getBorrowInterest = (
           });
         });
       });
-      var Token = UnilendLBTokenColl();
+      var Token = UnilendLBTokenColl(currentProvider);
       Token.methods
         .balanceOf(selectedAccount)
         .call((error: Error, result: any) => {
@@ -128,14 +128,14 @@ export const handleBorrowAction = (
   accounts: any,
   unilendLbRouter: any,
   yourCollateral: any,
-  borrowReceived: any
+  borrowReceived: any,
+  currentProvider: any
 ) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
     dispatch({
       type: ActionType.BORROW_ACTION,
     });
-    const unilendLB = UnilendLBContract(unilendLbRouter);
-    debugger;
+    const unilendLB = UnilendLBContract(unilendLbRouter, currentProvider);
     const amount1 = web3.utils.toWei(yourCollateral, "ether");
     const amount2 = web3.utils.toWei(borrowReceived, "ether");
     unilendLB.methods
@@ -158,20 +158,18 @@ export const handleBorrowAction = (
           payload: "Transaction Failed",
         });
       });
-    dispatch({
-      type: ActionType.HANDLE_BORROW,
-    });
   };
 };
 
 export const handleBorrowValueChange = (
   yourCollateral: any,
-  unilendLbRouter: any
+  unilendLbRouter: any,
+  currentProvider: any
 ) => {
   return async (dispatch: Dispatch<BorrowAction>) => {
     try {
       var fullAmount = web3.utils.toWei(yourCollateral, "ether");
-      let unilendLB = UnilendLBContract(unilendLbRouter);
+      let unilendLB = UnilendLBContract(unilendLbRouter, currentProvider);
       if (new BigNumber(fullAmount).isGreaterThan(0)) {
         unilendLB.methods
           .getEstimateAssetAmount(collateralAddress, assetAddress, fullAmount)
@@ -219,9 +217,7 @@ export const handleBorrowValueChange = (
               });
             }
           });
-          
       }
-      
     } catch (e) {
       console.log(e);
     }

@@ -5,28 +5,15 @@ import {
   UnilendLBPool,
 } from "../ethereum/contracts/UnilendLB";
 import web3 from "../ethereum/web3";
-var unilendLBFactory = UnilendLBFactory();
+var unilendLBFactory = (currentProvider: any) =>
+  UnilendLBFactory(currentProvider);
 
-export const getUniLendLbRouter = (dispatch: any) => {
-  unilendLBFactory.methods.router().call((error: any, result: any) => {
-    dispatch("LB_FACTORY", { unilendLbRouter: result });
-    if (!error && result) {
-      unilendLBFactory.methods
-        .getPools([assetAddress, collateralAddress])
-        .call((error1: any, result1: any) => {
-          if (!error1 && result1) {
-            dispatch("SET_POOL_ADDRESS", {
-              assetPoolAddress: result1[0],
-              collateralPoolAddress: result1[1],
-            });
-          }
-        });
-    }
-  });
-};
-
-export const getRepayBalance = (assetPoolAddress: any, accounts: any): any => {
-  let unilendLB = UnilendLBPool(assetPoolAddress);
+export const getRepayBalance = (
+  assetPoolAddress: any,
+  accounts: any,
+  currentProvider: any
+): any => {
+  let unilendLB = UnilendLBPool(assetPoolAddress, currentProvider);
   unilendLB.methods
     .borrowBalanceOf(accounts[0])
     .call((error: any, result: any) => {
@@ -44,9 +31,10 @@ export const getRepayBalance = (assetPoolAddress: any, accounts: any): any => {
 export const handleRepayService = (
   accounts: any,
   unilendLbRouter: any,
-  repayValue: any
+  repayValue: any,
+  currentProvider: any
 ) => {
-  const unilendLB = UnilendLBContract(unilendLbRouter);
+  const unilendLB = UnilendLBContract(unilendLbRouter, currentProvider);
   let fullAmount = web3.utils.toWei(repayValue, "ether");
   return unilendLB.methods.repayETH(collateralAddress).send({
     from: accounts[0],

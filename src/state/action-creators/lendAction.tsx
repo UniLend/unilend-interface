@@ -7,14 +7,16 @@ import { LendAction } from "../actions/lendA";
 export const handleLendAction = (
   unilendLbRouter: string,
   accounts: string[],
-  lendAmount: string
+  lendAmount: string,
+  currentProvider: any
 ) => {
   return async (dispatch: Dispatch<LendAction>) => {
     dispatch({
       type: ActionType.LEND_ACTION,
     });
     try {
-      const unilendLB = UnilendLBContract(unilendLbRouter);
+      const unilendLB = UnilendLBContract(unilendLbRouter, currentProvider);
+      console.log(unilendLB, accounts);
       unilendLB.methods
         .lendETH()
         .send({

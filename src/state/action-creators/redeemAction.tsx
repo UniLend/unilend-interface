@@ -11,11 +11,12 @@ import { RedeemAction } from "../actions/redeemA";
 
 export const getCollateralAmount = (
   assetPoolAddress: any,
-  selectedAccount: any
+  selectedAccount: any,
+  currentProvider: any
 ) => {
   return async (dispatch: Dispatch<RedeemAction>) => {
     try {
-      const unilendLB = UnilendLBToken(assetPoolAddress);
+      const unilendLB = UnilendLBToken(assetPoolAddress, currentProvider);
       unilendLB.methods
         .balanceOf(selectedAccount)
         .call((error: any, result: any) => {
@@ -40,11 +41,12 @@ export const getCollateralAmount = (
 
 export const getCollateralAmountBase = (
   assetPoolAddress: any,
-  selectedAccount: any
+  selectedAccount: any,
+  currentProvider: any
 ) => {
   return async (dispatch: Dispatch<RedeemAction>) => {
     try {
-      const unilendLB = UnilendLBPool(assetPoolAddress);
+      const unilendLB = UnilendLBPool(assetPoolAddress, currentProvider);
       unilendLB.methods
         .lendingBalanceOf(selectedAccount)
         .call((error: any, result: any) => {
@@ -72,14 +74,15 @@ export const getCollateralAmountBase = (
 export const handleRedeemAction = (
   unilendLbRouter: any,
   redeemAmount: any,
-  accounts: any
+  accounts: any,
+  currentProvider: any
 ) => {
   return async (dispatch: Dispatch<RedeemAction>) => {
     try {
       dispatch({
         type: ActionType.REDEEM_ACTION,
       });
-      const unilendLB = UnilendLBContract(unilendLbRouter);
+      const unilendLB = UnilendLBContract(unilendLbRouter, currentProvider);
       let fullAmount = web3.utils.toWei(redeemAmount, "ether");
       unilendLB.methods
         .redeemETH(fullAmount)
@@ -104,9 +107,9 @@ export const handleRedeemAction = (
             payload: "Transaction Failed",
           });
         });
-        dispatch({
-          type: ActionType.HANDLE_REDEEM,
-        });
+      dispatch({
+        type: ActionType.HANDLE_REDEEM,
+      });
     } catch (e) {
       console.log(e);
     }
