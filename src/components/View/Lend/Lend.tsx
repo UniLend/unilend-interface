@@ -14,12 +14,18 @@ const Lend: FC<Props> = (props) => {
   const [lendAmount, setLendAmount] = useState("");
   const [currFieldName, setCurrFieldName] = useState("");
   const [yourLend, setYourLend] = useState("ht");
-  const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
+  const { walletConnected, accounts, connectedWallet, handleWalletConnect } =
+    useWalletConnect();
   const { handleLendAction, getBorrowInterest } = useActions();
   const { unilendLbRouter, assetPoolAddress, accountBalance } =
     useTypedSelector((state) => state.configureWallet);
-  const { lendLoading, lendTransHx, lendTransHxReceived, lendErrorMessage ,lendSuccessMessage} =
-    useTypedSelector((state) => state.lend);
+  const {
+    lendLoading,
+    lendTransHx,
+    lendTransHxReceived,
+    lendErrorMessage,
+    lendSuccessMessage,
+  } = useTypedSelector((state) => state.lend);
   const { lendInterest } = useTypedSelector((state) => state.borrow);
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
 
@@ -91,7 +97,7 @@ const Lend: FC<Props> = (props) => {
           ) : (
             <button
               className="btn btn-lg btn-custom-primary"
-              onClick={handleWalletConnect}
+              onClick={() => handleWalletConnect(JSON.parse(connectedWallet))}
             >
               Connect Wallet
             </button>

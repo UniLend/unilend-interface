@@ -7,7 +7,6 @@ import { useTypedSelector } from "hooks/useTypedSelector";
 import useWalletConnect from "hooks/useWalletConnect";
 import TransactionPopup from "../UI/TransactionLoaderPopup/TransactionLoader";
 
-
 interface Props {}
 
 const Borrow: FC<Props> = (props) => {
@@ -17,10 +16,12 @@ const Borrow: FC<Props> = (props) => {
   const [currFieldName, setCurrFieldName] = useState("");
   const [collateralBal, setCollateralBal] = useState("ht");
   const [receivedType, setReceived] = useState("eth");
-  const { getBorrowInterest, handleBorrowValueChange,handleBorrowAction } = useActions();
-  const { walletConnected, accounts, handleWalletConnect } = useWalletConnect();
+  const { getBorrowInterest, handleBorrowValueChange, handleBorrowAction } =
+    useActions();
+  const { walletConnected, accounts, connectedWallet, handleWalletConnect } =
+    useWalletConnect();
   const { unilendLbRouter, assetPoolAddress, accountBalance } =
-  useTypedSelector((state) => state.configureWallet);
+    useTypedSelector((state) => state.configureWallet);
 
   const {
     borrowInterest,
@@ -31,10 +32,14 @@ const Borrow: FC<Props> = (props) => {
     lbAmount2,
     tokenBalance,
   } = useTypedSelector((state) => state.borrow);
- 
+
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
-  const { borrowLoading, borrowTransHx, borrowTransHxReceived, borrowErrorMessage } =
-  useTypedSelector((state) => state.borrow);
+  const {
+    borrowLoading,
+    borrowTransHx,
+    borrowTransHxReceived,
+    borrowErrorMessage,
+  } = useTypedSelector((state) => state.borrow);
 
   useEffect(() => {
     if (assetPoolAddress) {
@@ -70,7 +75,12 @@ const Borrow: FC<Props> = (props) => {
 
   const handleBorrow = async () => {
     setTransModalInfo(true);
-    handleBorrowAction( accounts[0],unilendLbRouter,yourCollateral, borrowReceived);
+    handleBorrowAction(
+      accounts[0],
+      unilendLbRouter,
+      yourCollateral,
+      borrowReceived
+    );
   };
 
   let curencySelectModel = (
@@ -108,7 +118,7 @@ const Borrow: FC<Props> = (props) => {
       return (
         <button
           className="btn btn-lg btn-custom-primary"
-          onClick={handleWalletConnect}
+          onClick={() => handleWalletConnect(JSON.parse(connectedWallet))}
         >
           Connect Wallet
         </button>

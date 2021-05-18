@@ -1,3 +1,4 @@
+import useWalletConnect from "hooks/useWalletConnect";
 import React, { FC, useState } from "react";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
@@ -9,11 +10,11 @@ const Mining: FC<Props> = (props) => {
   const setMessage = useState("")[1];
   const { connectWalletAction } = useActions();
   const { accounts } = useTypedSelector((state) => state.configureWallet);
-
+  const { handleWalletConnect } = useWalletConnect();
   const connectWallet = async () => {
     setMessage("Waiting on transaction success...");
 
-    connectWalletAction();
+    handleWalletConnect();
   };
   return (
     <>

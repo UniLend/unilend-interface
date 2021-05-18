@@ -24,11 +24,6 @@ interface SetPoolAddress {
   payload: string[];
 }
 
-interface AccountBalance {
-  type: ActionType.ACCOUNT_BALANCE;
-  payload: string;
-}
-
 interface setSelectedNetworkId {
   type: ActionType.SELECTED_NETWORK_ID;
   networkId: number;
@@ -50,6 +45,23 @@ interface walletDisconnect {
   type: ActionType.WALLET_DISCONNECT;
 }
 
+interface ConnectedWallet {
+  type: ActionType.CONNECTED_WALLET;
+  payload: any;
+}
+
+interface AccountBalance {
+  type: ActionType.ACCOUNT_BALANCE_SUCCESS;
+  payload: any;
+  fullAccountBalance: any;
+}
+interface AccountBalanceAction {
+  type: ActionType.ACCOUNT_BALANCE_ACTION;
+}
+
+interface AccountBalanceFailed {
+  type: ActionType.ACCOUNT_BALANCE_FAILED;
+}
 export type Action =
   | CurrentProvider
   | walletDisconnect
@@ -60,4 +72,7 @@ export type Action =
   | SetPoolAddress
   | setSelectedNetworkId
   | ActiveNetwork
-  | AccountBalance;
+  | ConnectedWallet
+  | AccountBalance
+  | AccountBalanceAction
+  | AccountBalanceFailed;

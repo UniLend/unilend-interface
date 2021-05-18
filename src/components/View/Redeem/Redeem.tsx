@@ -16,20 +16,22 @@ const Redeem: FC<Props> = (props) => {
   const [showModel, setShowModel] = useState(false);
   const [currFieldName, setCurrFieldName] = useState("");
   const [youRedeem, setYouRedeem] = useState("ht");
-  const { accounts, handleWalletConnect } = useWalletConnect();
-  const {
-    getCollateralAmount,
-    getCollateralAmountBase,
-    handleRedeemAction,
-  } = useActions();
+  const { accounts, connectedWallet, handleWalletConnect } = useWalletConnect();
+  const { getCollateralAmount, getCollateralAmountBase, handleRedeemAction } =
+    useActions();
   const { unilendLbRouter, assetPoolAddress } = useTypedSelector(
     (state) => state.configureWallet
   );
   const { collateralShare, collateralShareBase } = useTypedSelector(
     (state) => state.redeem
   );
-  const { redeemLoading, redeemTransHx, redeemTransHxReceived, redeemErrorMessage ,redeemSuccessMessage} =
-    useTypedSelector((state) => state.redeem);
+  const {
+    redeemLoading,
+    redeemTransHx,
+    redeemTransHxReceived,
+    redeemErrorMessage,
+    redeemSuccessMessage,
+  } = useTypedSelector((state) => state.redeem);
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
   // const { youOwe } = useTypedSelector((state) => state.repay);
   const handleFieldValue = useCallback(() => {
@@ -63,7 +65,6 @@ const Redeem: FC<Props> = (props) => {
     setTransModalInfo(true);
     handleRedeemAction(unilendLbRouter, redeemAmount, accounts);
   };
-
 
   return (
     <>
@@ -118,7 +119,7 @@ const Redeem: FC<Props> = (props) => {
           ) : (
             <button
               className="btn btn-lg btn-custom-primary"
-              onClick={handleWalletConnect}
+              onClick={() => handleWalletConnect(JSON.parse(connectedWallet))}
             >
               Connect Wallet
             </button>

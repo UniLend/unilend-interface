@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import "./theme.scss";
@@ -12,36 +13,54 @@ import LoadingPage from "./components/View/UI/LoadingPage/LoadingPage";
 import Redeem from "./components/View/Redeem/Redeem";
 import Repay from "./components/View/Repay/Repay";
 import { useTypedSelector } from "./hooks/useTypedSelector";
-import { useActions } from "./hooks/useActions";
 import Swap from "components/View/Swap/Swap";
 import dotEnv from "dotenv";
 import { Alert } from "react-bootstrap";
 import AlertImg from "assets/warning.svg";
+import useWalletConnect from "hooks/useWalletConnect";
 
 declare const window: any;
 function App() {
   const [alertShow, setAlertShow] = useState<Boolean>(true);
   const [loading, setLoading] = useState<Boolean>(true);
-  const { connectWalletAction } = useActions();
+  // const { connectWalletAction } = useActions();
   const { theme } = useTypedSelector((state) => state.settings);
-
+  const {
+    handleWalletConnect,
+    walletProvider,
+    connectedWallet,
+    accounts,
+    selectedNetworkId,
+    currentProvider,
+    getAccountBalance,
+  } = useWalletConnect();
   useEffect(() => {
     dotEnv.config();
-    if (window && window.ethereum !== undefined && window !== undefined) {
-      window.ethereum.on("disconnect", () => {});
-      window.ethereum.on("accountsChanged", (accounts: any) => {
-        connectWalletAction();
-      });
-      window.ethereum.on("chainChanged", (chainId: any) => {
-        window.location.reload();
-      });
-    }
+
     setTimeout(() => {
       setLoading(false);
     }, 2000);
+    console.log("starting");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (connectedWallet) {
+      handleWalletConnect(JSON.parse(connectedWallet));
+    }
+  }, [walletProvider, connectedWallet]);
+  useEffect(() => {
+    let interval: any;
+
+    interval = setInterval(() => {
+      handleTokenBalance();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [accounts, selectedNetworkId]);
+  const handleTokenBalance = () => {
+    if (accounts.length && currentProvider)
+      getAccountBalance(accounts[0], selectedNetworkId);
+  };
   return (
     <div className={`App ${theme} mainapp`}>
       {loading ? (
@@ -74,7 +93,7 @@ function App() {
               <div className={`bg-vector ${theme}`}>
                 <div
                   className="pt-6"
-                  style={{ height: "100%", overflow:"auto"}}
+                  style={{ height: "100%", overflow: "auto" }}
                 >
                   <Switch>
                     <Route path="/swap" exact component={Swap} />

@@ -19,17 +19,18 @@ const Repay: FC<Props> = (props) => {
   const [showModel, setShowModel] = useState(false);
   const [youRepay, setYouRepay] = useState("ht");
   const [repayValue, setRepayValue] = useState("");
-  const { accounts, handleWalletConnect } = useWalletConnect();
-  const { handleRepayAction,getOweValue } = useActions();
+  const { accounts, connectedWallet, handleWalletConnect } = useWalletConnect();
+  const { handleRepayAction, getOweValue } = useActions();
   const { youOwe } = useTypedSelector((state) => state.repay);
   const [transModalInfo, setTransModalInfo] = useState<boolean>(false);
-  const { repayLoading, repayTransHx, repayTransHxReceived, repayErrorMessage } =
-    useTypedSelector((state) => state.repay);
   const {
-    unilendLbRouter,
-    assetPoolAddress,
-    accountBalance,
-  } = useTypedSelector((state) => state.configureWallet);
+    repayLoading,
+    repayTransHx,
+    repayTransHxReceived,
+    repayErrorMessage,
+  } = useTypedSelector((state) => state.repay);
+  const { unilendLbRouter, assetPoolAddress, accountBalance } =
+    useTypedSelector((state) => state.configureWallet);
   useEffect(() => {
     if (assetPoolAddress) {
       let unilendLB = UnilendLBPool(assetPoolAddress);
@@ -60,7 +61,6 @@ const Repay: FC<Props> = (props) => {
     setYouRepay(selectedField.name);
     setShowModel(false);
   };
-
 
   const handleRepay = async () => {
     setTransModalInfo(true);
@@ -127,7 +127,7 @@ const Repay: FC<Props> = (props) => {
           ) : (
             <button
               className="btn btn-lg btn-custom-primary"
-              onClick={handleWalletConnect}
+              onClick={() => handleWalletConnect(JSON.parse(connectedWallet))}
             >
               Connect Wallet
             </button>
